@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/urfave/cli"
 )
 
@@ -49,6 +50,17 @@ func InitCommand() []cli.Command {
 			Usage: "query or set bbhj information",
 			Action: func(c *cli.Context) error {
 				return bbhj()
+			},
+			BashComplete: func(c *cli.Context) {
+				// This will complete if no args are passed
+				if c.NArg() > 0 {
+					return
+				}
+
+				tasks := []string{"cook", "clean", "laundry", "eat", "sleep", "code"}
+				for _, t := range tasks {
+					fmt.Println(t)
+				}
 			},
 		},
 		{
