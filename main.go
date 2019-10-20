@@ -14,7 +14,7 @@ func main() {
 	app.Name = "adb"
 	app.Usage = "Airdb Development Builder Command Line Interface"
 	app.Description = "Airdb Development Builder help you initialise server or development environment.\n" +
-		"\t Release your project and deploy your project."
+		"\t Release your project and deploy your projects."
 	app.Version = "1.0.0"
 	app.Authors = []cli.Author{
 		{
@@ -34,35 +34,6 @@ func main() {
 	}
 
 	app.Commands = command.InitCommand()
-
-	/*
-		app.Commands = []cli.Command{
-			{
-				Name:  "init",
-				Usage: "init server or tool",
-				Action: func(c *cli.Context) error {
-					log.Println("aa")
-					return nil
-				},
-			},
-			{
-				Name:    "release",
-				Aliases: []string{"r"},
-				Usage:   "release a git branch with",
-				Action: func(c *cli.Context) error {
-					return nil
-				},
-			},
-			{
-				Name:    "deploy",
-				Aliases: []string{"d"},
-				Usage:   "deoply project to cloud server or docker container",
-				Action: func(c *cli.Context) error {
-					return nil
-				},
-			},
-		}
-	*/
 
 	//	sort.Sort(cli.FlagsByName(app.Flags))
 	//	sort.Sort(cli.CommandsByName(app.Commands))
