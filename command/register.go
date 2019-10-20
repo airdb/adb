@@ -51,5 +51,19 @@ func InitCommand() []cli.Command {
 				return bbhj()
 			},
 		},
+		{
+			Name:  "host",
+			Usage: "host operation",
+			Action: func(c *cli.Context) error {
+				return host()
+			},
+		},
+		{
+			Name:  "mysql",
+			Usage: "mysql client",
+			Action: func(c *cli.Context) error {
+				return mysql(c.Args())
+			},
+		},
 	}
 }
