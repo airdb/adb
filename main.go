@@ -22,7 +22,7 @@ func main() {
 			Email: "dean@airdb.com",
 		},
 	}
-	app.Copyright = "https://github.com/airdb/adb\n"+
+	app.Copyright = "https://github.com/airdb/adb\n" +
 		"\t https://www.airdb.com"
 
 	app.EnableBashCompletion = true
