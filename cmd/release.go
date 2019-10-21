@@ -1,15 +1,25 @@
-package command
+package cmd
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/imroc/req"
+	"github.com/spf13/cobra"
 	"log"
 	"os/exec"
 	"strings"
-
-	"github.com/imroc/req"
 )
+
+var releaseCommand = &cobra.Command{
+	Use:                "release",
+	Short:              "release operation",
+	Long:               "release operation",
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		release()
+	},
+}
 
 type Tag struct {
 	NodeID string `json:"node_id"`
@@ -22,9 +32,8 @@ type Tag struct {
 	URL string `json:"url"`
 }
 
-func release() error {
+func release() {
 	getTags()
-	return nil
 }
 
 func getTags() {

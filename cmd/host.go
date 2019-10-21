@@ -1,13 +1,24 @@
-package command
+package cmd
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/spf13/cobra"
 	"log"
 	"os/exec"
 	"strings"
 )
+
+var hostCommand = &cobra.Command{
+	Use:                "host",
+	Short:              "host operation",
+	Long:               "host operation",
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		host()
+	},
+}
 
 type HostInstance struct {
 	PageNumber    int    `json:"PageNumber"`
@@ -30,7 +41,7 @@ type HostInstance struct {
 	} `json:"DomainRecords"`
 }
 
-func host() error {
+func host() {
 	// alidns DescribeDomainRecords --DomainName airdb.host
 	domain := "airdb.host"
 	cmd := exec.Command("aliyun", "alidns", "DescribeDomainRecords", "--DomainName", domain)
@@ -59,6 +70,4 @@ func host() error {
 			fmt.Printf("%-8s%-32s\t%s\n", typ, record.RR+"."+record.DomainName, record.Value)
 		}
 	}
-	return err
-
 }
