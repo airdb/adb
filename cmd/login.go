@@ -27,7 +27,8 @@ func login() {
 	mtod := "https://init.airdb.host/mtod/icon"
 	r, err := req.Get(mtod)
 	if err == nil {
-		fmt.Print(r)
+		msg, _ := r.ToString()
+		fmt.Print(msg)
 		if err = r.ToFile(iconFileName); err == nil {
 			return
 		}
