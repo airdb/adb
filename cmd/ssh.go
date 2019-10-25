@@ -34,7 +34,6 @@ func ssh(args []string) {
 		return
 	}
 
-
 	sshArgs := getArgs(args[0])
 	cmd := exec.Command(sshPath, sshArgs...)
 	cmd.Stdin = os.Stdin
@@ -66,7 +65,7 @@ func getArgs(arg string) []string {
 	}
 
 	if !strings.HasSuffix(host, "."+domainZone) {
-			host = host + "." + domainZone
+		host = host + "." + domainZone
 	}
 
 	sshArgs := []string{

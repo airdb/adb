@@ -6,13 +6,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
 var osinitCommand = &cobra.Command{
 	Use:   "init",
 	Short: "init operation",
 	Long:  "init operation",
 }
-
 
 var gitInitCommand = &cobra.Command{
 	Use:   "git",
@@ -22,7 +20,6 @@ var gitInitCommand = &cobra.Command{
 		fmt.Println("git config --global core.hooksPath .github/hooks")
 	},
 }
-
 
 var dockerInitCommand = &cobra.Command{
 	Use:   "docker",
