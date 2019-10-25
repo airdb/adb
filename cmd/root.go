@@ -24,6 +24,9 @@ func init() {
 	rootCmd.AddCommand(releaseCommand)
 	rootCmd.AddCommand(mysqlCommand)
 	rootCmd.AddCommand(updateCommand)
+	rootCmd.AddCommand(osinitCommand)
+	osinitCommand.AddCommand(gitInitCommand)
+	osinitCommand.AddCommand(dockerInitCommand)
 }
 
 func Execute() {
