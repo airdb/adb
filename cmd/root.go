@@ -27,6 +27,9 @@ func init() {
 	rootCmd.AddCommand(osinitCommand)
 	osinitCommand.AddCommand(gitInitCommand)
 	osinitCommand.AddCommand(dockerInitCommand)
+	osinitCommand.AddCommand(cloudInitCommand)
+
+	rootCmd.AddCommand(loginCommand)
 }
 
 func Execute() {

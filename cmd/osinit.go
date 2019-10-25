@@ -29,3 +29,13 @@ var dockerInitCommand = &cobra.Command{
 		fmt.Println("docker exec  -e COLUMNS=`tput cols` -e LINES=`tput lines`  -it airdb/go bash")
 	},
 }
+
+var cloudInitCommand = &cobra.Command{
+	Use:   "cloud",
+	Short: "cloud operation",
+	Long:  "cloud operation",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("brew install aliyun-cli")
+		fmt.Println("https://github.com/aliyun/aliyun-cli")
+	},
+}
