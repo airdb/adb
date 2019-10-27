@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"github.com/airdb/sailor/config"
 )
 
 var mysqlCommand = &cobra.Command{
@@ -24,27 +24,10 @@ var mysqlCommand = &cobra.Command{
 }
 
 func mysql(args []string) {
-	viper.SetConfigFile("conf/dev.json")
-	if len(args) != 0 {
-		viper.SetConfigFile(args[0])
-	}
-
-	databases := make(map[string]*DatabaseItem)
-
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	if err := viper.UnmarshalKey("databases", &databases); err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	for name := range databases {
-		if databases[name].DefaultTableName {
-			host, port, _ := net.SplitHostPort(databases[name].Address)
-			aa := fmt.Sprintf("-h%s -P%s -u%s -p%s %s", host, port, databases[name].User, databases[name].Password, name)
+	for dbname,item := range config.GetDatabases() {
+		host, port, _ := net.SplitHostPort(item.Address)
+		if item.Default {
+			aa := fmt.Sprintf("-h%s -P%s -u%s -p%s %s", host, port, item.User, item.Password, dbname)
 			mysqlcmd(strings.Split(aa, " "))
 		}
 	}
@@ -67,7 +50,7 @@ func mysqlcmd(args []string) {
 	}
 	err = cmd.Wait()
 	if err != nil {
-		fmt.Printf("exec error %v\n", err)
+		log.Println("adb exec failed.")
 		if exiterror, ok := err.(*exec.ExitError); ok {
 			os.Exit(exiterror.ExitCode())
 		}
