@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/spf13/cobra"
 	"github.com/airdb/sailor/config"
+	"github.com/spf13/cobra"
 )
 
 var mysqlCommand = &cobra.Command{
@@ -24,7 +24,7 @@ var mysqlCommand = &cobra.Command{
 }
 
 func mysql(args []string) {
-	for dbname,item := range config.GetDatabases() {
+	for dbname, item := range config.GetDatabases() {
 		host, port, _ := net.SplitHostPort(item.Address)
 		if item.Default {
 			aa := fmt.Sprintf("-h%s -P%s -u%s -p%s %s", host, port, item.User, item.Password, dbname)
