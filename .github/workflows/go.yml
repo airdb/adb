@@ -21,7 +21,9 @@ jobs:
         go mod download
         # go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
         # PATH=$PATH:$HOME/go/bin golangci-lint run
-        go build main.go
+        BuildTime=`date`
+        go build main.go \
+        -ldflags  "-X github.com/airdb/adb/cmd.BuildTime=${BuildTime}"
 
     - name: Test
       run: echo go test -v .

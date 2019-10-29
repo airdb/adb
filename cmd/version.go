@@ -12,6 +12,7 @@ type VersionInfo struct {
 	GitCommit string
 }
 
+var BuildTime string
 var version *VersionInfo
 
 var versionCommand = &cobra.Command{
@@ -25,5 +26,6 @@ var versionCommand = &cobra.Command{
 			fmt.Printf("Git Commit: %v\n", version.GitCommit)
 		}
 		fmt.Printf("Go Version: %v\n", runtime.Version())
+		fmt.Printf("BuildTime: %v\n", BuildTime)
 	},
 }

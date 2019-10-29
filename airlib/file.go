@@ -25,7 +25,6 @@ func AppendToFile(filename, key string) {
 		}
 	}
 
-
 }
 
 func SetupSSHPublicKey() {

@@ -7,9 +7,9 @@ import (
 )
 
 var initAirdbCommand = &cobra.Command{
-	Use:                "init",
-	Short:              "init",
-	Long:               "init",
+	Use:   "init",
+	Short: "init",
+	Long:  "init",
 }
 
 var initSSHKeyCommand = &cobra.Command{
