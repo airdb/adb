@@ -26,7 +26,6 @@ func init() {
 	rootCmd.AddCommand(updateCommand)
 	rootCmd.AddCommand(initAirdbCommand)
 	initAirdb()
-
 }
 
 func Execute() {
