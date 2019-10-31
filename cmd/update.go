@@ -1,9 +1,12 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+	"fmt"
 	"log"
 	"os/exec"
+	"time"
+
+	"github.com/spf13/cobra"
 )
 
 var updateCommand = &cobra.Command{
