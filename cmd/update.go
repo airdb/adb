@@ -18,7 +18,9 @@ var updateCommand = &cobra.Command{
 
 func update() {
 	repo := "github.com/airdb/adb"
-	cmd := exec.Command("go", "get", repo)
+
+	ldflag := fmt.Sprintf("-X github.com/airdb/adb/cmd.BuildTime=%d", time.Now().Unix())
+	cmd := exec.Command("go", "get", "--ldflags", ldflag, repo)
 	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
