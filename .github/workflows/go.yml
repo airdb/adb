@@ -22,6 +22,8 @@ jobs:
         # go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
         # PATH=$PATH:$HOME/go/bin golangci-lint run
         go build main.go
+        timeNow=$(date +%s)
+        go build -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
 
     - name: Test
       run: echo go test -v .
