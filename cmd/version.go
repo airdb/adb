@@ -7,12 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type VersionInfo struct {
-	Version   string
-	GitCommit string
-}
-
-var version *VersionInfo
+// Build version info.
+var BuildTime string
+var BuildVersion string
 
 var versionCommand = &cobra.Command{
 	Use:   "version",
@@ -20,10 +17,8 @@ var versionCommand = &cobra.Command{
 	Long:  "Version information",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("%v\n", rootCmd.Long)
-		if version != nil {
-			fmt.Printf("Version: %v\n", version.Version)
-			fmt.Printf("Git Commit: %v\n", version.GitCommit)
-		}
-		fmt.Printf("Go Version: %v\n", runtime.Version())
+		fmt.Printf("GoVersion: %v\n", runtime.Version())
+		fmt.Printf("BuildTime: %v\n", BuildTime)
+		fmt.Printf("BuildVersion: %v\n", BuildVersion)
 	},
 }
