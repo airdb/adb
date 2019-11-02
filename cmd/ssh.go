@@ -29,6 +29,12 @@ type DatabaseItem struct {
 }
 
 func ssh(args []string) {
+	if len(args) == 0 {
+		fmt.Println("Usage:")
+		fmt.Println("  adb ssh [ip|host|container]")
+		return
+	}
+
 	sshPath, err := exec.LookPath("ssh")
 	if err != nil {
 		return
