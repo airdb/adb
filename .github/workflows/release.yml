@@ -44,14 +44,6 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-        run: |
-          timeNow=$(date +%s)
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows-x64.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux-x64 -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin-x64 -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          zip adb-windows-x64.zip adb-windows-x64.exe
-          zip adb-linux-x64.zip adb-linux-x64
-          zip adb-darwin-x64.zip adb-darwin-x64
 
       - name: Upload Release normal linux
         uses: actions/upload-release-asset@v1.0.1
