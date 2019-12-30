@@ -23,12 +23,13 @@ jobs:
       - name: Build
         run: |
           timeNow=$(date +%s)
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          zip adb-windows-amd64.zip adb-windows.exe
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           zip adb-linux-amd64.zip adb-linux
           zip adb-darwin-amd64.zip adb-darwin
+          zip adb-windows-amd64.zip adb-windows.exe
 
       - name: Create Release
         id: create_release
@@ -52,7 +53,7 @@ jobs:
         with:
           # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./adb-linux-amd64
+          asset_path: ./adb
           asset_name: adb
           asset_content_type: application/octet-stream
 
