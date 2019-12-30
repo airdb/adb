@@ -45,6 +45,17 @@ jobs:
           draft: false
           prerelease: false
 
+     - name: Upload Release normal linux binary
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./adb-linux-amd64
+          asset_name: adb
+          asset_content_type: application/stream
+
       - name: Upload Release normal linux
         uses: actions/upload-release-asset@v1.0.1
         env:
