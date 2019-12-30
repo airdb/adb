@@ -23,12 +23,12 @@ jobs:
       - name: Build
         run: |
           timeNow=$(date +%s)
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          zip adb-windows-amd64.zip adb-windows.exe
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
           zip adb-linux-amd64.zip adb-linux
           zip adb-darwin-amd64.zip adb-darwin
+          zip adb-windows-amd64.zip adb-windows.exe
 
       - name: Create Release
         id: create_release
@@ -45,13 +45,35 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Upload Release normal linux binary
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./adb-linux
+          asset_name: adb
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release normal darwin binary
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./adb-darwin
+          asset_name: adb-darwin
+          asset_content_type: application/octet-stream
+
       - name: Upload Release normal linux
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./adb-linux-amd64.zip
           asset_name: adb-linux-amd64.zip
           asset_content_type: application/zip
@@ -62,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./adb-darwin-amd64.zip
           asset_name: adb-darwin-amd64.zip
           asset_content_type: application/zip
@@ -73,7 +95,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./adb-windows-amd64.zip
           asset_name: adb-windows-amd64.zip
           asset_content_type: application/zip
