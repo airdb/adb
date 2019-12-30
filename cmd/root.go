@@ -29,6 +29,8 @@ func init() {
 	osinitCommand.AddCommand(dockerInitCommand)
 	osinitCommand.AddCommand(cloudInitCommand)
 
+	rootCmd.AddCommand(installCommand)
+
 	rootCmd.AddCommand(loginCommand)
 }
 
