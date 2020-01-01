@@ -28,8 +28,7 @@ func init() {
 	osinitCommand.AddCommand(gitInitCommand)
 	osinitCommand.AddCommand(dockerInitCommand)
 	osinitCommand.AddCommand(cloudInitCommand)
-
-	rootCmd.AddCommand(installCommand)
+	osinitCommand.AddCommand(toolsInitCommand)
 
 	rootCmd.AddCommand(loginCommand)
 }

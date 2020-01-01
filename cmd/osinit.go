@@ -39,3 +39,13 @@ var cloudInitCommand = &cobra.Command{
 		fmt.Println("https://github.com/aliyun/aliyun-cli")
 	},
 }
+
+var toolsInitCommand = &cobra.Command{
+	Use:   "tools",
+	Short: "install binary tools",
+	Long:  "install binary tools",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("brew install aliyun-cli")
+		fmt.Println("wget https://github.com/airdb/init/releases/latest/download/tools-linux-amd64.zip")
+	},
+}
