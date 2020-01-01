@@ -18,6 +18,7 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(sshCommand)
+	rootCmd.AddCommand(sftpCommand)
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
 	rootCmd.AddCommand(hostCommand)

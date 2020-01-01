@@ -18,6 +18,22 @@ var sshCommand = &cobra.Command{
 	},
 }
 
+var sftpCommand = &cobra.Command{
+	Use:                "sftp",
+	Short:              "sftp client",
+	Long:               "Airdb sftp client",
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		sftp(args)
+	},
+}
+
+const (
+	CommandSSH = "ssh"
+	CommandSFTP = "sftp"
+	DefaultSshUser = "ubuntu"
+)
+
 const domainZone = "airdb.host"
 
 type DatabaseItem struct {
@@ -35,12 +51,12 @@ func ssh(args []string) {
 		return
 	}
 
-	sshPath, err := exec.LookPath("ssh")
+	sshPath, err := exec.LookPath(CommandSSH)
 	if err != nil {
 		return
 	}
 
-	sshArgs := getArgs(args[0])
+	sshArgs := getArgs(CommandSSH, args[0])
 	cmd := exec.Command(sshPath, sshArgs...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -59,7 +75,38 @@ func ssh(args []string) {
 	}
 }
 
-func getArgs(arg string) []string {
+func sftp(args []string) {
+	if len(args) == 0 {
+		fmt.Println("Usage:")
+		fmt.Println("  adb sftp [ip|host|container]")
+		return
+	}
+
+	sshPath, err := exec.LookPath(CommandSFTP)
+	if err != nil {
+		return
+	}
+
+	sshArgs := getArgs(CommandSFTP, args[0])
+	cmd := exec.Command(sshPath, sshArgs...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err = cmd.Start()
+	if err != nil {
+		return
+	}
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Printf("exec error %v\n", err)
+		if exiterror, ok := err.(*exec.ExitError); ok {
+			os.Exit(exiterror.ExitCode())
+		}
+	}
+}
+
+func getArgs(typ, arg string) []string {
 	// user = "root"
 	user := "ubuntu"
 	host := arg
@@ -79,8 +126,14 @@ func getArgs(arg string) []string {
 		"-oStrictHostKeyChecking=no",
 		"-oUserKnownHostsFile=/dev/null",
 		"-oConnectTimeout=3",
-		"-l" + user,
-		host,
+	}
+
+	switch typ {
+	case CommandSFTP:
+		sshArgs = append(sshArgs, user+"@"+host+":/tmp")
+	case CommandSSH:
+		sshArgs = append(sshArgs, "-l"+user)
+		sshArgs = append(sshArgs, host)
 	}
 
 	return sshArgs
