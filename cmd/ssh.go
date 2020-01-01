@@ -29,8 +29,8 @@ var sftpCommand = &cobra.Command{
 }
 
 const (
-	CommandSSH = "ssh"
-	CommandSFTP = "sftp"
+	CommandSSH     = "ssh"
+	CommandSFTP    = "sftp"
 	DefaultSshUser = "ubuntu"
 )
 
