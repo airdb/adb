@@ -2,11 +2,15 @@
 
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
-if [ "$current_branch" = "master" ] ; then
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo ""
-    echo "禁止直接向master或develop分支提交代码！"
-    echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+protect_branch="master"
+protect_branch="dev"
+if [ "$current_branch" == "$protect_branch" ] ; then
+    echo "--------------------------------------------------"
+    printf "%s%30s%20s\n" "|" "FORBIDDEN 403" "|"
+    printf "%s%50s\n" "|" "|"
+    printf "%s\t%s%10s\n" "|" "Do not push $protect_branch branch directly!!" "|"
+    printf "%s\t%-40s%3s\n" "|" "The branch $protect_branch is protected." "|"
+    printf "%s%50s\n" "|" "|"
+    echo "---------------------------------------------------"
     exit 1
 fi
