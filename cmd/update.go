@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os/exec"
-	"time"
-
+	"github.com/imroc/req"
 	"github.com/spf13/cobra"
+	"log"
+	"os"
+	"os/exec"
+	"runtime"
 )
 
 var updateCommand = &cobra.Command{
@@ -20,14 +21,36 @@ var updateCommand = &cobra.Command{
 }
 
 func update() {
-	repo := "github.com/airdb/adb"
-
-	ldflag := fmt.Sprintf("-X github.com/airdb/adb/cmd.BuildTime=%d", time.Now().Unix())
-	cmd := exec.Command("go", "get", "--ldflags", ldflag, repo)
-	err := cmd.Run()
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		log.Println("update successfully")
+	dl := "https://github.com/airdb/adb/releases/latest/download/adb"
+	if runtime.GOOS == "darwin" {
+		dl = dl + "-" + runtime.GOOS
+		fmt.Println(dl)
 	}
+
+	resp, err := req.Get(dl)
+	tmpPath := "/tmp/adb-latest"
+	if err == nil {
+		err = resp.ToFile(tmpPath)
+	}
+
+	if err != nil {
+		log.Println("Error: download package failed! ", err)
+		return
+	}
+
+	err = updateBinary(tmpPath)
+	if err != nil {
+		log.Println("update failed!")
+	} else {
+		log.Println("update successfully!")
+	}
+}
+
+func updateBinary(tmpPath string) error {
+	adbPath, err := exec.LookPath("adb")
+	if err == nil {
+		err = os.Rename(tmpPath, adbPath)
+	}
+
+	return err
 }
