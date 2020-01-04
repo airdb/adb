@@ -24,8 +24,8 @@ func update() {
 	dl := "https://github.com/airdb/adb/releases/latest/download/adb"
 	if runtime.GOOS == "darwin" {
 		dl = dl + "-" + runtime.GOOS
-		fmt.Println(dl)
 	}
+	fmt.Printf("It will take about 1 minute for downloading.\nDonwload url: %s\n", dl)
 
 	resp, err := req.Get(dl)
 	tmpPath := "/tmp/adb-latest"
@@ -38,7 +38,11 @@ func update() {
 		return
 	}
 
-	err = updateBinary(tmpPath)
+	err = os.Chmod(tmpPath, 0755)
+	if err == nil {
+		err = updateBinary(tmpPath)
+	}
+
 	if err != nil {
 		log.Println("update failed!")
 	} else {
