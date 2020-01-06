@@ -30,9 +30,11 @@ jobs:
       - name: Build
         run: |
           timeNow=$(date +%s)
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
+          timeflag="github.com/airdb/adb/cmd.BuildTime=$timeNow"
+          versionflag="github.com/airdb/adb/cmd.Version=${{ steps.bump_version.outputs.tag }}"
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
           zip adb-linux-amd64.zip adb-linux
           zip adb-darwin-amd64.zip adb-darwin
           zip adb-windows-amd64.zip adb-windows.exe
