@@ -32,6 +32,7 @@ func init() {
 	osinitCommand.AddCommand(toolsInitCommand)
 
 	rootCmd.AddCommand(loginCommand)
+	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
 }
 

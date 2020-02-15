@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -16,7 +18,20 @@ const (
 )
 
 func init() {
-	Gopath = os.Getenv("GOPATH")
+	cmd := exec.Command("go", "env", "GOPATH")
+
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("please install golang at first.")
+		fmt.Println("Thanks for using adb tool!")
+
+		return
+	}
+
+	Gopath := strings.Trim(out.String(), "\n")
+
 	if Gopath == "" {
 		panic("cannot find $GOPATH environment variable")
 	}
