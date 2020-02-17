@@ -36,9 +36,9 @@ func Usage() {
 }
 
 type Repo struct {
-	ID uint `json:"id"`
+	ID     uint   `json:"id"`
 	NodeID string `json:"node_id"`
-	Name string `json:"name"`
+	Name   string `json:"name"`
 }
 
 func listRepos() {
@@ -62,7 +62,7 @@ func listRepos() {
 		switch repo.Name {
 		case "airdb-wiki.github.io":
 		default:
-			fmt.Printf("\t%s%30s\n", repo.Name, "thttps://airdb.wiki/" + repo.Name)
+			fmt.Printf("\t%s%30s\n", repo.Name, "https://airdb.wiki/"+repo.Name)
 		}
 	}
 }
