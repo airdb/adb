@@ -6,10 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var osinitCommand = &cobra.Command{
-	Use:   "init",
-	Short: "init operation",
-	Long:  "init operation",
+var manCommand = &cobra.Command{
+	Use:   "man",
+	Short: "man command like linux",
+	Long:  "display manual pages",
 }
 
 var gitInitCommand = &cobra.Command{
@@ -26,7 +26,8 @@ var dockerInitCommand = &cobra.Command{
 	Short: "docker operation",
 	Long:  "docker operation",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("docker exec  -e COLUMNS=`tput cols` -e LINES=`tput lines`  -it airdb/go bash")
+		fmt.Println("docker exec -it -e COLUMNS=`tput cols` -e LINES=`tput lines`  -it airdb/go bash")
+		fmt.Println("docker exec -it -e COLUMNS=$(tput cols) -e LINES=$(tput lines) airdb/go bash")
 	},
 }
 
@@ -46,5 +47,27 @@ var toolsInitCommand = &cobra.Command{
 	Long:  "install binary tools",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("wget https://github.com/airdb/init/releases/latest/download/tools-linux-amd64.zip")
+	},
+}
+
+var brewInitCommand = &cobra.Command{
+	Use:   "brew",
+	Short: "brew operation",
+	Long:  "brew operation",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("brew outdated")
+		fmt.Println("brew tap aidb/taps")
+		fmt.Println("brew install adb")
+	},
+}
+
+var githubInitCommand = &cobra.Command{
+	Use:   "gh",
+	Short: "github operation",
+	Long:  "github operation",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("brew install github/gh/gh")
+		fmt.Println("gh --repo bbhj/lbs issue status")
+		fmt.Println("gh --repo bbhj/lbs issue view 1")
 	},
 }
