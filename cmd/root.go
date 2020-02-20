@@ -32,6 +32,7 @@ func init() {
 	manCommand.AddCommand(toolsInitCommand)
 	manCommand.AddCommand(brewInitCommand)
 	manCommand.AddCommand(githubInitCommand)
+	manCommand.AddCommand(vimInitCommand)
 
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)

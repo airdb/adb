@@ -55,9 +55,15 @@ var brewInitCommand = &cobra.Command{
 	Short: "brew operation",
 	Long:  "brew operation",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("brew outdated")
-		fmt.Println("brew tap aidb/taps")
-		fmt.Println("brew install adb")
+		fmt.Println("Brew Common Command:")
+		fmt.Println("\tbrew outdated")
+		fmt.Println("\tbrew install github/gh/gh")
+		fmt.Println("\tbrew install aliyun-cli")
+		fmt.Println()
+		fmt.Println("\tbrew tap aidb/taps")
+		fmt.Println("\tbrew install airdb/taps/adb")
+		fmt.Println("\tbrew install adb")
+		fmt.Println()
 	},
 }
 
@@ -69,5 +75,19 @@ var githubInitCommand = &cobra.Command{
 		fmt.Println("brew install github/gh/gh")
 		fmt.Println("gh --repo bbhj/lbs issue status")
 		fmt.Println("gh --repo bbhj/lbs issue view 1")
+	},
+}
+
+var vimInitCommand = &cobra.Command{
+	Use:   "vim",
+	Short: "vim configuration",
+	Long:  "vim configuration",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("VIM Common Plugins:")
+		fmt.Println("")
+		fmt.Printf("\tgit clone %s %s\n",
+			"http://github.com/fatih/vim-go.git",
+			"~/.vim/pack/plugins/start/vim-go",
+		)
 	},
 }
