@@ -11,8 +11,6 @@ import (
 )
 
 func TestScaffold(t *testing.T) {
-
-	t.Log("xxx")
 	// 1tempDir, err := ioutil.TempDir(filepath.Join(Gopath, "src"), "test")
 	tempDir, err := ioutil.TempDir(filepath.Join("/tmp", "src"), "test")
 
