@@ -102,3 +102,15 @@ var osinitCommand = &cobra.Command{
 		fmt.Println("\tcurl https://init.airdb.host/osinit/ubuntu_init.sh | bash -")
 	},
 }
+
+var kubeCommand = &cobra.Command{
+	Use:   "kube",
+	Short: "kubeneters command",
+	Long:  "kubeneters command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("kubeneters and helm commands)")
+		fmt.Println("")
+		fmt.Println("\tsudo snap install helm --classic")
+		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
+	},
+}
