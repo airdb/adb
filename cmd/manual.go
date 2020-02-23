@@ -111,6 +111,12 @@ var kubeCommand = &cobra.Command{
 		fmt.Println("kubeneters and helm commands)")
 		fmt.Println("")
 		fmt.Println("\tsudo snap install helm --classic")
+		fmt.Println("")
 		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
+		fmt.Println("\thelm repo add airdb https://www.airdb.com/helm/")
+		fmt.Println("\thelm repo update")
+		fmt.Println("\thelm search repo helm/mychart")
+		fmt.Println("\thelm install chart airdb/mychat")
+		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
 	},
 }
