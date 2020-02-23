@@ -3,9 +3,10 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/spf13/cobra"
 	"os/exec"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 var weatherCommand = &cobra.Command{

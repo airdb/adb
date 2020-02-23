@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func init() {
+func Execute() {
 	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(sshCommand)
 	rootCmd.AddCommand(sftpCommand)
@@ -34,38 +34,14 @@ func init() {
 	manCommand.AddCommand(brewInitCommand)
 	manCommand.AddCommand(githubInitCommand)
 	manCommand.AddCommand(vimInitCommand)
+	manCommand.AddCommand(osinitCommand)
 
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
-}
 
-func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-// completionCmd represents the completion command
-var completionBashCommand = &cobra.Command{
-	Use:   "completion",
-	Short: "Generates bash completion scripts",
-	Long: `To load completion run
-
-. <(bitbucket completion)
-
-To configure your bash shell to load completions for each session add to your bashrc
-
-# MacOS:
-# adb completion >/usr/local/etc/bash_completion.d/adb
-# ~/.bashrc or ~/.profile
-. <(bitbucket completion)
-`,
-	Run: func(cmd *cobra.Command, args []string) {
-		err := rootCmd.GenBashCompletion(os.Stdout)
-		if err != nil {
-			fmt.Println("Generates bash completion scripts failed!")
-		}
-	},
 }

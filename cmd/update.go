@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/imroc/req"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
+
+	"github.com/imroc/req"
+	"github.com/spf13/cobra"
 )
 
 var updateCommand = &cobra.Command{
@@ -25,7 +26,7 @@ func update() {
 	if runtime.GOOS == "darwin" {
 		dl = dl + "-" + runtime.GOOS
 	}
-	fmt.Printf("It will take about 1 minute for downloading.\nDonwload url: %s\n", dl)
+	fmt.Printf("It will take about 1 minute for downloading.\nDownload url: %s\n", dl)
 
 	resp, err := req.Get(dl)
 	tmpPath := "/tmp/adb-latest"
@@ -57,4 +58,27 @@ func updateBinary(tmpPath string) error {
 	}
 
 	return err
+}
+
+// completionCmd represents the completion command
+var completionBashCommand = &cobra.Command{
+	Use:   "completion",
+	Short: "Generates bash completion scripts",
+	Long: `To load completion run
+
+. <(bitbucket completion)
+
+To configure your bash shell to load completions for each session add to your bashrc
+
+# MacOS:
+# adb completion >/usr/local/etc/bash_completion.d/adb
+# ~/.bashrc or ~/.profile
+. <(bitbucket completion)
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		err := rootCmd.GenBashCompletion(os.Stdout)
+		if err != nil {
+			fmt.Println("Generates bash completion scripts failed!")
+		}
+	},
 }

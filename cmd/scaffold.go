@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"html/template"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -17,32 +15,13 @@ const (
 	GoScaffoldPath = "src/github.com/catchplay/scaffold"
 )
 
-func init() {
-	cmd := exec.Command("go", "env", "GOPATH")
-
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println("please install golang at first.")
-		fmt.Println("Thanks for using adb tool!")
-
-		return
-	}
-
-	Gopath := strings.Trim(out.String(), "\n")
-
-	if Gopath == "" {
-		panic("cannot find $GOPATH environment variable")
-	}
-}
-
 var Gopath string
 
 type scaffold struct {
 	debug bool
 }
 
+// nolint:golint
 func New(debug bool) *scaffold {
 	return &scaffold{debug: debug}
 }
@@ -53,7 +32,6 @@ func (s *scaffold) Generate(path string) error {
 		return err
 	}
 	projectName := filepath.Base(genAbsDir)
-	//TODO: have to check path MUST be under the $GOPATH/src folder
 	goProjectPath := strings.TrimPrefix(genAbsDir, filepath.Join(Gopath, "src")+"test")
 
 	d := data{
@@ -113,6 +91,7 @@ func (s *scaffold) genFromTemplate(templateSets []templateSet, d data) error {
 	return nil
 }
 
+// nolint: gosec
 func unescaped(x string) interface{} { return template.HTML(x) }
 
 func (s *scaffold) tmplExec(tmplSet templateSet, d data) error {
@@ -154,7 +133,9 @@ func (templEngine *templateEngine) visit(path string, f os.FileInfo, err error) 
 		templateFileName := filepath.Base(path)
 
 		genFileBaeName := strings.TrimSuffix(templateFileName, ".tmpl") + ".go"
-		genFileBasePath, err := filepath.Rel(filepath.Join(Gopath, GoScaffoldPath, "template"), filepath.Join(filepath.Dir(path), genFileBaeName))
+		genFileBasePath, err := filepath.Rel(
+			filepath.Join(Gopath, GoScaffoldPath, "template"),
+			filepath.Join(filepath.Dir(path), genFileBaeName))
 		if err != nil {
 			return pkgErr.WithStack(err)
 		}
@@ -166,7 +147,6 @@ func (templEngine *templateEngine) visit(path string, f os.FileInfo, err error) 
 		}
 
 		templEngine.Templates = append(templEngine.Templates, templ)
-
 	} else if mode := f.Mode(); mode.IsRegular() {
 		templateFileName := filepath.Base(path)
 

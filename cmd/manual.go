@@ -91,3 +91,14 @@ var vimInitCommand = &cobra.Command{
 		)
 	},
 }
+
+var osinitCommand = &cobra.Command{
+	Use:   "osinit",
+	Short: "init linux os",
+	Long:  "init linux os",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("User-Data for Cloud Server(EC2/CVM/ECS)")
+		fmt.Println("")
+		fmt.Println("\tcurl https://init.airdb.host/osinit/ubuntu_init.sh | bash -")
+	},
+}

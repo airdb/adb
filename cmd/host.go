@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"os/exec"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 var hostCommand = &cobra.Command{
