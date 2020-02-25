@@ -18,6 +18,20 @@ var gitInitCommand = &cobra.Command{
 	Long:  "git operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("git config --global core.hooksPath .github/hooks")
+		fmt.Println("git config --global core.excludefile .gitignore_global")
+		fmt.Println()
+		fmt.Println("For Close Github Issue, commit message should as follow:")
+		fmt.Println("\t", "close #x" )
+		fmt.Println("\t", "closes #x" )
+		fmt.Println("\t", "closed #x" )
+		fmt.Println("\t", "fix #x" )
+		fmt.Println("\t", "fixes #x" )
+		fmt.Println("\t", "fixed #x" )
+		fmt.Println("\t", "resolve #x" )
+		fmt.Println("\t", "resolves #x" )
+		fmt.Println("\t", "resolved #x" )
+		fmt.Println("\t", "add new quick sort algorithm, fixes #4, resolve #6, closed #12" )
+
 	},
 }
 
