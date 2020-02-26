@@ -71,6 +71,9 @@ var brewInitCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Brew Common Command:")
 		fmt.Println("\tbrew outdated")
+		fmt.Println("\tbrew ")
+		fmt.Println("\tbrew cask outdated")
+		fmt.Println("\tbrew outdated adb --verbose --debug")
 		fmt.Println("\tbrew install github/gh/gh")
 		fmt.Println("\tbrew install aliyun-cli")
 		fmt.Println()

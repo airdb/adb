@@ -9,4 +9,4 @@
 
 #Step 1: lint
 gofmt -w -s $(git rev-parse --show-toplevel)
-golangci-lint run
+#golangci-lint run
