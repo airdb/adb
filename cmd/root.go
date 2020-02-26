@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-func init() {
+func Execute() {
 	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(sshCommand)
 	rootCmd.AddCommand(sftpCommand)
@@ -25,6 +25,7 @@ func init() {
 	rootCmd.AddCommand(releaseCommand)
 	rootCmd.AddCommand(mysqlCommand)
 	rootCmd.AddCommand(updateCommand)
+	rootCmd.AddCommand(completionBashCommand)
 	rootCmd.AddCommand(manCommand)
 	manCommand.AddCommand(gitInitCommand)
 	manCommand.AddCommand(dockerInitCommand)
@@ -32,13 +33,14 @@ func init() {
 	manCommand.AddCommand(toolsInitCommand)
 	manCommand.AddCommand(brewInitCommand)
 	manCommand.AddCommand(githubInitCommand)
+	manCommand.AddCommand(vimInitCommand)
+	manCommand.AddCommand(osinitCommand)
+	manCommand.AddCommand(kubeCommand)
 
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
-}
 
-func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

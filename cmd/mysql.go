@@ -24,6 +24,7 @@ var mysqlCommand = &cobra.Command{
 }
 
 func mysql(args []string) {
+	fmt.Println("args: ", args)
 	for dbname, item := range config.GetDatabases() {
 		host, port, _ := net.SplitHostPort(item.Address)
 		if item.Default {

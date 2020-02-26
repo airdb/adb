@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 var sshCommand = &cobra.Command{
@@ -31,7 +32,7 @@ var sftpCommand = &cobra.Command{
 const (
 	CommandSSH     = "ssh"
 	CommandSFTP    = "sftp"
-	DefaultSshUser = "ubuntu"
+	DefaultSSHUser = "ubuntu"
 )
 
 const domainZone = "airdb.host"

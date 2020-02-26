@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/imroc/req"
-	"github.com/spf13/cobra"
 	"log"
 	"os/exec"
 	"strings"
+
+	"github.com/imroc/req"
+	"github.com/spf13/cobra"
 )
 
 var releaseCommand = &cobra.Command{

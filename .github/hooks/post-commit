@@ -7,6 +7,4 @@
 #
 # To enable this hook, rename this file to "pre-commit".
 
-#Step 1: lint
-gofmt -w -s $(git rev-parse --show-toplevel)
-#golangci-lint run
+git push

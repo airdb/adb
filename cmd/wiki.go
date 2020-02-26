@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/imroc/req"
 	"log"
 	"os/exec"
 	"sort"
 	"strings"
 
+	"github.com/imroc/req"
 	"github.com/spf13/cobra"
 )
 

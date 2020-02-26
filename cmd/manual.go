@@ -18,6 +18,20 @@ var gitInitCommand = &cobra.Command{
 	Long:  "git operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("git config --global core.hooksPath .github/hooks")
+		fmt.Println("git config --global core.excludefile .gitignore_global")
+		fmt.Println()
+		fmt.Println("For Close Github Issue, commit message should as follow:")
+		fmt.Println("\t", "close #x")
+		fmt.Println("\t", "closes #x")
+		fmt.Println("\t", "closed #x")
+		fmt.Println("\t", "fix #x")
+		fmt.Println("\t", "fixes #x")
+		fmt.Println("\t", "fixed #x")
+		fmt.Println("\t", "resolve #x")
+		fmt.Println("\t", "resolves #x")
+		fmt.Println("\t", "resolved #x")
+		fmt.Println("\t", "add new quick sort algorithm, fixes #4, resolve #6, closed #12")
+
 	},
 }
 
@@ -55,9 +69,18 @@ var brewInitCommand = &cobra.Command{
 	Short: "brew operation",
 	Long:  "brew operation",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("brew outdated")
-		fmt.Println("brew tap aidb/taps")
-		fmt.Println("brew install adb")
+		fmt.Println("Brew Common Command:")
+		fmt.Println("\tbrew outdated")
+		fmt.Println("\tbrew ")
+		fmt.Println("\tbrew cask outdated")
+		fmt.Println("\tbrew outdated adb --verbose --debug")
+		fmt.Println("\tbrew install github/gh/gh")
+		fmt.Println("\tbrew install aliyun-cli")
+		fmt.Println()
+		fmt.Println("\tbrew tap aidb/taps")
+		fmt.Println("\tbrew install airdb/taps/adb")
+		fmt.Println("\tbrew install adb")
+		fmt.Println()
 	},
 }
 
@@ -69,5 +92,48 @@ var githubInitCommand = &cobra.Command{
 		fmt.Println("brew install github/gh/gh")
 		fmt.Println("gh --repo bbhj/lbs issue status")
 		fmt.Println("gh --repo bbhj/lbs issue view 1")
+	},
+}
+
+var vimInitCommand = &cobra.Command{
+	Use:   "vim",
+	Short: "vim configuration",
+	Long:  "vim configuration",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("VIM Common Plugins:")
+		fmt.Println("")
+		fmt.Printf("\tgit clone %s %s\n",
+			"http://github.com/fatih/vim-go.git",
+			"~/.vim/pack/plugins/start/vim-go",
+		)
+	},
+}
+
+var osinitCommand = &cobra.Command{
+	Use:   "osinit",
+	Short: "init linux os",
+	Long:  "init linux os",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("User-Data for Cloud Server(EC2/CVM/ECS)")
+		fmt.Println("")
+		fmt.Println("\tcurl https://init.airdb.host/osinit/ubuntu_init.sh | bash -")
+	},
+}
+
+var kubeCommand = &cobra.Command{
+	Use:   "kube",
+	Short: "kubeneters command",
+	Long:  "kubeneters command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("kubeneters and helm commands)")
+		fmt.Println("")
+		fmt.Println("\tsudo snap install helm --classic")
+		fmt.Println("")
+		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
+		fmt.Println("\thelm repo add airdb https://www.airdb.com/helm/")
+		fmt.Println("\thelm repo update")
+		fmt.Println("\thelm search repo helm/mychart")
+		fmt.Println("\thelm install chart airdb/mychat")
+		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
 	},
 }
