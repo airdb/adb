@@ -14,16 +14,10 @@ import (
 )
 
 var wikiCommand = &cobra.Command{
-	Use:   "wiki",
-	Short: "airdb wiki",
-	Long:  "airdb wiki, https://airdb.wiki",
-	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			Usage()
-			return
-		}
-		wiki(args[0])
-	},
+	Use:     "wiki",
+	Short:   "airdb wiki",
+	Long:    "airdb wiki, https://airdb.wiki",
+	Example: "adb wiki [project_name]",
 }
 
 func Usage() {
@@ -92,4 +86,23 @@ func getWikiArgs(name string) []string {
 		args = append(args, "https://airdb.wiki/"+name)
 	}
 	return args
+}
+
+var interviewWikiCommand = &cobra.Command{
+	Use:   "interview",
+	Short: "interview wiki",
+	Long:  "interview wiki",
+	Run: func(cmd *cobra.Command, args []string) {
+		name := "interview"
+		wiki(name)
+	},
+}
+
+var listWikiCommand = &cobra.Command{
+	Use:   "list",
+	Short: "list wiki",
+	Long:  "list wiki",
+	Run: func(cmd *cobra.Command, args []string) {
+		listRepos()
+	},
 }
