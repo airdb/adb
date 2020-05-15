@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const AirdbWiki = "https://airdb-wiki.github.io"
+const AirdbWiki = "https://airdb-wiki.github.io/"
 
 var wikiCommand = &cobra.Command{
 	Use:     "wiki",
@@ -61,7 +61,7 @@ func listRepos() {
 		switch repo.Name {
 		case strings.TrimPrefix(AirdbWiki, "https"):
 		default:
-			fmt.Printf("\t%s%30s\n", repo.Name, AirdbWiki+repo.Name)
+			fmt.Printf("\t%s\t%30s\n", repo.Name, AirdbWiki+repo.Name)
 		}
 	}
 }
