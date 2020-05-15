@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -26,5 +27,5 @@ func TestScaffold(t *testing.T) {
 	fmt.Printf("tempDir:%s\n", tempDir)
 	assert.NoError(t, New(true).Generate(tempDir))
 
-	//	defer os.RemoveAll(tempDir) // clean up
+	defer os.RemoveAll(tempDir) // clean up
 }

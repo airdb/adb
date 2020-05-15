@@ -49,6 +49,7 @@ func ssh(args []string) {
 	if len(args) == 0 {
 		fmt.Println("Usage:")
 		fmt.Println("  adb ssh [ip|host|container]")
+
 		return
 	}
 
@@ -67,9 +68,11 @@ func ssh(args []string) {
 	if err != nil {
 		return
 	}
+
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Printf("exec error %v\n", err)
+
 		if exiterror, ok := err.(*exec.ExitError); ok {
 			os.Exit(exiterror.ExitCode())
 		}
@@ -80,6 +83,7 @@ func sftp(args []string) {
 	if len(args) == 0 {
 		fmt.Println("Usage:")
 		fmt.Println("  adb sftp [ip|host|container]")
+
 		return
 	}
 
@@ -98,9 +102,11 @@ func sftp(args []string) {
 	if err != nil {
 		return
 	}
+
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Printf("exec error %v\n", err)
+
 		if exiterror, ok := err.(*exec.ExitError); ok {
 			os.Exit(exiterror.ExitCode())
 		}
@@ -113,7 +119,8 @@ func getArgs(typ, arg string) []string {
 	host := arg
 	args := strings.Split(arg, "@")
 
-	if len(args) == 2 {
+	argsLen := 2
+	if len(args) == argsLen {
 		user = args[0]
 		host = args[1]
 	}

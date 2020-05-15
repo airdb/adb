@@ -48,11 +48,13 @@ func getTags() {
 
 	tagsList := make([]Tag, 0)
 	err = json.Unmarshal(r.Bytes(), &tagsList)
+
 	if err != nil {
 		return
 	}
 
 	fmt.Printf("%-16s\t%s\n", "Repo", "Version")
+
 	if len(tagsList) == 0 {
 		fmt.Printf("%-16s\t%s\n", repo, "no tags")
 		return
@@ -68,12 +70,15 @@ func getRepoName() string {
 	cmd := exec.Command("git", "config", "remote.origin.url")
 
 	var out bytes.Buffer
+
 	cmd.Stdout = &out
+
 	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	repo := strings.TrimPrefix(out.String(), "https://github.com/")
+
 	return strings.TrimRight(repo, "\n")
 }

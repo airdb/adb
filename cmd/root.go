@@ -40,6 +40,8 @@ func Execute() {
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
+	wikiCommand.AddCommand(interviewWikiCommand)
+	wikiCommand.AddCommand(listWikiCommand)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
