@@ -127,6 +127,8 @@ var kubeCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("kubeneters and helm commands)")
 		fmt.Println("")
+		fmt.Println("\tsudo apt update")
+		fmt.Println("\tsudo apt install snapd")
 		fmt.Println("\tsudo snap install helm --classic")
 		fmt.Println("")
 		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
