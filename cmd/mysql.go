@@ -25,8 +25,10 @@ var mysqlCommand = &cobra.Command{
 
 func mysql(args []string) {
 	fmt.Println("args: ", args)
+
 	for dbname, item := range config.GetDatabases() {
 		host, port, _ := net.SplitHostPort(item.Address)
+
 		if item.Default {
 			aa := fmt.Sprintf("-h%s -P%s -u%s -p%s %s", host, port, item.User, item.Password, dbname)
 			mysqlcmd(strings.Split(aa, " "))
@@ -49,9 +51,11 @@ func mysqlcmd(args []string) {
 	if err != nil {
 		return
 	}
+
 	err = cmd.Wait()
 	if err != nil {
 		log.Println("adb exec failed.")
+
 		if exiterror, ok := err.(*exec.ExitError); ok {
 			os.Exit(exiterror.ExitCode())
 		}

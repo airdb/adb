@@ -48,20 +48,25 @@ func host() {
 	cmd := exec.Command("aliyun", "alidns", "DescribeDomainRecords", "--DomainName", domain)
 
 	var out bytes.Buffer
+
 	cmd.Stdout = &out
 	err := cmd.Run()
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var instance HostInstance
+
 	err = json.Unmarshal(out.Bytes(), &instance)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Printf("%-8s\t%-32s\t%s\n", "Type", "Host", "IP")
+
 	typ := "host"
+
 	for _, record := range instance.DomainRecords.Record {
 		if strings.HasPrefix(record.Value, ".docker") {
 			typ = "docker"

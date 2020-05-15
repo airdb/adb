@@ -31,8 +31,10 @@ func weather(args []string) {
 	cmd := exec.Command("/usr/bin/curl", apiurl)
 
 	var out bytes.Buffer
+
 	cmd.Stdout = &out
 	err := cmd.Run()
+
 	if err != nil {
 		fmt.Println("Thanks for using adb tool!")
 	} else {

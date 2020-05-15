@@ -26,10 +26,12 @@ func update() {
 	if runtime.GOOS == "darwin" {
 		dl = dl + "-" + runtime.GOOS
 	}
+
 	fmt.Printf("It will take about 1 minute for downloading.\nDownload url: %s\n", dl)
 
-	resp, err := req.Get(dl)
 	tmpPath := "/tmp/adb-latest"
+
+	resp, err := req.Get(dl)
 	if err == nil {
 		err = resp.ToFile(tmpPath)
 	}
@@ -60,7 +62,7 @@ func updateBinary(tmpPath string) error {
 	return err
 }
 
-// completionCmd represents the completion command
+// completionCmd represents the completion command.
 var completionBashCommand = &cobra.Command{
 	Use:   "completion",
 	Short: "Generates bash completion scripts",

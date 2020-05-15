@@ -31,6 +31,7 @@ func (s *scaffold) Generate(path string) error {
 	if err != nil {
 		return err
 	}
+
 	projectName := filepath.Base(genAbsDir)
 	goProjectPath := strings.TrimPrefix(genAbsDir, filepath.Join(Gopath, "src")+"test")
 
@@ -48,6 +49,7 @@ func (s *scaffold) Generate(path string) error {
 	if err := s.genFormStaticFle(d); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -88,6 +90,7 @@ func (s *scaffold) genFromTemplate(templateSets []templateSet, d data) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -97,6 +100,7 @@ func unescaped(x string) interface{} { return template.HTML(x) }
 func (s *scaffold) tmplExec(tmplSet templateSet, d data) error {
 	tmpl := template.New(tmplSet.templateFileName)
 	tmpl = tmpl.Funcs(template.FuncMap{"unescaped": unescaped})
+
 	tmpl, err := tmpl.ParseFiles(tmplSet.templateFilePath)
 	if err != nil {
 		return pkgErr.WithStack(err)
@@ -121,6 +125,7 @@ func (s *scaffold) tmplExec(tmplSet templateSet, d data) error {
 	defer dist.Close()
 
 	fmt.Printf("Create %s\n", distRelFilePath)
+
 	return tmpl.Execute(dist, d)
 }
 
@@ -136,6 +141,7 @@ func (templEngine *templateEngine) visit(path string, f os.FileInfo, err error) 
 		genFileBasePath, err := filepath.Rel(
 			filepath.Join(Gopath, GoScaffoldPath, "template"),
 			filepath.Join(filepath.Dir(path), genFileBaeName))
+
 		if err != nil {
 			return pkgErr.WithStack(err)
 		}
@@ -171,6 +177,7 @@ func (templEngine *templateEngine) visit(path string, f os.FileInfo, err error) 
 
 func (s *scaffold) genFormStaticFle(d data) error {
 	walkerFuc := func(path string, f os.FileInfo, err error) error {
+		// nolint:nestif
 		if f.Mode().IsRegular() {
 			src, err := os.Open(path)
 			if err != nil {
@@ -179,6 +186,7 @@ func (s *scaffold) genFormStaticFle(d data) error {
 			defer src.Close()
 
 			basepath := filepath.Join(Gopath, GoScaffoldPath, "static")
+
 			distRelFilePath, err := filepath.Rel(basepath, path)
 			if err != nil {
 				return pkgErr.WithStack(err)
@@ -207,6 +215,7 @@ func (s *scaffold) genFormStaticFle(d data) error {
 	}
 
 	walkPath := filepath.Join(Gopath, GoScaffoldPath, "static")
+
 	return filepath.Walk(walkPath, walkerFuc)
 }
 

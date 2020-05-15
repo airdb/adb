@@ -13,10 +13,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const AirdbWiki = "https://airdb-wiki.github.io"
+
 var wikiCommand = &cobra.Command{
 	Use:     "wiki",
 	Short:   "airdb wiki",
-	Long:    "airdb wiki, https://airdb.wiki",
+	Long:    "airdb wiki, https://airdb-wiki.github.io",
 	Example: "adb wiki [project_name]",
 }
 
@@ -26,7 +28,7 @@ func Usage() {
 	fmt.Println()
 	listRepos()
 	fmt.Println()
-	fmt.Println("Airdb Wiki: https://airdb.wiki.")
+	fmt.Printf("Airdb Wiki: %s.\n", AirdbWiki)
 }
 
 type Repo struct {
@@ -37,6 +39,7 @@ type Repo struct {
 
 func listRepos() {
 	apiurl := "https://api.github.com/orgs/airdb-wiki/repos"
+
 	resp, err := req.Get(apiurl)
 	if err != nil {
 		log.Println("Query Github failed. https://github.com/airdb/airdb-wiki")
@@ -44,6 +47,7 @@ func listRepos() {
 	}
 
 	repos := make([]Repo, 0)
+
 	err = json.Unmarshal(resp.Bytes(), &repos)
 	if err != nil {
 		log.Println("json unmarshall failed.")
@@ -52,11 +56,12 @@ func listRepos() {
 
 	sort.Slice(repos, func(i, j int) bool { return len(repos[i].Name) < len(repos[j].Name) })
 	fmt.Println("Projects:")
+
 	for _, repo := range repos {
 		switch repo.Name {
-		case "airdb-wiki.github.io":
+		case strings.TrimPrefix(AirdbWiki, "https"):
 		default:
-			fmt.Printf("\t%s%30s\n", repo.Name, "https://airdb.wiki/"+repo.Name)
+			fmt.Printf("\t%s%30s\n", repo.Name, AirdbWiki+repo.Name)
 		}
 	}
 }
@@ -66,7 +71,9 @@ func wiki(wikiName string) {
 	cmd := exec.Command("open", wikiArgs...)
 
 	var out bytes.Buffer
+
 	cmd.Stdout = &out
+
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println("Thanks for using adb tool!", err)
@@ -81,10 +88,11 @@ func getWikiArgs(name string) []string {
 		"Google Chrome",
 	}
 	if name == "" {
-		args = append(args, "https://airdb.wiki/")
+		args = append(args, AirdbWiki)
 	} else {
-		args = append(args, "https://airdb.wiki/"+name)
+		args = append(args, AirdbWiki+name)
 	}
+
 	return args
 }
 
