@@ -137,3 +137,22 @@ var kubeCommand = &cobra.Command{
 		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
 	},
 }
+
+var terraformCommand = &cobra.Command{
+	Use:   "terraform",
+	Short: "terraform command",
+	Long:  "terraform command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("terraform commands")
+		fmt.Println("")
+		fmt.Println("\tterraform -install-autocomplete")
+		fmt.Println("\tterraform init -upgrade")
+		fmt.Println("")
+		fmt.Println("\tterraform validate")
+		fmt.Println("\tterraform plan")
+		fmt.Println("\tterraform apply")
+		fmt.Println("\t#terraform destroy")
+		fmt.Println("")
+		fmt.Println("\tRefer: https://github.com/airdb/init/tree/master/terraform")
+	},
+}

@@ -36,6 +36,7 @@ func Execute() {
 	manCommand.AddCommand(vimInitCommand)
 	manCommand.AddCommand(osinitCommand)
 	manCommand.AddCommand(kubeCommand)
+	manCommand.AddCommand(terraformCommand)
 
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
