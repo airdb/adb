@@ -37,6 +37,7 @@ func Execute() {
 	manCommand.AddCommand(osinitCommand)
 	manCommand.AddCommand(kubeCommand)
 	manCommand.AddCommand(terraformCommand)
+	manCommand.AddCommand(opensslCommand)
 
 	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
