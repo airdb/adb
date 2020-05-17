@@ -36,6 +36,7 @@ func Execute() {
 	manCommand.AddCommand(vimInitCommand)
 	manCommand.AddCommand(osinitCommand)
 	manCommand.AddCommand(kubeCommand)
+	manCommand.AddCommand(helmCommand)
 	manCommand.AddCommand(terraformCommand)
 	manCommand.AddCommand(opensslCommand)
 

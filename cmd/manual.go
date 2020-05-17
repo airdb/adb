@@ -125,18 +125,39 @@ var kubeCommand = &cobra.Command{
 	Short: "kubeneters command",
 	Long:  "kubeneters command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("kubeneters and helm commands)")
+		fmt.Println("kubeneters commands)")
+		fmt.Println("")
+		fmt.Println("\tingress")
+		fmt.Println("\tkubectl describe ingress")
+		fmt.Println("\tkubectl get ingress -o yaml")
+		fmt.Println("")
+	},
+}
+
+var helmCommand = &cobra.Command{
+	Use:   "helm",
+	Short: "helm command",
+	Long:  "helm command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("helm commands)")
 		fmt.Println("")
 		fmt.Println("\tsudo apt update")
 		fmt.Println("\tsudo apt install snapd")
 		fmt.Println("\tsudo snap install helm --classic")
 		fmt.Println("")
 		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
+		fmt.Println("")
 		fmt.Println("\thelm repo add airdb https://www.airdb.com/helm/")
 		fmt.Println("\thelm repo update")
 		fmt.Println("\thelm search repo helm/mychart")
+		fmt.Println("")
+		fmt.Println("\thelm show readme airdb/mychat")
+		fmt.Println("")
 		fmt.Println("\thelm install chart airdb/mychat")
 		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
+		fmt.Println("")
+		fmt.Println("\thelm get notes mychat")
+		fmt.Println("")
 	},
 }
 
