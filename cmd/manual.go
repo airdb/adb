@@ -125,15 +125,71 @@ var kubeCommand = &cobra.Command{
 	Short: "kubeneters command",
 	Long:  "kubeneters command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("kubeneters and helm commands)")
+		fmt.Println("kubeneters commands)")
 		fmt.Println("")
+		fmt.Println("\tingress")
+		fmt.Println("\tkubectl describe ingress")
+		fmt.Println("\tkubectl get ingress -o yaml")
+		fmt.Println("")
+	},
+}
+
+var helmCommand = &cobra.Command{
+	Use:   "helm",
+	Short: "helm command",
+	Long:  "helm command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("helm commands)")
+		fmt.Println("")
+		fmt.Println("\tsudo apt update")
+		fmt.Println("\tsudo apt install snapd")
 		fmt.Println("\tsudo snap install helm --classic")
 		fmt.Println("")
 		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
+		fmt.Println("")
 		fmt.Println("\thelm repo add airdb https://www.airdb.com/helm/")
 		fmt.Println("\thelm repo update")
 		fmt.Println("\thelm search repo helm/mychart")
+		fmt.Println("")
+		fmt.Println("\thelm show readme airdb/mychat")
+		fmt.Println("")
 		fmt.Println("\thelm install chart airdb/mychat")
 		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
+		fmt.Println("")
+		fmt.Println("\thelm get notes mychat")
+		fmt.Println("")
+	},
+}
+
+var terraformCommand = &cobra.Command{
+	Use:   "terraform",
+	Short: "terraform command",
+	Long:  "terraform command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("terraform commands")
+		fmt.Println("")
+		fmt.Println("\tterraform -install-autocomplete")
+		fmt.Println("\tterraform init -upgrade")
+		fmt.Println("")
+		fmt.Println("\tterraform validate")
+		fmt.Println("\tterraform plan")
+		fmt.Println("\tterraform apply")
+		fmt.Println("\t#terraform destroy")
+		fmt.Println("")
+		fmt.Println("\tRefer: https://github.com/airdb/init/tree/master/terraform")
+	},
+}
+
+var opensslCommand = &cobra.Command{
+	Use:   "openssl",
+	Short: "openssl command",
+	Long:  "openssl command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("openssl commands")
+		fmt.Println("")
+		fmt.Println("\topenssl s_client -servername www.airdb.com  -connect www.airdb.com:443 </dev/null 2>/dev/null")
+		fmt.Println("\tcert -f md  www.airdb.com")
+		fmt.Println("")
+		fmt.Println("\tRefer: https://github.com/genkiroid/cert")
 	},
 }
