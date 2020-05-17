@@ -25,7 +25,7 @@ jobs:
         uses: anothrNick/github-tag-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: none
+          DEFAULT_BUMP: major
           WITH_V: true
 
       - name: Build
