@@ -1,6 +1,6 @@
 module github.com/airdb/adb
 
-go 1.13
+go 1.14
 
 require (
 	github.com/airdb/sailor v0.0.0-20200103145643-be7832efaafd
@@ -9,6 +9,7 @@ require (
 	github.com/mitchellh/mapstructure v1.3.1 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/rakyll/statik v0.1.7
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v1.0.0

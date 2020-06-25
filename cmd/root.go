@@ -48,6 +48,8 @@ func Execute() {
 	wikiCommand.AddCommand(interviewWikiCommand)
 	wikiCommand.AddCommand(listWikiCommand)
 
+	genCmdInit()
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
