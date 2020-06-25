@@ -4,6 +4,8 @@ import (
 	"github.com/airdb/adb/cmd"
 )
 
+//go:generate go build -o adb main.go
+
 func main() {
 	cmd.Execute()
 }

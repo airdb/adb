@@ -3,7 +3,7 @@ module github.com/airdb/adb
 go 1.14
 
 require (
-	github.com/airdb/sailor v0.0.0-20200103145643-be7832efaafd
+	github.com/airdb/sailor v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/imroc/req v0.2.4
 	github.com/mitchellh/mapstructure v1.3.1 // indirect
