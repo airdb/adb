@@ -19,6 +19,7 @@ var gitInitCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("git config --global core.hooksPath .github/hooks")
 		fmt.Println("git config --global core.excludefile .gitignore_global")
+		fmt.Println("git config --global url.'ssh://git@github.com'.insteadOf https://github.com")
 		fmt.Println()
 		fmt.Println("For Close Github Issue, commit message should as follow:")
 		fmt.Println("\t", "close #x")

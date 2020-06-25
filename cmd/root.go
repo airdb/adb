@@ -16,6 +16,8 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
+
 	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(sshCommand)
 	rootCmd.AddCommand(sftpCommand)
@@ -45,6 +47,8 @@ func Execute() {
 	rootCmd.AddCommand(wikiCommand)
 	wikiCommand.AddCommand(interviewWikiCommand)
 	wikiCommand.AddCommand(listWikiCommand)
+
+	genCmdInit()
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

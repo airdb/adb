@@ -3,12 +3,9 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"os/exec"
-	"strings"
 
-	"github.com/airdb/sailor/config"
 	"github.com/spf13/cobra"
 )
 
@@ -25,15 +22,7 @@ var mysqlCommand = &cobra.Command{
 
 func mysql(args []string) {
 	fmt.Println("args: ", args)
-
-	for dbname, item := range config.GetDatabases() {
-		host, port, _ := net.SplitHostPort(item.Address)
-
-		if item.Default {
-			aa := fmt.Sprintf("-h%s -P%s -u%s -p%s %s", host, port, item.User, item.Password, dbname)
-			mysqlcmd(strings.Split(aa, " "))
-		}
-	}
+	mysqlcmd(args)
 }
 
 func mysqlcmd(args []string) {
