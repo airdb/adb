@@ -19,13 +19,9 @@ func Execute() {
 	rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
 
 	rootCmd.AddCommand(versionCommand)
-	rootCmd.AddCommand(sshCommand)
-	rootCmd.AddCommand(sftpCommand)
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
-	rootCmd.AddCommand(hostCommand)
 	rootCmd.AddCommand(releaseCommand)
-	rootCmd.AddCommand(mysqlCommand)
 	rootCmd.AddCommand(updateCommand)
 	rootCmd.AddCommand(completionBashCommand)
 	rootCmd.AddCommand(manCommand)
@@ -49,6 +45,9 @@ func Execute() {
 	wikiCommand.AddCommand(listWikiCommand)
 
 	genCmdInit()
+	mysqlCmdInit()
+	serviceCmdInit()
+	hostCmdInit()
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

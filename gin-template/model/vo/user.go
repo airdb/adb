@@ -1,7 +1,7 @@
 package vo
 
 import (
-	"github.com/airdb-template/gin-api/model/po"
+	"{{ .GoModulePath }}/model/po"
 )
 
 type UserReq struct {

@@ -1,13 +1,15 @@
-package web
+package web_test
 
 import (
 	"net/http"
 	"testing"
+
+	"{{ .GoModulePath }}/web"
 )
 
 func TestListUser(t *testing.T) {
 	uri := "/apis/user/v1/dean"
-	resp := APIRequest(uri, "GET", nil)
+	resp := web.APIRequest(uri, "GET", nil)
 
 	if resp.Code != http.StatusOK {
 		t.Error(uri, resp.Code)

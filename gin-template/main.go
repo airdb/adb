@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/airdb-template/gin-api/web"
+	"{{ .GoModulePath }}/web" // invalid
 )
 
+//go:generate go build -o main main.go
 func main() {
 	web.Run()
 }

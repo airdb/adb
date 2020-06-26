@@ -2,51 +2,78 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
+	"strings"
 
+	"github.com/airdb/sailor"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )
 
-var mysqlCommand = &cobra.Command{
-	Use:                "mysql",
+var mysqlCmd = &cobra.Command{
+	Use:                "mysql [service]",
 	Short:              "mysql client",
 	Long:               "Airdb mysql client",
-	DisableFlagParsing: true,
+	DisableFlagParsing: false,
+	Args:               cobra.MinimumNArgs(1),
 	Aliases:            []string{"sql"},
 	Run: func(cmd *cobra.Command, args []string) {
 		mysql(args)
 	},
 }
 
-func mysql(args []string) {
-	fmt.Println("args: ", args)
-	mysqlcmd(args)
+type mysqlStruct struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DB       string
 }
 
-func mysqlcmd(args []string) {
-	mysqlPath, err := exec.LookPath("mysql")
+var mysqlFlags mysqlStruct
+
+func mysqlCmdInit() {
+	rootCmd.AddCommand(mysqlCmd)
+
+	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.User, "user", "u", "root", "database username")
+	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.Password, "password", "p", "airdb.me", "database password")
+	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.DB, "db", "", "test", "database name")
+}
+
+func mysql(args []string) {
+	client, err := aliyunConfigInit()
 	if err != nil {
-		return
+		panic(err)
 	}
 
-	cmd := exec.Command(mysqlPath, args...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	request := alidns.CreateDescribeDomainRecordsRequest()
+	request.DomainName = ServiceDomain
+	request.RRKeyWord = args[0]
 
-	err = cmd.Start()
+	output, err := client.DescribeDomainRecords(request)
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
 
-	err = cmd.Wait()
-	if err != nil {
-		log.Println("adb exec failed.")
-
-		if exiterror, ok := err.(*exec.ExitError); ok {
-			os.Exit(exiterror.ExitCode())
+	rrs := output.DomainRecords.Record
+	if len(rrs) > 1 {
+		for _, rr := range output.DomainRecords.Record {
+			fmt.Printf("%-32s\t%s\n", rr.RR, rr.Value)
 		}
 	}
+
+	values := strings.Split(rrs[0].Value, " ")
+
+	mysqlFlags.Host = values[3]
+	mysqlFlags.Port = values[2]
+
+	flags := fmt.Sprintf("-h%s -P%s -u%s -p%s %s",
+		mysqlFlags.Host,
+		mysqlFlags.Port,
+		mysqlFlags.User,
+		mysqlFlags.Password,
+		mysqlFlags.DB,
+	)
+
+	args = strings.Split(flags, " ")
+	sailor.Exec("mysql", args)
 }
