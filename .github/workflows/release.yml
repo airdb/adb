@@ -18,7 +18,7 @@ jobs:
           go-version: "1.14"
 
       - name: Test
-        run: echo go test -v .
+        run: go version
 
       - name: Bump version and push tag
         id: bump_version
@@ -33,9 +33,12 @@ jobs:
           timeNow=$(date +%s)
           timeflag="github.com/airdb/adb/cmd.BuildTime=$timeNow"
           versionflag="github.com/airdb/adb/cmd.Version=${{ steps.bump_version.outputs.tag }}"
+          
+          echo $timeflag, $versionflag
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
           CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
           CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
+          
           zip adb-linux-amd64.zip adb-linux
           zip adb-darwin-amd64.zip adb-darwin
           zip adb-windows-amd64.zip adb-windows.exe
