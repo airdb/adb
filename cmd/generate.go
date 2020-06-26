@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"go/build"
 	"log"
 	"os"
@@ -34,11 +35,6 @@ var genCmd = &cobra.Command{
 	Long:    `Generate a new airdb project`,
 	Aliases: []string{"generate", "gene"},
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			println("usage: adb gen [module]")
-			return
-		}
-
 		generate(args)
 	},
 }
@@ -46,17 +42,17 @@ var genCmd = &cobra.Command{
 func genCmdInit() {
 	rootCmd.AddCommand(genCmd)
 
-	genCmd.PersistentFlags().StringVarP(&genFlags.Module, "module", "m", "github.com/airdb/demo", "project module name")
+	genCmd.PersistentFlags().StringVarP(&generateFlags.GitURL, "git", "g", "github.com", "git domain")
+	genCmd.PersistentFlags().StringVarP(&generateFlags.Owner, "owner", "o", "airdb", "owner or organization")
+	genCmd.PersistentFlags().StringVarP(&generateFlags.Repo, "repo", "r", "demo", "project repo")
 }
-
-type genStruct struct {
-	Module string
-}
-
-var genFlags = genStruct{}
 
 func generate(args []string) {
-	module := args[0]
+	module := fmt.Sprintf("%s/%s/%s",
+		generateFlags.GitURL,
+		generateFlags.Owner,
+		generateFlags.Repo,
+	)
 
 	projectDir := path.Join(build.Default.GOPATH, "src", module)
 
