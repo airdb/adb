@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/airdb-template/gin-api/model/vo"
+	"{{ .GoModulePath }}/model/vo"
 	"github.com/gin-gonic/gin"
 )
 

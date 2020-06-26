@@ -47,14 +47,34 @@ func genCmdInit() {
 	genCmd.PersistentFlags().StringVarP(&generateFlags.Repo, "repo", "r", "demo", "project repo")
 }
 
+type generateStruct struct {
+	// github.com
+	GitURL string
+
+	// airdb
+	Owner string
+
+	// demo
+	Repo string
+
+	// github.com/airdb/demo
+	GoModulePath string
+}
+
+var generateFlags = generateStruct{}
+
 func generate(args []string) {
-	module := fmt.Sprintf("%s/%s/%s",
+	if len(args) > 0 {
+		generateFlags.Repo = args[0]
+	}
+
+	generateFlags.GoModulePath = fmt.Sprintf("%s/%s/%s",
 		generateFlags.GitURL,
 		generateFlags.Owner,
 		generateFlags.Repo,
 	)
 
-	projectDir := path.Join(build.Default.GOPATH, "src", module)
+	projectDir := path.Join(build.Default.GOPATH, "src", generateFlags.GoModulePath)
 
 	statikFS, err := fs.New()
 	if err != nil {
@@ -78,7 +98,7 @@ func generate(args []string) {
 			return err
 		}
 
-		err = sailor.TemplateGenerateFileFromReader(srcFile, projectDir, nil)
+		err = sailor.TemplateGenerateFileFromReader(srcFile, projectDir, generateFlags)
 		if err != nil {
 			return err
 		}

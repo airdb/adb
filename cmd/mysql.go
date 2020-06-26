@@ -2,21 +2,19 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
 	"strings"
-	"time"
 
-	"github.com/miekg/dns"
+	"github.com/airdb/sailor"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )
 
 var mysqlCmd = &cobra.Command{
-	Use:                "mysql",
+	Use:                "mysql [service]",
 	Short:              "mysql client",
 	Long:               "Airdb mysql client",
 	DisableFlagParsing: false,
+	Args:               cobra.MinimumNArgs(1),
 	Aliases:            []string{"sql"},
 	Run: func(cmd *cobra.Command, args []string) {
 		mysql(args)
@@ -25,7 +23,7 @@ var mysqlCmd = &cobra.Command{
 
 type mysqlStruct struct {
 	Host     string
-	Port     uint16
+	Port     string
 	User     string
 	Password string
 	DB       string
@@ -42,25 +40,33 @@ func mysqlCmdInit() {
 }
 
 func mysql(args []string) {
-	fmt.Println("args: ", args)
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
 
-	c := dns.Client{Timeout: 1 * time.Second}
-	m := dns.Msg{}
+	request := alidns.CreateDescribeDomainRecordsRequest()
+	request.DomainName = ServiceDomain
+	request.RRKeyWord = args[0]
 
-	m.SetQuestion("hello.airdb.me.", dns.TypeSRV)
-	r, _, err := c.Exchange(&m, "8.8.8.8:53")
-	fmt.Println(r.Answer, err)
+	output, err := client.DescribeDomainRecords(request)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	for _, ans := range r.Answer {
-		record, isType := ans.(*dns.SRV)
-		if isType {
-			mysqlFlags.Host = record.Target
-			mysqlFlags.Port = record.Port
-			fmt.Println(record.Target, record.Port)
+	rrs := output.DomainRecords.Record
+	if len(rrs) > 1 {
+		for _, rr := range output.DomainRecords.Record {
+			fmt.Printf("%-32s\t%s\n", rr.RR, rr.Value)
 		}
 	}
 
-	flags := fmt.Sprintf("-h%s -P%d -u%s -p%s %s",
+	values := strings.Split(rrs[0].Value, " ")
+
+	mysqlFlags.Host = values[3]
+	mysqlFlags.Port = values[2]
+
+	flags := fmt.Sprintf("-h%s -P%s -u%s -p%s %s",
 		mysqlFlags.Host,
 		mysqlFlags.Port,
 		mysqlFlags.User,
@@ -69,31 +75,5 @@ func mysql(args []string) {
 	)
 
 	args = strings.Split(flags, " ")
-	mysqlcmd(args)
-}
-
-func mysqlcmd(args []string) {
-	mysqlPath, err := exec.LookPath("mysql")
-	if err != nil {
-		return
-	}
-
-	cmd := exec.Command(mysqlPath, args...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Start()
-	if err != nil {
-		return
-	}
-
-	err = cmd.Wait()
-	if err != nil {
-		log.Println("adb exec failed.")
-
-		if exiterror, ok := err.(*exec.ExitError); ok {
-			os.Exit(exiterror.ExitCode())
-		}
-	}
+	sailor.Exec("mysql", args)
 }

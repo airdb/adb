@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/airdb-template/gin-api/web"
+	"{{ .GoModulePath }}/web"
 )
 
 func TestListUser(t *testing.T) {

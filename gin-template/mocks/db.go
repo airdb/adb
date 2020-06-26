@@ -3,7 +3,7 @@ package mocks
 import (
 	"fmt"
 
-	"github.com/airdb-template/gin-api/model/po"
+	"{{ .GoModulePath }}/model/po"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // In order to connect to a database.
 )

@@ -6,14 +6,15 @@ import (
 	"net/http/httptest"
 	"os"
 
-	"github.com/airdb-template/gin-api/mocks"
+	"{{ .GoModulePath }}/mocks"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
 func Run() {
 	defaultAddr := "0.0.0.0:8080"
-	err := NewRouter().Run("0.0.0.0:" + defaultAddr)
+	log.Println("web server starting, listen", defaultAddr)
+	err := NewRouter().Run(defaultAddr)
 
 	if err != nil {
 		log.Println("error: ", err)
@@ -25,6 +26,8 @@ func NewRouter() *gin.Engine {
 
 	router := gin.New()
 	pprof.Register(router)
+
+	router.GET("/", DefaultRoot)
 
 	v1API := router.Group("/apis/user/v1")
 	v1API.Use()

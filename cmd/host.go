@@ -1,79 +1,146 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"log"
-	"os/exec"
 	"strings"
 
+	"github.com/airdb/sailor"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )
 
-var hostCommand = &cobra.Command{
+var hostCmd = &cobra.Command{
 	Use:                "host",
-	Short:              "host operation",
-	Long:               "host operation",
+	Short:              "Perform actions on hosts",
+	Long:               "Perform actions on hosts",
 	DisableFlagParsing: true,
+	Hidden:             true,
+	Aliases:            []string{"server", "servers", "hosts"},
 	Run: func(cmd *cobra.Command, args []string) {
 		host()
 	},
 }
 
-type HostInstance struct {
-	PageNumber    int    `json:"PageNumber"`
-	PageSize      int    `json:"PageSize"`
-	RequestID     string `json:"RequestId"`
-	TotalCount    int    `json:"TotalCount"`
-	DomainRecords struct {
-		Record []struct {
-			DomainName string `json:"DomainName"`
-			Line       string `json:"Line"`
-			Locked     bool   `json:"Locked"`
-			RR         string `json:"RR"`
-			RecordID   string `json:"RecordId"`
-			Status     string `json:"Status"`
-			TTL        int    `json:"TTL"`
-			Type       string `json:"Type"`
-			Value      string `json:"Value"`
-			Weight     int    `json:"Weight"`
-		} `json:"Record"`
-	} `json:"DomainRecords"`
+func hostCmdInit() {
+	rootCmd.AddCommand(hostCmd)
+	hostCmd.AddCommand(hostSSHCmd)
+	hostCmd.AddCommand(hostSFTPCmd)
+
+	sshOptions := []string{
+		"StrictHostKeyChecking=no",
+		"UserKnownHostsFile=/dev/null",
+		"ConnectTimeout=3",
+	}
+
+	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
+	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.adb/id_rsa", "identity file")
+	sshFlags.Options = hostSSHCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
+	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
+		"sftp server dest path")
+
+	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
+	sshFlags.Options = hostSFTPCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
+
+	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.adb/id_rsa",
+		"identity file")
+
+	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
+		"sftp server dest path")
 }
 
 func host() {
-	// alidns DescribeDomainRecords --DomainName airdb.host
-	domain := "airdb.host"
-	cmd := exec.Command("aliyun", "alidns", "DescribeDomainRecords", "--DomainName", domain)
-
-	var out bytes.Buffer
-
-	cmd.Stdout = &out
-	err := cmd.Run()
-
+	client, err := aliyunConfigInit()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	var instance HostInstance
+	request := alidns.CreateDescribeDomainRecordsRequest()
+	request.DomainName = HostDomain
 
-	err = json.Unmarshal(out.Bytes(), &instance)
+	output, err := client.DescribeDomainRecords(request)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
-	fmt.Printf("%-8s\t%-32s\t%s\n", "Type", "Host", "IP")
-
-	typ := "host"
-
-	for _, record := range instance.DomainRecords.Record {
-		if strings.HasPrefix(record.Value, ".docker") {
-			typ = "docker"
+	for _, rr := range output.DomainRecords.Record {
+		if rr.RR == sailor.DelimiterStar || rr.RR == sailor.DelimiterAt {
+			continue
 		}
 
-		if record.Type == "A" {
-			fmt.Printf("%-8s%-32s\t%s\n", typ, record.RR+"."+record.DomainName, record.Value)
-		}
+		domain := rr.RR + "." + rr.DomainName
+		fmt.Printf("%-8s\t%-32s\t%s\n", rr.RR, domain, rr.Value)
 	}
+}
+
+type sshStruct struct {
+	LoginName    string
+	IdentityFile string
+	Options      *[]string
+	SFTPDestPath string
+}
+
+var sshFlags = sshStruct{}
+
+var hostSSHCmd = &cobra.Command{
+	Use:   "ssh [server]",
+	Short: "SSH servers",
+	Long:  "SSH servers",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		hostSSH(args)
+	},
+}
+
+func hostSSH(args []string) {
+	host := args[0]
+	if !strings.HasSuffix(host, "."+HostDomain) {
+		host = host + "." + HostDomain
+	}
+
+	parms := []string{}
+
+	parms = append(parms, host)
+	parms = append(parms, "-l"+sshFlags.LoginName)
+	parms = append(parms, "-i"+sshFlags.IdentityFile)
+
+	for _, option := range *sshFlags.Options {
+		parms = append(parms, "-o"+option)
+	}
+
+	sailor.Exec(CommandSSH, parms)
+}
+
+var hostSFTPCmd = &cobra.Command{
+	Use:   "sftp [server]",
+	Short: "SFTP servers",
+	Long:  "SFTP servers",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		hostSFTP(args)
+	},
+}
+
+func hostSFTP(args []string) {
+	host := args[0]
+	if !strings.HasSuffix(host, "."+HostDomain) {
+		host = host + "." + HostDomain
+	}
+
+	parms := []string{}
+
+	parms = append(parms, "-i"+sshFlags.IdentityFile)
+	for _, option := range *sshFlags.Options {
+		parms = append(parms, "-o"+option)
+	}
+
+	sftpTarget := fmt.Sprintf("%s@%s:%s",
+		sshFlags.LoginName,
+		host,
+		sshFlags.SFTPDestPath,
+	)
+
+	// Sftp target must at the end of params.
+	parms = append(parms, sftpTarget)
+
+	sailor.Exec(CommandSFTP, parms)
 }

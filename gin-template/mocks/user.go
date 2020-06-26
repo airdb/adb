@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	"github.com/airdb-template/gin-api/model/po"
+	"{{ .GoModulePath }}/model/po"
 )
 
 var User1 = &po.User{

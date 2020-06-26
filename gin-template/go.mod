@@ -1,4 +1,4 @@
-module github.com/airdb-template/gin-api
+module {{ .GoModulePath }} // nolint
 
 go 1.14
 
