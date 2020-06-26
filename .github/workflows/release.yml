@@ -25,7 +25,7 @@ jobs:
         uses: anothrNick/github-tag-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: none
+          DEFAULT_BUMP: major
           WITH_V: true
 
       - name: Build
@@ -33,12 +33,12 @@ jobs:
           timeNow=$(date +%s)
           timeflag="github.com/airdb/adb/cmd.BuildTime=$timeNow"
           versionflag="github.com/airdb/adb/cmd.Version=${{ steps.bump_version.outputs.tag }}"
-          
+
           echo $timeflag, $versionflag
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o adb-linux -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
           CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o adb-darwin -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
           CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o adb-windows.exe -ldflags "-X $timeflag" -ldflags "-X $versionflag" main.go
-          
+
           zip adb-linux-amd64.zip adb-linux
           zip adb-darwin-amd64.zip adb-darwin
           zip adb-windows-amd64.zip adb-windows.exe
