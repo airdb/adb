@@ -1,7 +1,6 @@
 package po
 
 import (
-	"github.com/airdb/sailor/dbutils"
 	"github.com/jinzhu/gorm"
 )
 
@@ -18,14 +17,11 @@ type User struct {
 }
 
 func ListProvider() (secret []*User) {
-	dbutils.DefaultDB().Table("user_tab").Find(&secret)
 	return
 }
 
 func List(voUser string) *User {
 	var user User
-
-	dbutils.DefaultDB().Table("user_tab").Where("user = ?", voUser).First(&user)
 
 	return &user
 }
