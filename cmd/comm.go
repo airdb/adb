@@ -14,7 +14,7 @@ const (
 )
 
 const (
-	ServiceDomain = "airdb.me"
+	ServiceDomain = "airdb.space"
 	HostDomain    = "airdb.host"
 )
 
