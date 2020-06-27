@@ -21,8 +21,6 @@ func Execute() {
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
 	rootCmd.AddCommand(releaseCommand)
-	rootCmd.AddCommand(updateCommand)
-	rootCmd.AddCommand(completionBashCommand)
 	rootCmd.AddCommand(manCommand)
 	manCommand.AddCommand(gitInitCommand)
 	manCommand.AddCommand(dockerInitCommand)
@@ -47,6 +45,8 @@ func Execute() {
 	mysqlCmdInit()
 	serviceCmdInit()
 	hostCmdInit()
+
+	updateCmdInit()
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

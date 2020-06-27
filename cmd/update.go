@@ -11,14 +11,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var updateCommand = &cobra.Command{
+var updateCmd = &cobra.Command{
 	Use:                "update",
-	Short:              "update self",
-	Long:               "update self",
+	Short:              "Self update adb",
+	Long:               "Self update adb",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		update()
 	},
+}
+
+func updateCmdInit() {
+	rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(completionBashCmd)
+
+	completionBashCmd.PersistentFlags().BoolVarP(&writeCompletionFile, "write_file", "w", false, "write completion file")
 }
 
 func update() {
@@ -62,11 +69,9 @@ func updateBinary(tmpPath string) error {
 	return err
 }
 
-// completionCmd represents the completion command.
-var completionBashCommand = &cobra.Command{
-	Use:   "completion",
-	Short: "Generates bash completion scripts",
-	Long: `To load completion run
+var writeCompletionFile bool
+
+var completionBashCmdLongDesc = `To load completion run
 
 . <(bitbucket completion)
 
@@ -76,11 +81,30 @@ To configure your bash shell to load completions for each session add to your ba
 # adb completion >/usr/local/etc/bash_completion.d/adb
 # ~/.bashrc or ~/.profile
 . <(bitbucket completion)
-`,
+`
+
+// CompletionCmd represents the completion command.
+var completionBashCmd = &cobra.Command{
+	Use:   "completion",
+	Short: "Generates bash completion scripts",
+	Long: completionBashCmdLongDesc,
 	Run: func(cmd *cobra.Command, args []string) {
+		if writeCompletionFile {
+			completionFile := "/usr/local/etc/bash_completion.d/adb"
+
+			err := rootCmd.GenFishCompletionFile(completionFile, true)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println("Generates bash completion scripts successfully, file:", completionFile)
+			return
+		}
+
 		err := rootCmd.GenBashCompletion(os.Stdout)
 		if err != nil {
 			fmt.Println("Generates bash completion scripts failed!")
 		}
+
 	},
 }

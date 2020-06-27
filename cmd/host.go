@@ -13,7 +13,7 @@ var hostCmd = &cobra.Command{
 	Use:                "host",
 	Short:              "Perform actions on hosts",
 	Long:               "Perform actions on hosts",
-	DisableFlagParsing:true,
+	DisableFlagParsing: true,
 	Aliases:            []string{"server", "servers", "hosts"},
 }
 
@@ -46,10 +46,10 @@ func hostCmdInit() {
 }
 
 var hostListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List servers",
-	Long:  "List servers",
-	DisableFlagParsing:true,
+	Use:                "list",
+	Short:              "List servers",
+	Long:               "List servers",
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		host()
 	},
@@ -89,11 +89,11 @@ type sshStruct struct {
 var sshFlags = sshStruct{}
 
 var hostSSHCmd = &cobra.Command{
-	Use:   "ssh [server]",
-	Short: "SSH servers",
-	Long:  "SSH servers",
-	DisableFlagParsing:true,
-	Args:  cobra.ExactArgs(1),
+	Use:                "ssh [server]",
+	Short:              "SSH servers",
+	Long:               "SSH servers",
+	DisableFlagParsing: true,
+	Args:               cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		hostSSH(args)
 	},
@@ -119,11 +119,11 @@ func hostSSH(args []string) {
 }
 
 var hostSFTPCmd = &cobra.Command{
-	Use:   "sftp [server]",
-	Short: "SFTP servers",
-	Long:  "SFTP servers",
-	Args:  cobra.ExactArgs(1),
-	DisableFlagParsing:true,
+	Use:                "sftp [server]",
+	Short:              "SFTP servers",
+	Long:               "SFTP servers",
+	Args:               cobra.ExactArgs(1),
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		hostSFTP(args)
 	},
