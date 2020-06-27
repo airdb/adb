@@ -16,8 +16,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
-
+	// rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
 	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
