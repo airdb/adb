@@ -87,7 +87,7 @@ To configure your bash shell to load completions for each session add to your ba
 var completionBashCmd = &cobra.Command{
 	Use:   "completion",
 	Short: "Generates bash completion scripts",
-	Long: completionBashCmdLongDesc,
+	Long:  completionBashCmdLongDesc,
 	Run: func(cmd *cobra.Command, args []string) {
 		if writeCompletionFile {
 			completionFile := "/usr/local/etc/bash_completion.d/adb"

@@ -15,7 +15,7 @@ var manCommand = &cobra.Command{
 var gitInitCommand = &cobra.Command{
 	Use:   "git",
 	Short: "git operation",
-	Long:  "git operation",
+	Long: "git operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("git config --global core.hooksPath .github/hooks")
 		fmt.Println("git config --global core.excludefile .gitignore_global")
