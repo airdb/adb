@@ -14,15 +14,12 @@ var hostCmd = &cobra.Command{
 	Short:              "Perform actions on hosts",
 	Long:               "Perform actions on hosts",
 	DisableFlagParsing: true,
-	Hidden:             true,
 	Aliases:            []string{"server", "servers", "hosts"},
-	Run: func(cmd *cobra.Command, args []string) {
-		host()
-	},
 }
 
 func hostCmdInit() {
 	rootCmd.AddCommand(hostCmd)
+	hostCmd.AddCommand(hostListCmd)
 	hostCmd.AddCommand(hostSSHCmd)
 	hostCmd.AddCommand(hostSFTPCmd)
 
@@ -46,6 +43,16 @@ func hostCmdInit() {
 
 	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
 		"sftp server dest path")
+}
+
+var hostListCmd = &cobra.Command{
+	Use:                "list",
+	Short:              "List servers",
+	Long:               "List servers",
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		host()
+	},
 }
 
 func host() {
@@ -82,10 +89,11 @@ type sshStruct struct {
 var sshFlags = sshStruct{}
 
 var hostSSHCmd = &cobra.Command{
-	Use:   "ssh [server]",
-	Short: "SSH servers",
-	Long:  "SSH servers",
-	Args:  cobra.ExactArgs(1),
+	Use:                "ssh [server]",
+	Short:              "SSH servers",
+	Long:               "SSH servers",
+	DisableFlagParsing: true,
+	Args:               cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		hostSSH(args)
 	},
@@ -111,10 +119,11 @@ func hostSSH(args []string) {
 }
 
 var hostSFTPCmd = &cobra.Command{
-	Use:   "sftp [server]",
-	Short: "SFTP servers",
-	Long:  "SFTP servers",
-	Args:  cobra.ExactArgs(1),
+	Use:                "sftp [server]",
+	Short:              "SFTP servers",
+	Long:               "SFTP servers",
+	Args:               cobra.ExactArgs(1),
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		hostSFTP(args)
 	},
@@ -139,7 +148,7 @@ func hostSFTP(args []string) {
 		sshFlags.SFTPDestPath,
 	)
 
-	// Sftp target must at the end of params.
+	// Sftp target(user@host:/tmp) must at the end of params.
 	parms = append(parms, sftpTarget)
 
 	sailor.Exec(CommandSFTP, parms)
