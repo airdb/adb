@@ -46,6 +46,8 @@ func Execute() {
 	serviceCmdInit()
 	hostCmdInit()
 
+	initConfigCmd()
+
 	updateCmdInit()
 
 	if err := rootCmd.Execute(); err != nil {
