@@ -87,6 +87,9 @@ var configGetCmd = &cobra.Command{
 	Short: "Print the value of a given configuration key",
 	Example: heredoc.Doc(`
 	$ adb config get aliyun 
+    access_key_id: xxxxxxxxxxxx_id
+    access_key_secret: xxxxxxxxxxxx_secret
+    region_id: cn-hangzhou
 	`),
 	Args: cobra.ExactArgs(1),
 	RunE: configGet,
@@ -100,7 +103,7 @@ var configSetCmd = &cobra.Command{
     [aliyun]
     ? access_key_id: xxxxxxxxxxxx_id
     ? access_key_secret: xxxxxxxxxxxx_secret
-    ? region_id: (cn-hangzhou) 
+    ? region_id: (cn-hangzhou)
 	`),
 	Args: cobra.ExactArgs(1),
 	RunE: configSet,
