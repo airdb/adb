@@ -86,8 +86,7 @@ var configGetCmd = &cobra.Command{
 	Use:   "get <key>",
 	Short: "Print the value of a given configuration key",
 	Example: heredoc.Doc(`
-	$ adb config get git_protocol
-	https
+	$ adb config get aliyun 
 	`),
 	Args: cobra.ExactArgs(1),
 	RunE: configGet,
@@ -97,8 +96,11 @@ var configSetCmd = &cobra.Command{
 	Use:   "set <key> <value>",
 	Short: "Update configuration with a value for the given key",
 	Example: heredoc.Doc(`
-	$ adb config set editor vim
-	$ adb config set editor "code --wait"
+	$ adb config set aliyun
+    [aliyun]
+    ? access_key_id: xxxxxxxxxxxx_id
+    ? access_key_secret: xxxxxxxxxxxx_secret
+    ? region_id: (cn-hangzhou) 
 	`),
 	Args: cobra.ExactArgs(1),
 	RunE: configSet,
@@ -196,7 +198,7 @@ func configGet(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func getAliyunConfig() *AliyunFlag{
+func getAliyunConfig() *AliyunFlag {
 	viper.SetConfigFile(aliyunConfigFile())
 
 	if err := viper.ReadInConfig(); err != nil {
