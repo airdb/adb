@@ -190,8 +190,8 @@ var opensslCommand = &cobra.Command{
 		fmt.Println("")
 		fmt.Println("\topenssl  x509 -text -in ssl.chain.crt")
 		fmt.Println("")
-		fmt.Println("\topenssl s_client -servername www.airdb.com  -connect www.airdb.com:443 </dev/null 2>/dev/null")
-		fmt.Println("\tcert -f md  www.airdb.com")
+		fmt.Println("\topenssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null")
+		fmt.Println("\tcert -f md www.airdb.com")
 		fmt.Println("")
 		fmt.Println("\tRefer: https://github.com/genkiroid/cert")
 	},

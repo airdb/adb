@@ -11,3 +11,6 @@ linters:
   disable:
     - gochecknoglobals
   enable-all: true
+
+skip-dirs:
+  - gin-template
