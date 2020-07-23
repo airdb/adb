@@ -68,7 +68,7 @@ func generate(args []string) {
 		generateFlags.Repo = args[0]
 	}
 
-	generateFlags.GoModulePath = fmt.Sprintf("%s/%s/%s",
+	generateFlags.GoModulePath = fmt.Sprintf("d%s/%s/%s",
 		generateFlags.GitURL,
 		generateFlags.Owner,
 		generateFlags.Repo,

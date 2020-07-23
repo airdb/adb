@@ -19,4 +19,3 @@ https://github.com/airdb/adb/releases/download/v1.0.0/adb
 go get github.com/rakyll/statik
 statik -include='*' -src gin-template -f
 ```
-
