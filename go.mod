@@ -12,6 +12,5 @@ require (
 	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.4.0
-	github.com/tcnksm/go-input v0.0.0-20180404061846-548a7d7a8ee8
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 )

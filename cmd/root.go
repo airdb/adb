@@ -8,16 +8,16 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "adb",
-	Short: "Airdb Development Builder",
-	Long:  "Airdb Development Builder Command Line Interface",
+	Use:     "adb",
+	Short:   "Airdb Development Builder",
+	Long:    "Airdb Development Builder Command Line Interface",
+	Version: getVersion(),
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 	},
 }
 
 func Execute() {
 	// rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
-	rootCmd.AddCommand(versionCommand)
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
 	rootCmd.AddCommand(releaseCommand)

@@ -17,7 +17,7 @@ const (
 
 const CloudPlatformAliyun = "aliyun"
 
-var aliyunConfig = map[string]string{}
+// var aliyunConfig = map[string]string{}
 
 func aliyunConfigInit() (*alidns.Client, error) {
 	aliyunFlag := getAliyunConfig()
