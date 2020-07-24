@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
@@ -20,7 +21,7 @@ const CloudPlatformAliyun = "aliyun"
 // var aliyunConfig = map[string]string{}
 
 func aliyunConfigInit() (*alidns.Client, error) {
-	aliyunFlag := getAliyunConfig()
+	aliyunFlag := adblib.GetAliyunConfig()
 
 	client, err := alidns.NewClientWithAccessKey(
 		aliyunFlag.RegionID,

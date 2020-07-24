@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/airdb/adb/internal/config"
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 
@@ -16,5 +16,5 @@ var loginCommand = &cobra.Command{
 }
 
 func login() {
-	config.Login()
+	adblib.Login()
 }

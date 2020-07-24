@@ -1,34 +1,30 @@
-package config
+package adblib
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/imroc/req"
-	"os/exec"
-	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/airdb/sailor"
+	"github.com/imroc/req"
 )
 
 // The  flag will be written to this struct.
 type User struct {
-	Name string `json:"name" survey:"name" mapstructure:"name"`
+	Name     string `json:"name" survey:"name" mapstructure:"name"`
 	Password string `json:"password" survey:"Password" mapstructure:"password"`
 }
 
 // The questions to ask.
 var userLogin = []*survey.Question{
 	{
-		Name: "name",
-		Prompt:    &survey.Input{Message: "username:"},
-		Validate:  survey.Required,
-		Transform: survey.Title,
+		Name:     "name",
+		Prompt:   &survey.Input{Message: "Username:"},
+		Validate: survey.Required,
 	},
 	{
-		Name:      "password",
-		Prompt:    &survey.Password{ Message: "Password:" },
-		Validate:  survey.Required,
-		Transform: survey.Title,
+		Name:     "password",
+		Prompt:   &survey.Password{Message: "Password:"},
+		Validate: survey.Required,
 	},
 }
 
@@ -42,21 +38,15 @@ func Login() {
 		return
 	}
 
-	cmd := exec.Command("cat", IconFile())
+	args := []string{IconFile()}
 
-	var out bytes.Buffer
-
-	cmd.Stdout = &out
-
-	err = cmd.Run()
+	out, err := sailor.ExecCommand("cat", args)
 	if err != nil {
 		downloadIcon()
-		fmt.Println("Thanks for using adb tool!")
-	} else {
-		fmt.Println(strings.Trim(out.String(), "\n"))
+		return
 	}
 
-	return
+	fmt.Println(out)
 }
 
 func downloadIcon() {

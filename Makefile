@@ -1,8 +1,11 @@
 BINARY := $(shell basename "$(PWD)")
 VERSION := $(shell git describe --tags)
-BUILD := $(shell git rev-parse --short HEAD)
+BUILD := $(shell git rev-parse HEAD)
 
-LDFLAGS=-ldflags "-X=github.com/airdb/adb/cmd.Version=$(VERSION) -X=github.com/airdb/adb/cmd.BuildTime=$(shell date +%s)"
+LDFLAGS=-ldflags
+LDFLAGS += "-X=github.com/airdb/adb/internal/adblib.Version=$(VERSION) \
+            -X=github.com/airdb/adb/internal/adblib.Build=$(BUILD) \
+            -X=github.com/airdb/adb/internal/adblib.BuildTime=$(shell date +%s)"
 
 myos = $(word 1, $@)
 ifndef $myos

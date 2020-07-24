@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/AlecAivazis/survey/v2 v2.0.8
 	github.com/MakeNowJust/heredoc v1.0.0
-	github.com/airdb/sailor v1.1.2-0.20200626053957-b22f85e53a20
+	github.com/airdb/sailor v1.4.0-85dfa77
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.279
 	github.com/imroc/req v0.2.4
 	github.com/mitchellh/go-homedir v1.1.0
