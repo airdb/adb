@@ -4,19 +4,21 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "adb",
-	Short:   "Airdb Development Builder",
-	Long:    "Airdb Development Builder Command Line Interface",
-	Version: getVersion(),
+	Use:   "adb",
+	Short: "Airdb Development Builder",
+	Long:  "Airdb Development Builder Command Line Interface",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 	},
 }
 
 func Execute() {
+	rootCmd.Version = adblib.GetVersion()
+
 	// rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)

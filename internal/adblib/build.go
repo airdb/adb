@@ -1,4 +1,4 @@
-package cmd
+package adblib
 
 import (
 	"encoding/json"
@@ -7,24 +7,24 @@ import (
 
 // Build version info.
 type BuildInfo struct {
-	BuildTime string
 	GoVersion string
 	Version   string
-	Commit    string
+	Build     string
+	BuildTime string
 }
 
 var (
-	BuildTime string
-	Commit    string
 	Version   string
+	Build     string
+	BuildTime string
 )
 
-func getVersion() string {
+func GetVersion() string {
 	info := BuildInfo{
-		BuildTime: BuildTime,
 		GoVersion: runtime.Version(),
 		Version:   Version,
-		Commit:    Commit,
+		Build:     Build,
+		BuildTime: BuildTime,
 	}
 
 	out, err := json.Marshal(info)
