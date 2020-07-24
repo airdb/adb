@@ -35,7 +35,7 @@ jobs:
           zip -r adb.zip release
 
           sha256sum release/*
-          echo "::set-output name=sha25sum::($1)"
+          echo "::set-output name=sha25sum:: $(sha256sum release/*)"
 
       - name: Create Release
         id: create_release
