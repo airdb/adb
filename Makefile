@@ -1,5 +1,6 @@
-BINARY := adb
-VERSION = 0.0.0
+BINARY := $(shell basename "$(PWD)")
+VERSION := $(shell git describe --tags)
+BUILD := $(shell git rev-parse --short HEAD)
 
 LDFLAGS=-ldflags "-X=github.com/airdb/adb/cmd.Version=$(VERSION) -X=github.com/airdb/adb/cmd.BuildTime=$(shell date +%s)"
 
