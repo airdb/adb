@@ -98,6 +98,19 @@ var configSetCmd = &cobra.Command{
 	RunE: configSet,
 }
 
+var slackConfigGetCmd = &cobra.Command{
+	Use:   "get <key>",
+	Short: "Print the value of a given configuration key",
+	Example: heredoc.Doc(`
+	$ adb config get slack
+    access_key_id: xxxxxxxxxxxx_id
+    access_key_secret: xxxxxxxxxxxx_secret
+    region_id: cn-hangzhou
+	`),
+	Args: cobra.ExactArgs(1),
+	RunE: slackConfigGet,
+}
+
 func initConfigCmd() {
 	rootCmd.AddCommand(configCmd)
 	configCmd.AddCommand(configGetCmd)
@@ -105,9 +118,51 @@ func initConfigCmd() {
 }
 
 func configSet(cmd *cobra.Command, args []string) error {
-	fmt.Println(args)
+	service := args[0]
 
-	err := adblib.SetAliyunConfig()
+	switch service {
+	case adblib.ServiceAliyun:
+		err := adblib.SetAliyunConfig()
+		if err != nil {
+			fmt.Println("configure failed, error: ", err)
+			return err
+		}
+	case adblib.ServiceSlack:
+		err := adblib.SetSlackConfig()
+		if err != nil {
+			fmt.Println("configure failed, error: ", err)
+			return err
+		}
+	}
+
+	fmt.Println("configure successfully.")
+
+	return nil
+}
+
+func configGet(cmd *cobra.Command, args []string) error {
+	service := args[0]
+
+	var config interface{}
+	switch service {
+	case "aliyun":
+		aliyunFlag := adblib.GetAliyunConfig()
+		fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
+			aliyunFlag.AccessKeyID,
+			aliyunFlag.AccessKeySecret,
+			aliyunFlag.RegionID,
+		)
+	case "slack":
+		config = adblib.GetSlackConfig()
+	}
+
+	fmt.Println(config)
+
+	return nil
+}
+
+func slackConfigSet(cmd *cobra.Command, args []string) error {
+	err := adblib.SetSlackConfig()
 	if err != nil {
 		fmt.Println("configure failed, error: ", err)
 		return err
@@ -118,13 +173,12 @@ func configSet(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func configGet(cmd *cobra.Command, args []string) error {
-	aliyunFlag := adblib.GetAliyunConfig()
+func slackConfigGet(cmd *cobra.Command, args []string) error {
+	config := adblib.GetSlackConfig()
 
-	fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
-		aliyunFlag.AccessKeyID,
-		aliyunFlag.AccessKeySecret,
-		aliyunFlag.RegionID,
+	fmt.Printf("Token: %s\nChannel: %s\n",
+		config.Token,
+		config.Channel,
 	)
 
 	return nil

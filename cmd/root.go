@@ -49,6 +49,7 @@ func Execute() {
 	hostCmdInit()
 
 	initConfigCmd()
+	initSlack()
 
 	updateCmdInit()
 
