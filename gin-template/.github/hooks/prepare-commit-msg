@@ -1,5 +1,0 @@
-#!/bin/sh
-#
-
-gofmt -w -s $(git rev-parse --show-toplevel)
-golangci-lint run
