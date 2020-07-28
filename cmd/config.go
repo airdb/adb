@@ -98,19 +98,6 @@ var configSetCmd = &cobra.Command{
 	RunE: configSet,
 }
 
-var slackConfigGetCmd = &cobra.Command{
-	Use:   "get <key>",
-	Short: "Print the value of a given configuration key",
-	Example: heredoc.Doc(`
-	$ adb config get slack
-    access_key_id: xxxxxxxxxxxx_id
-    access_key_secret: xxxxxxxxxxxx_secret
-    region_id: cn-hangzhou
-	`),
-	Args: cobra.ExactArgs(1),
-	RunE: slackConfigGet,
-}
-
 func initConfigCmd() {
 	rootCmd.AddCommand(configCmd)
 	configCmd.AddCommand(configGetCmd)
@@ -144,6 +131,7 @@ func configGet(cmd *cobra.Command, args []string) error {
 	service := args[0]
 
 	var config interface{}
+
 	switch service {
 	case "aliyun":
 		aliyunFlag := adblib.GetAliyunConfig()
@@ -157,29 +145,6 @@ func configGet(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Println(config)
-
-	return nil
-}
-
-func slackConfigSet(cmd *cobra.Command, args []string) error {
-	err := adblib.SetSlackConfig()
-	if err != nil {
-		fmt.Println("configure failed, error: ", err)
-		return err
-	}
-
-	fmt.Println("configure successfully.")
-
-	return nil
-}
-
-func slackConfigGet(cmd *cobra.Command, args []string) error {
-	config := adblib.GetSlackConfig()
-
-	fmt.Printf("Token: %s\nChannel: %s\n",
-		config.Token,
-		config.Channel,
-	)
 
 	return nil
 }

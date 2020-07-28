@@ -17,14 +17,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/airdb/adb/internal/adblib"
 	"strings"
 
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/slack-go/slack"
 	"github.com/spf13/cobra"
 )
 
-// slackCmd represents the slack command
+// slackCmd represents the slack command.
 var slackCmd = &cobra.Command{
 	Use:   "slack",
 	Short: "A brief description of your command",
@@ -54,6 +54,7 @@ func opSlack(args []string) {
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		fmt.Printf("Send message to %s failed, id: %s timestamp: %s\n", channelName, channelID, timestamp)
+
 		return
 	}
 
