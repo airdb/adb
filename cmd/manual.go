@@ -56,15 +56,6 @@ var cloudInitCommand = &cobra.Command{
 	},
 }
 
-var toolsInitCommand = &cobra.Command{
-	Use:   "tools",
-	Short: "install binary tools",
-	Long:  "install binary tools",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("wget https://github.com/airdb/init/releases/latest/download/tools-linux-amd64.zip")
-	},
-}
-
 var brewInitCommand = &cobra.Command{
 	Use:   "brew",
 	Short: "brew operation",
@@ -188,11 +179,43 @@ var opensslCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("openssl commands")
 		fmt.Println("")
-		fmt.Println("\topenssl  x509 -text -in ssl.chain.crt")
+		fmt.Println("\topenssl x509 -text -in ssl.chain.crt")
+		fmt.Println("\topenssl req  -noout -text -in ssl.csr")
 		fmt.Println("")
 		fmt.Println("\topenssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null")
 		fmt.Println("\tcert -f md www.airdb.com")
 		fmt.Println("")
 		fmt.Println("\tRefer: https://github.com/genkiroid/cert")
 	},
+}
+
+var toolsCommand = &cobra.Command{
+	Use:   "tools",
+	Short: "tools command",
+	Long:  "tools command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("tools")
+		fmt.Println("")
+		fmt.Println("\tasciinema play https://asciinema.org/a/349488")
+		fmt.Println("\tdocker run --rm -v $PWD:/data asciinema/asciicast2gif -s 2 -t solarized-dark demo.json demo.gif")
+		fmt.Println("")
+		fmt.Println("wget https://github.com/airdb/init/releases/latest/download/tools-linux-amd64.zip")
+	},
+}
+
+func initManCommand() {
+	rootCmd.AddCommand(manCommand)
+
+	manCommand.AddCommand(gitInitCommand)
+	manCommand.AddCommand(dockerInitCommand)
+	manCommand.AddCommand(cloudInitCommand)
+	manCommand.AddCommand(brewInitCommand)
+	manCommand.AddCommand(githubInitCommand)
+	manCommand.AddCommand(vimInitCommand)
+	manCommand.AddCommand(osinitCommand)
+	manCommand.AddCommand(kubeCommand)
+	manCommand.AddCommand(helmCommand)
+	manCommand.AddCommand(terraformCommand)
+	manCommand.AddCommand(opensslCommand)
+	manCommand.AddCommand(toolsCommand)
 }

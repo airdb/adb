@@ -105,12 +105,21 @@ func initConfigCmd() {
 }
 
 func configSet(cmd *cobra.Command, args []string) error {
-	fmt.Println(args)
+	service := args[0]
 
-	err := adblib.SetAliyunConfig()
-	if err != nil {
-		fmt.Println("configure failed, error: ", err)
-		return err
+	switch service {
+	case adblib.ServiceAliyun:
+		err := adblib.SetAliyunConfig()
+		if err != nil {
+			fmt.Println("configure failed, error: ", err)
+			return err
+		}
+	case adblib.ServiceSlack:
+		err := adblib.SetSlackConfig()
+		if err != nil {
+			fmt.Println("configure failed, error: ", err)
+			return err
+		}
 	}
 
 	fmt.Println("configure successfully.")
@@ -119,13 +128,23 @@ func configSet(cmd *cobra.Command, args []string) error {
 }
 
 func configGet(cmd *cobra.Command, args []string) error {
-	aliyunFlag := adblib.GetAliyunConfig()
+	service := args[0]
 
-	fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
-		aliyunFlag.AccessKeyID,
-		aliyunFlag.AccessKeySecret,
-		aliyunFlag.RegionID,
-	)
+	var config interface{}
+
+	switch service {
+	case "aliyun":
+		aliyunFlag := adblib.GetAliyunConfig()
+		fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
+			aliyunFlag.AccessKeyID,
+			aliyunFlag.AccessKeySecret,
+			aliyunFlag.RegionID,
+		)
+	case "slack":
+		config = adblib.GetSlackConfig()
+	}
+
+	fmt.Println(config)
 
 	return nil
 }
