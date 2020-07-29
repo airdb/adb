@@ -3,13 +3,15 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 
 var manCommand = &cobra.Command{
-	Use:   "man",
-	Short: "man command like linux",
-	Long:  "display manual pages",
+	Use:     "man",
+	Short:   "man command like linux",
+	Long:    "display manual pages",
+	Example: adblib.MysqlDoc,
 }
 
 var gitInitCommand = &cobra.Command{
@@ -61,18 +63,7 @@ var brewInitCommand = &cobra.Command{
 	Short: "brew operation",
 	Long:  "brew operation",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Brew Common Command:")
-		fmt.Println("\tbrew outdated")
-		fmt.Println("\tbrew ")
-		fmt.Println("\tbrew cask outdated")
-		fmt.Println("\tbrew outdated adb --verbose --debug")
-		fmt.Println("\tbrew install github/gh/gh")
-		fmt.Println("\tbrew install aliyun-cli")
-		fmt.Println()
-		fmt.Println("\tbrew tap aidb/taps")
-		fmt.Println("\tbrew install airdb/taps/adb")
-		fmt.Println("\tbrew install adb")
-		fmt.Println()
+		fmt.Println(adblib.BrewDoc)
 	},
 }
 
@@ -131,25 +122,7 @@ var helmCommand = &cobra.Command{
 	Short: "helm command",
 	Long:  "helm command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("helm commands)")
-		fmt.Println("")
-		fmt.Println("\tsudo apt update")
-		fmt.Println("\tsudo apt install snapd")
-		fmt.Println("\tsudo snap install helm --classic")
-		fmt.Println("")
-		fmt.Println("\thelm plugin install https://github.com/airdb/helm-kube")
-		fmt.Println("")
-		fmt.Println("\thelm repo add airdb https://www.airdb.com/helm/")
-		fmt.Println("\thelm repo update")
-		fmt.Println("\thelm search repo helm/mychart")
-		fmt.Println("")
-		fmt.Println("\thelm show readme airdb/mychat")
-		fmt.Println("")
-		fmt.Println("\thelm install chart airdb/mychat")
-		fmt.Println("\thelm install chart airdb/mychat --dry-run --debug")
-		fmt.Println("")
-		fmt.Println("\thelm get notes mychat")
-		fmt.Println("")
+		fmt.Println(adblib.HelmDoc)
 	},
 }
 
@@ -158,17 +131,7 @@ var terraformCommand = &cobra.Command{
 	Short: "terraform command",
 	Long:  "terraform command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("terraform commands")
-		fmt.Println("")
-		fmt.Println("\tterraform -install-autocomplete")
-		fmt.Println("\tterraform init -upgrade")
-		fmt.Println("")
-		fmt.Println("\tterraform validate")
-		fmt.Println("\tterraform plan")
-		fmt.Println("\tterraform apply")
-		fmt.Println("\t#terraform destroy")
-		fmt.Println("")
-		fmt.Println("\tRefer: https://github.com/airdb/init/tree/master/terraform")
+		fmt.Println(adblib.TerraformDoc)
 	},
 }
 
@@ -194,12 +157,7 @@ var toolsCommand = &cobra.Command{
 	Short: "tools command",
 	Long:  "tools command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("tools")
-		fmt.Println("")
-		fmt.Println("\tasciinema play https://asciinema.org/a/349488")
-		fmt.Println("\tdocker run --rm -v $PWD:/data asciinema/asciicast2gif -s 2 -t solarized-dark demo.json demo.gif")
-		fmt.Println("")
-		fmt.Println("wget https://github.com/airdb/init/releases/latest/download/tools-linux-amd64.zip")
+		fmt.Println(adblib.ToolsDoc)
 	},
 }
 
