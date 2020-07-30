@@ -15,26 +15,12 @@ var manCommand = &cobra.Command{
 }
 
 var gitInitCommand = &cobra.Command{
-	Use:   "git",
-	Short: "git operation",
-	Long:  "git operation",
+	Use:     "git",
+	Short:   "git operation",
+	Long:    "git operation",
+	Aliases: []string{"github", "gh"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("git config --global core.hooksPath .github/hooks")
-		fmt.Println("git config --global core.excludefile .gitignore_global")
-		fmt.Println("git config --global url.'ssh://git@github.com'.insteadOf https://github.com")
-		fmt.Println()
-		fmt.Println("For Close Github Issue, commit message should as follow:")
-		fmt.Println("\t", "close #x")
-		fmt.Println("\t", "closes #x")
-		fmt.Println("\t", "closed #x")
-		fmt.Println("\t", "fix #x")
-		fmt.Println("\t", "fixes #x")
-		fmt.Println("\t", "fixed #x")
-		fmt.Println("\t", "resolve #x")
-		fmt.Println("\t", "resolves #x")
-		fmt.Println("\t", "resolved #x")
-		fmt.Println("\t", "add new quick sort algorithm, fixes #4, resolve #6, closed #12")
-
+		fmt.Println(adblib.GithubDoc)
 	},
 }
 
@@ -64,17 +50,6 @@ var brewInitCommand = &cobra.Command{
 	Long:  "brew operation",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.BrewDoc)
-	},
-}
-
-var githubInitCommand = &cobra.Command{
-	Use:   "gh",
-	Short: "github operation",
-	Long:  "github operation",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("brew install github/gh/gh")
-		fmt.Println("gh --repo bbhj/lbs issue status")
-		fmt.Println("gh --repo bbhj/lbs issue view 1")
 	},
 }
 
@@ -140,15 +115,7 @@ var opensslCommand = &cobra.Command{
 	Short: "openssl command",
 	Long:  "openssl command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("openssl commands")
-		fmt.Println("")
-		fmt.Println("\topenssl x509 -text -in ssl.chain.crt")
-		fmt.Println("\topenssl req  -noout -text -in ssl.csr")
-		fmt.Println("")
-		fmt.Println("\topenssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null")
-		fmt.Println("\tcert -f md www.airdb.com")
-		fmt.Println("")
-		fmt.Println("\tRefer: https://github.com/genkiroid/cert")
+		fmt.Println(adblib.OpenSSLDoc)
 	},
 }
 
@@ -168,7 +135,6 @@ func initManCommand() {
 	manCommand.AddCommand(dockerInitCommand)
 	manCommand.AddCommand(cloudInitCommand)
 	manCommand.AddCommand(brewInitCommand)
-	manCommand.AddCommand(githubInitCommand)
 	manCommand.AddCommand(vimInitCommand)
 	manCommand.AddCommand(osinitCommand)
 	manCommand.AddCommand(kubeCommand)

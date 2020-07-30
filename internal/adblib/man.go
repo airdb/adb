@@ -10,6 +10,8 @@ $ mysql
 > ALTER TABLE xx_tab change status process int(10)
 > ALTER TABLE xx_tab modify status int(10) after id
 > ALTER TABLE xx_tab modify status varchar(600) NOT NULL
+
+SELECT DISTINCT column1, column2 FROM table_name;
 	`)
 
 	ToolsDoc = heredoc.Doc(`
@@ -69,5 +71,54 @@ $ Brew Common Command:
 	brew install airdb/taps/adb
 	brew install adb
 
+`)
+
+	GithubDoc = heredoc.Docf(`
+$ Github or Git Command:
+
+	1. Maintain a repo without permission
+		git remote add upstream https://github.com/bfenetworks/bfe.git
+		git fetch upstream
+		git checkout develop
+
+		git merge upstream/develop
+
+		git rebase upstream/develop
+
+		Refer: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
+
+
+	2. git config setting
+		git config --global core.hooksPath .github/hooks
+		git config --global core.excludefile .gitignore_global
+		git config --global url.'ssh://git@github.com'.insteadOf https://github.com
+
+	3. Github Commit. For Close Github Issue, commit message should as follow:
+		close #x
+		closes #x
+		closed #x
+		fix #x
+		fixes #x
+		fixed #x
+		resolve #x
+		resolves #x
+		resolved #x
+		add new quick sort algorithm, fixes #4, resolve #6, closed #12
+
+	4. Github Command Line
+		brew install github/gh/gh
+		gh --repo bbhj/lbs issue status
+		gh --repo bbhj/lbs issue view 1
+`)
+
+	OpenSSLDoc = heredoc.Doc(`
+$ openssl commands
+
+	openssl x509 -text -in ssl.chain.crt
+	openssl req  -noout -text -in ssl.csr
+	openssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null
+
+	cert -f md www.airdb.com
+	Refer: https://github.com/genkiroid/cert
 `)
 )
