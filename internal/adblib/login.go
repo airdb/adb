@@ -31,6 +31,7 @@ var userLogin = []*survey.Question{
 func Login() {
 	var user User
 
+	fmt.Println(TokenRequest)
 	// pPerform the questions.
 	err := survey.Ask(userLogin, &user)
 	if err != nil {
