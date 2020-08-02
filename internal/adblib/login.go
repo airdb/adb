@@ -2,6 +2,7 @@ package adblib
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/airdb/sailor"
@@ -12,6 +13,21 @@ import (
 type User struct {
 	Name     string `json:"name" survey:"name" mapstructure:"name"`
 	Password string `json:"password" survey:"Password" mapstructure:"password"`
+}
+
+func LoginWithToken() {
+	fmt.Print(TokenRequest)
+
+	var bar sailor.ProcessBar
+
+	bar.NewOption(0, 100)
+
+	for i := 0; i <= 100; i++ {
+		time.Sleep(100 * time.Millisecond)
+		bar.Play(int64(i))
+	}
+
+	bar.Finish()
 }
 
 // The questions to ask.

@@ -15,6 +15,21 @@ var loginCommand = &cobra.Command{
 	},
 }
 
+var loginWithToken bool
+
+func initLogin() {
+	rootCmd.AddCommand(loginCommand)
+
+	loginCommand.PersistentFlags().BoolVarP(&loginWithToken, "token", "t", false, "login with token")
+
+	// 	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.adb/id_rsa", "identity file")
+}
+
 func login() {
+	if loginWithToken {
+		adblib.LoginWithToken()
+		return
+	}
+
 	adblib.Login()
 }

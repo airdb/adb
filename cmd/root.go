@@ -23,22 +23,7 @@ func Execute() {
 	rootCmd.AddCommand(envCommand)
 	rootCmd.AddCommand(bbhjCommand)
 	rootCmd.AddCommand(releaseCommand)
-	// rootCmd.AddCommand(manCommand)
-	// manCommand.AddCommand(gitInitCommand)
-	// manCommand.AddCommand(dockerInitCommand)
-	// manCommand.AddCommand(cloudInitCommand)
-	// manCommand.AddCommand(toolsInitCommand)
-	// manCommand.AddCommand(brewInitCommand)
-	// manCommand.AddCommand(githubInitCommand)
-	// manCommand.AddCommand(vimInitCommand)
-	// manCommand.AddCommand(osinitCommand)
-	// manCommand.AddCommand(kubeCommand)
-	// manCommand.AddCommand(helmCommand)
-	// manCommand.AddCommand(terraformCommand)
-	// manCommand.AddCommand(opensslCommand)
-	// manCommand.AddCommand(toolsCommand)
 
-	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
 	wikiCommand.AddCommand(interviewWikiCommand)
@@ -52,6 +37,8 @@ func Execute() {
 	initConfigCmd()
 	initSlack()
 	initManCommand()
+
+	initLogin()
 
 	updateCmdInit()
 
