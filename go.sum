@@ -14,6 +14,8 @@ github.com/PuerkitoBio/purell v1.1.0/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbt
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
+github.com/airdb/sailor v1.1.2-0.20200802151610-a033b3f2a246 h1:5URmvEzDlQ5RoyiyUvrX5Ao5F7nlycdbUKoGuiVecjA=
+github.com/airdb/sailor v1.1.2-0.20200802151610-a033b3f2a246/go.mod h1:Txr7LHYpg61npbaDGkfud/lRaOFEaAB1f0anzuglOmI=
 github.com/airdb/sailor v1.4.0-85dfa77 h1:ieXE0OhZKknCUZU3vi2bcYoWLt3BAiFDKosBTHH35pI=
 github.com/airdb/sailor v1.4.0-85dfa77/go.mod h1:Txr7LHYpg61npbaDGkfud/lRaOFEaAB1f0anzuglOmI=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=

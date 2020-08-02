@@ -24,7 +24,6 @@ func Execute() {
 	rootCmd.AddCommand(bbhjCommand)
 	rootCmd.AddCommand(releaseCommand)
 
-	rootCmd.AddCommand(loginCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
 	wikiCommand.AddCommand(interviewWikiCommand)
@@ -38,6 +37,8 @@ func Execute() {
 	initConfigCmd()
 	initSlack()
 	initManCommand()
+
+	initLogin()
 
 	updateCmdInit()
 
