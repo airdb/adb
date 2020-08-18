@@ -18,6 +18,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/airdb/adb/internal/adblib"
+
 	"github.com/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
@@ -74,10 +76,11 @@ func service() {
 var servicesAddCmdMinArgs = 2
 
 var servicesAddCmd = &cobra.Command{
-	Use:   "add [service] [SRV record value]",
-	Short: "Add service",
-	Long:  "Add service",
-	Args:  cobra.MinimumNArgs(servicesAddCmdMinArgs),
+	Use:     "add [service] [SRV record value]",
+	Short:   "Add service",
+	Long:    "Add service",
+	Example: adblib.DNSSrvDoc,
+	Args:    cobra.MinimumNArgs(servicesAddCmdMinArgs),
 	Run: func(cmd *cobra.Command, args []string) {
 		addService(args)
 	},
