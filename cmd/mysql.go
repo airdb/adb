@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/airdb/adb/internal/adblib"
 	"strings"
 
 	"github.com/airdb/sailor"
@@ -15,6 +16,7 @@ var mysqlCmd = &cobra.Command{
 	Long:               "Airdb mysql client",
 	DisableFlagParsing: false,
 	Args:               cobra.MinimumNArgs(1),
+	Example:adblib.SqlDoc,
 	Aliases:            []string{"sql"},
 	Run: func(cmd *cobra.Command, args []string) {
 		mysql(args)
@@ -49,6 +51,7 @@ func mysql(args []string) {
 	request.DomainName = ServiceDomain
 	request.RRKeyWord = args[0]
 
+	fmt.Println(request.RRKeyWord)
 	output, err := client.DescribeDomainRecords(request)
 	if err != nil {
 		fmt.Println(err)
