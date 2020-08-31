@@ -22,8 +22,10 @@ func LoginWithToken() {
 
 	bar.NewOption(0, 100)
 
+	var sleepInterval time.Duration = 100
+
 	for i := 0; i <= 100; i++ {
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(sleepInterval * time.Millisecond)
 		bar.Play(int64(i))
 	}
 
