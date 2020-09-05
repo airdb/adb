@@ -16,7 +16,7 @@ var mysqlCmd = &cobra.Command{
 	Long:               "Airdb mysql client",
 	DisableFlagParsing: false,
 	Args:               cobra.MinimumNArgs(1),
-	Example:adblib.SqlDoc,
+	Example:            adblib.SqlDoc,
 	Aliases:            []string{"sql"},
 	Run: func(cmd *cobra.Command, args []string) {
 		mysql(args)
