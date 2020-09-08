@@ -16,7 +16,7 @@ type Client struct {
 	*clb.Client
 }
 
-func NewCLBClient() (*Client, error){
+func NewCLBClient() (*Client, error) {
 	secretID := os.Getenv("TENCENTCLOUD_SECRET_ID")
 	secretKey := os.Getenv("TENCENTCLOUD_SECRET_KEY")
 	region := os.Getenv("TENCENTCLOUD_REGION")
@@ -56,7 +56,7 @@ func (client *Client) ListCLB() {
 	}
 }
 
-func (client *Client)ShowRS(lbID string) {
+func (client *Client) ShowRS(lbID string) {
 
 	request := clb.NewDescribeTargetsRequest()
 
@@ -78,10 +78,11 @@ func (client *Client)ShowRS(lbID string) {
 	for _, listener := range response.Response.Listeners {
 		for _, rule := range listener.Rules {
 			for _, target := range rule.Targets {
-				fmt.Printf("%s%s\t%d\t%s\n",
+				fmt.Printf("%s%s\t%d\t%s\t%s\n",
 					*rule.Domain,
 					*rule.Url,
 					*target.Weight,
+					*target.InstanceId,
 					*target.InstanceName,
 				)
 			}
