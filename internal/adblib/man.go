@@ -109,6 +109,14 @@ $ Github or Git Command:
 		brew install github/gh/gh
 		gh --repo bbhj/lbs issue status
 		gh --repo bbhj/lbs issue view 1
+
+	5. Delete branch or tag
+		git branch -D dev
+		git push origin --delete dev
+
+		git tag -d v1.0
+		git push --delete origin v1.0
+
 `)
 
 	OpenSSLDoc = heredoc.Doc(`

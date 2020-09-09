@@ -20,9 +20,9 @@ var loginWithToken bool
 func initLogin() {
 	rootCmd.AddCommand(loginCommand)
 
+	// 	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile,
+	//	"identity_file", "i", "~/.adb/id_rsa", "identity file")
 	loginCommand.PersistentFlags().BoolVarP(&loginWithToken, "token", "t", false, "login with token")
-
-	// 	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.adb/id_rsa", "identity file")
 }
 
 func login() {

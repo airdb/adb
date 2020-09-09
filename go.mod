@@ -13,5 +13,6 @@ require (
 	github.com/slack-go/slack v0.6.5
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.4.0
+	github.com/tencentcloud/tencentcloud-sdk-go v1.0.12
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 )
