@@ -119,6 +119,15 @@ var opensslCommand = &cobra.Command{
 	},
 }
 
+var tcpdumpCommand = &cobra.Command{
+	Use:   "tcpdump",
+	Short: "tcpdump command",
+	Long:  "tcpdump command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.TcpdumpDoc)
+	},
+}
+
 var toolsCommand = &cobra.Command{
 	Use:   "tools",
 	Short: "tools command",
@@ -127,6 +136,7 @@ var toolsCommand = &cobra.Command{
 		fmt.Println(adblib.ToolsDoc)
 	},
 }
+
 
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
@@ -142,4 +152,5 @@ func initManCommand() {
 	manCommand.AddCommand(terraformCommand)
 	manCommand.AddCommand(opensslCommand)
 	manCommand.AddCommand(toolsCommand)
+	manCommand.AddCommand(tcpdumpCommand)
 }
