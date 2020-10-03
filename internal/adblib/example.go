@@ -4,8 +4,6 @@ import (
 	"github.com/MakeNowJust/heredoc"
 )
 
-var (
-	SqlDoc = heredoc.Doc(`
+var SQLDoc = heredoc.Doc(`
 adb mysql mina-api -uroot -ppasswd --db test
 	`)
-)

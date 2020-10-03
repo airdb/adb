@@ -37,15 +37,19 @@ func (client *Client) ListCLB() {
 	request := clb.NewDescribeLoadBalancersRequest()
 
 	params := "{}"
+
 	err := request.FromJsonString(params)
 	if err != nil {
 		panic(err)
 	}
+
 	response, err := client.DescribeLoadBalancers(request)
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		fmt.Printf("An API error has returned: %s", err)
+
 		return
 	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -57,19 +61,22 @@ func (client *Client) ListCLB() {
 }
 
 func (client *Client) ShowRS(lbID string) {
-
 	request := clb.NewDescribeTargetsRequest()
 
 	params := fmt.Sprintf("{\"LoadBalancerId\":\"%s\"}", lbID)
+
 	err := request.FromJsonString(params)
 	if err != nil {
 		panic(err)
 	}
+
 	response, err := client.DescribeTargets(request)
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		fmt.Printf("An API error has returned: %s", err)
+
 		return
 	}
+
 	if err != nil {
 		panic(err)
 	}

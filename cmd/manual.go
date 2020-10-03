@@ -137,7 +137,6 @@ var toolsCommand = &cobra.Command{
 	},
 }
 
-
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
 

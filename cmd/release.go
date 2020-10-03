@@ -57,6 +57,7 @@ func getTags() {
 
 	if len(tagsList) == 0 {
 		fmt.Printf("%-16s\t%s\n", repo, "no tags")
+
 		return
 	}
 

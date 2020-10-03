@@ -1,13 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-	"os/exec"
 	"runtime"
 
-	"github.com/imroc/req"
+	"github.com/minio/selfupdate"
 	"github.com/spf13/cobra"
 )
 
@@ -17,18 +18,11 @@ var updateCmd = &cobra.Command{
 	Long:               "Self update adb",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
-		update()
+		doUpdate()
 	},
 }
 
-func updateCmdInit() {
-	rootCmd.AddCommand(updateCmd)
-	rootCmd.AddCommand(completionBashCmd)
-
-	completionBashCmd.PersistentFlags().BoolVarP(&writeCompletionFile, "write_file", "w", false, "write completion file")
-}
-
-func update() {
+func doUpdate() {
 	dl := "https://github.com/airdb/adb/releases/latest/download/adb"
 	if runtime.GOOS == "darwin" {
 		dl = dl + "-" + runtime.GOOS
@@ -36,23 +30,25 @@ func update() {
 
 	fmt.Printf("It will take about 1 minute for downloading.\nDownload url: %s\n", dl)
 
-	tmpPath := "/tmp/adb-latest"
+	client := &http.Client{}
 
-	resp, err := req.Get(dl)
-	if err == nil {
-		err = resp.ToFile(tmpPath)
-	}
-
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, dl, nil)
 	if err != nil {
-		log.Println("Error: download package failed! ", err)
+		log.Println(err)
+
 		return
 	}
 
-	err = os.Chmod(tmpPath, 0755)
-	if err == nil {
-		err = updateBinary(tmpPath)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+
+		return
 	}
 
+	defer resp.Body.Close()
+
+	err = selfupdate.Apply(resp.Body, selfupdate.Options{})
 	if err != nil {
 		log.Println("update failed!")
 	} else {
@@ -60,13 +56,11 @@ func update() {
 	}
 }
 
-func updateBinary(tmpPath string) error {
-	adbPath, err := exec.LookPath("adb")
-	if err == nil {
-		err = os.Rename(tmpPath, adbPath)
-	}
+func updateCmdInit() {
+	rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(completionBashCmd)
 
-	return err
+	completionBashCmd.PersistentFlags().BoolVarP(&writeCompletionFile, "write_file", "w", false, "write completion file")
 }
 
 var writeCompletionFile bool
@@ -98,6 +92,7 @@ var completionBashCmd = &cobra.Command{
 			}
 
 			fmt.Println("Generates bash completion scripts successfully, file:", completionFile)
+
 			return
 		}
 
@@ -105,6 +100,5 @@ var completionBashCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println("Generates bash completion scripts failed!")
 		}
-
 	},
 }

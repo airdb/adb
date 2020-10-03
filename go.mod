@@ -8,6 +8,7 @@ require (
 	github.com/airdb/sailor v1.1.2-0.20200802151610-a033b3f2a246
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.279
 	github.com/imroc/req v0.2.4
+	github.com/minio/selfupdate v0.3.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/rakyll/statik v0.1.7
 	github.com/slack-go/slack v0.6.5

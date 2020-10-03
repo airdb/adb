@@ -130,11 +130,9 @@ $ openssl commands
 	Refer: https://github.com/genkiroid/cert
 `)
 
-
-        TcpdumpDoc = heredoc.Doc(`
+	TcpdumpDoc = heredoc.Doc(`
 $ tcpdump commands
 
 	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  http-gateway.spex.test.shopee.sg
 `)
-
 )

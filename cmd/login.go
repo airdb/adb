@@ -28,6 +28,7 @@ func initLogin() {
 func login() {
 	if loginWithToken {
 		adblib.LoginWithToken()
+
 		return
 	}
 
