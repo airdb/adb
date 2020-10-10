@@ -137,6 +137,15 @@ var toolsCommand = &cobra.Command{
 	},
 }
 
+var perfCommand = &cobra.Command{
+	Use:   "perf",
+	Short: "application performance",
+	Long:  "application performance",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.PerformanceDoc)
+	},
+}
+
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
 
@@ -152,4 +161,5 @@ func initManCommand() {
 	manCommand.AddCommand(opensslCommand)
 	manCommand.AddCommand(toolsCommand)
 	manCommand.AddCommand(tcpdumpCommand)
+	manCommand.AddCommand(perfCommand)
 }

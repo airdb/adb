@@ -135,4 +135,34 @@ $ tcpdump commands
 
 	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  http-gateway.spex.test.shopee.sg
 `)
+
+	PerformanceDoc = heredoc.Doc(`
+$ Linux
+
+	1. dstat 
+	2. iostat 
+		iostat -x 5
+
+	3. iotop
+		iotop -p $pid
+
+	4. top, htop
+	5. iptraf
+	6. iftop
+
+	7. lsof
+	
+	8. strace
+		strace -p $pid
+
+	Refer: https://www.brendangregg.com/linuxperf.html
+
+$ Golang
+	
+	1. go tool pprof -alloc_space http://127.0.0.1:8080/debug/pprof/heap
+		top
+
+	2. go tool pprof -alloc_space -cum -svg http://127.0.0.1:8080/debug/pprof/heap > heap.svg
+		(apt-get  install graphviz)
+`)
 )
