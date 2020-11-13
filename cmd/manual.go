@@ -146,6 +146,15 @@ var perfCommand = &cobra.Command{
 	},
 }
 
+var s3Command = &cobra.Command{
+	Use:   "s3",
+	Short: "s3 tools",
+	Long:  "s3 tools",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.S3Doc)
+	},
+}
+
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
 
@@ -162,4 +171,5 @@ func initManCommand() {
 	manCommand.AddCommand(toolsCommand)
 	manCommand.AddCommand(tcpdumpCommand)
 	manCommand.AddCommand(perfCommand)
+	manCommand.AddCommand(s3Command)
 }
