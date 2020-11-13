@@ -22,7 +22,8 @@ import (
 	"os"
 	"path"
 
-	_ "github.com/airdb/adb/statik" // statik zip data, `statik -include='*' -src gin-template/ -f`
+	// statik zip data, `statik -include='*' -src gin-template/ -f`.
+	_ "github.com/airdb/adb/statik"
 	"github.com/airdb/sailor"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cobra"
@@ -79,6 +80,7 @@ func generate(args []string) {
 	statikFS, err := fs.New()
 	if err != nil {
 		log.Fatal("new statik fs failed, err: ", err)
+
 		return
 	}
 

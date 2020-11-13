@@ -15,6 +15,7 @@ import (
 
 func ConfigDir() string {
 	dir, _ := homedir.Expand("~/.config/adb")
+
 	return dir
 }
 
@@ -34,12 +35,12 @@ var ReadConfigFile = func(filename string) ([]byte, error) {
 }
 
 var WriteConfigFile = func(filename string, data []byte) error {
-	err := os.MkdirAll(path.Dir(filename), 0771)
+	err := os.MkdirAll(path.Dir(filename), 0o771)
 	if err != nil {
 		return pathError(err)
 	}
 
-	cfgFile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600) // cargo coded from setup
+	cfgFile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o600) // cargo coded from setup
 	if err != nil {
 		return err
 	}
@@ -112,12 +113,14 @@ func configSet(cmd *cobra.Command, args []string) error {
 		err := adblib.SetAliyunConfig()
 		if err != nil {
 			fmt.Println("configure failed, error: ", err)
+
 			return err
 		}
 	case adblib.ServiceSlack:
 		err := adblib.SetSlackConfig()
 		if err != nil {
 			fmt.Println("configure failed, error: ", err)
+
 			return err
 		}
 	}

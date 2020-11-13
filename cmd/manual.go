@@ -119,12 +119,39 @@ var opensslCommand = &cobra.Command{
 	},
 }
 
+var tcpdumpCommand = &cobra.Command{
+	Use:   "tcpdump",
+	Short: "tcpdump command",
+	Long:  "tcpdump command",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.TcpdumpDoc)
+	},
+}
+
 var toolsCommand = &cobra.Command{
 	Use:   "tools",
 	Short: "tools command",
 	Long:  "tools command",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.ToolsDoc)
+	},
+}
+
+var perfCommand = &cobra.Command{
+	Use:   "perf",
+	Short: "application performance",
+	Long:  "application performance",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.PerformanceDoc)
+	},
+}
+
+var s3Command = &cobra.Command{
+	Use:   "s3",
+	Short: "s3 tools",
+	Long:  "s3 tools",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.S3Doc)
 	},
 }
 
@@ -142,4 +169,7 @@ func initManCommand() {
 	manCommand.AddCommand(terraformCommand)
 	manCommand.AddCommand(opensslCommand)
 	manCommand.AddCommand(toolsCommand)
+	manCommand.AddCommand(tcpdumpCommand)
+	manCommand.AddCommand(perfCommand)
+	manCommand.AddCommand(s3Command)
 }

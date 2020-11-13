@@ -28,7 +28,6 @@ func aliyunConfigInit() (*alidns.Client, error) {
 		aliyunFlag.AccessKeyID,
 		aliyunFlag.AccessKeySecret,
 	)
-
 	if err != nil {
 		return nil, err
 	}

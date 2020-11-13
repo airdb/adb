@@ -53,6 +53,7 @@ func Login() {
 	err := survey.Ask(userLogin, &user)
 	if err != nil {
 		fmt.Println(err.Error())
+
 		return
 	}
 
@@ -61,6 +62,7 @@ func Login() {
 	out, err := sailor.ExecCommand("cat", args)
 	if err != nil {
 		downloadIcon()
+
 		return
 	}
 

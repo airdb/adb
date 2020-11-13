@@ -43,6 +43,7 @@ func listRepos() {
 	resp, err := req.Get(apiurl)
 	if err != nil {
 		log.Println("Query Github failed. https://github.com/airdb/airdb-wiki")
+
 		return
 	}
 
@@ -51,6 +52,7 @@ func listRepos() {
 	err = json.Unmarshal(resp.Bytes(), &repos)
 	if err != nil {
 		log.Println("json unmarshall failed.")
+
 		return
 	}
 

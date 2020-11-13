@@ -17,6 +17,7 @@ const (
 
 func ConfigDir() string {
 	dir, _ := homedir.Expand("~/.config/adb")
+
 	return dir
 }
 
@@ -69,7 +70,8 @@ var qsSlack = []*survey.Question{
 	},
 	{
 		Name: "channel",
-		Prompt: &survey.Input{Message: "channel",
+		Prompt: &survey.Input{
+			Message: "channel",
 			Default: "#wiki",
 		},
 		Validate: survey.Required,
