@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/airdb/adb/cmd"
+	"airdb.io/airdb/adb/cmd"
 )
 
 //go:generate go build -o adb main.go

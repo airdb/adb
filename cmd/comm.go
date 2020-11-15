@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/airdb/adb/internal/adblib"
+	"airdb.io/airdb/adb/internal/adblib"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 

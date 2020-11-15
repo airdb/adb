@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/airdb/adb/internal/adblib"
+	"airdb.io/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 

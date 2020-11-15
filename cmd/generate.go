@@ -23,7 +23,7 @@ import (
 	"path"
 
 	// statik zip data, `statik -include='*' -src gin-template/ -f`.
-	_ "github.com/airdb/adb/statik"
+	_ "airdb.io/airdb/adb/statik"
 	"github.com/airdb/sailor"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cobra"

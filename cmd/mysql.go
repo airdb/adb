@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/airdb/adb/internal/adblib"
+	"airdb.io/airdb/adb/internal/adblib"
 	"github.com/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
