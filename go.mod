@@ -1,4 +1,4 @@
-module github.com/airdb/adb
+module airdb.io/airdb/adb
 
 go 1.14
 
