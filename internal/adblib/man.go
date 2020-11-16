@@ -126,6 +126,10 @@ $ openssl commands
 	openssl req  -noout -text -in ssl.csr
 	openssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null
 
+	Check Keypair
+	openssl rsa -pubout -in privkey.pem
+	openssl x509 -pubkey -noout -in fullchain.pem
+
 	cert -f md www.airdb.com
 	Refer: https://github.com/genkiroid/cert
 `)
