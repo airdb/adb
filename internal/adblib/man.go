@@ -7,6 +7,10 @@ import (
 var (
 	MysqlDoc = heredoc.Doc(`
 $ mysql
+Backup table // https://stackoverflow.com/questions/40724046/mysql-gtid-consistency-violation
+> CREATE TABLE new_table LIKE old_table; 
+> INSERT new_table SELECT * FROM old_table;
+
 > ALTER TABLE xx_tab change status process int(10)
 > ALTER TABLE xx_tab modify status int(10) after id
 > ALTER TABLE xx_tab modify status varchar(600) NOT NULL
