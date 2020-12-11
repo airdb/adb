@@ -181,4 +181,20 @@ $ Golang
 	2. go tool pprof -alloc_space -cum -svg http://127.0.0.1:8080/debug/pprof/heap > heap.svg
 		(apt-get  install graphviz)
 `)
+
+	WrkDoc = heredoc.Doc(`
+$ wrk
+config.lua:
+request = function()
+  wrk.method = "POST"
+  wrk.headers["Content-Type"] = "application/json"
+  wrk.headers["Authorization"] = "Bearer xx"
+  wrk.body = "{}"
+
+  return wrk.format("POST", headers)
+end
+
+wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://airdb.io
+
+`)
 )

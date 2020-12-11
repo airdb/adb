@@ -146,6 +146,15 @@ var perfCommand = &cobra.Command{
 	},
 }
 
+var wrkCommand = &cobra.Command{
+	Use:   "wrk",
+	Short: "wrk performance",
+	Long:  "wrk performance",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.WrkDoc)
+	},
+}
+
 var s3Command = &cobra.Command{
 	Use:   "s3",
 	Short: "s3 tools",
@@ -171,5 +180,6 @@ func initManCommand() {
 	manCommand.AddCommand(toolsCommand)
 	manCommand.AddCommand(tcpdumpCommand)
 	manCommand.AddCommand(perfCommand)
+	manCommand.AddCommand(wrkCommand)
 	manCommand.AddCommand(s3Command)
 }
