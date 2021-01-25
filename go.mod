@@ -3,7 +3,7 @@ module airdb.io/airdb/adb
 go 1.14
 
 require (
-	airdb.io/airdb/sailor v1.8.0-beta.3 // indirect
+	airdb.io/airdb/sailor v1.0.7
 	github.com/AlecAivazis/survey/v2 v2.0.8
 	github.com/MakeNowJust/heredoc v1.0.0
 	github.com/airdb/sailor v1.1.2-0.20200802151610-a033b3f2a246
