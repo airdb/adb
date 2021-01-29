@@ -34,5 +34,5 @@ func GetVersion() string {
 
 	// fmt.Printf("version.BuildInfo%s\n", string(out))
 
-	return string(out)
+	return string(out) + "\n"+ "https://github.com/airdb/adb/releases/latest"
 }
