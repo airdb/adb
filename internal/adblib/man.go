@@ -7,6 +7,10 @@ import (
 var (
 	MysqlDoc = heredoc.Doc(`
 $ mysql
+Backup table // https://stackoverflow.com/questions/40724046/mysql-gtid-consistency-violation
+> CREATE TABLE new_table LIKE old_table; 
+> INSERT new_table SELECT * FROM old_table;
+
 > ALTER TABLE xx_tab change status process int(10)
 > ALTER TABLE xx_tab modify status int(10) after id
 > ALTER TABLE xx_tab modify status varchar(600) NOT NULL
@@ -126,6 +130,13 @@ $ openssl commands
 	openssl req  -noout -text -in ssl.csr
 	openssl s_client -servername www.airdb.com -connect www.airdb.com:443 </dev/null 2>/dev/null
 
+	Check Keypair 1
+	openssl rsa -pubout -in privkey.pem
+	openssl x509 -pubkey -noout -in fullchain.pem
+
+	Check keypair 2
+	diff -eq <(openssl x509 -pubkey -noout -in fullchain.pem) <(openssl rsa -pubout -in privkey.pem)
+
 	cert -f md www.airdb.com
 	Refer: https://github.com/genkiroid/cert
 `)
@@ -169,5 +180,21 @@ $ Golang
 
 	2. go tool pprof -alloc_space -cum -svg http://127.0.0.1:8080/debug/pprof/heap > heap.svg
 		(apt-get  install graphviz)
+`)
+
+	WrkDoc = heredoc.Doc(`
+$ wrk
+config.lua:
+request = function()
+  wrk.method = "POST"
+  wrk.headers["Content-Type"] = "application/json"
+  wrk.headers["Authorization"] = "Bearer xx"
+  wrk.body = "{}"
+
+  return wrk.format("POST", headers)
+end
+
+wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://airdb.io
+
 `)
 )

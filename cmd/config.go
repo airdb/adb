@@ -7,8 +7,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/MakeNowJust/heredoc"
 	"airdb.io/airdb/adb/internal/adblib"
+	"github.com/MakeNowJust/heredoc"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 )
