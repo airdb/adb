@@ -148,6 +148,7 @@ $ tcpdump commands
 `)
 	S3Doc = heredoc.Doc(`
 # Minio
+	wget https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2019-10-02T19-41-02Z
 	wget https://dl.min.io/client/mc/release/linux-amd64/mc
 	mc config host add <bucketname> https://s3.airdb.io <accessKey> <secretKey>
 `)
