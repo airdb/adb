@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"airdb.io/airdb/adb/internal/adblib"
-	"github.com/airdb/sailor"
+	"airdb.io/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )

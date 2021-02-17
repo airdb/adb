@@ -24,7 +24,7 @@ import (
 
 	// statik zip data, `statik -include='*' -src gin-template/ -f`.
 	_ "airdb.io/airdb/adb/statik"
-	"github.com/airdb/sailor"
+	"airdb.io/airdb/sailor/fileutil"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cobra"
 )
@@ -100,7 +100,7 @@ func generate(args []string) {
 			return err
 		}
 
-		err = sailor.TemplateGenerateFileFromReader(srcFile, projectDir, generateFlags)
+		err = fileutil.TemplateGenerateFileFromReader(srcFile, projectDir, generateFlags)
 		if err != nil {
 			return err
 		}
