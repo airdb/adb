@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/airdb/sailor"
+	"airdb.io/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )
@@ -30,7 +30,9 @@ func hostCmdInit() {
 	}
 
 	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
-	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.config/ssh/id_rsa", "identity file")
+	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i",
+		"~/.config/ssh/id_rsa", "identity file")
+
 	sshFlags.Options = hostSSHCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
 	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
 		"sftp server dest path")

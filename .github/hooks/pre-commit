@@ -9,4 +9,4 @@
 
 # Step 1: gofmt, ignore gin-template files
 gofmt -w -s $(git rev-parse --show-toplevel) || true
-#golangci-lint run
+golangci-lint run

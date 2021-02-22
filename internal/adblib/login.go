@@ -1,11 +1,12 @@
 package adblib
 
 import (
+	"airdb.io/airdb/sailor"
 	"fmt"
 	"time"
 
+	"airdb.io/airdb/sailor/process"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/airdb/sailor"
 	"github.com/imroc/req"
 )
 
@@ -18,7 +19,7 @@ type User struct {
 func LoginWithToken() {
 	fmt.Print(TokenRequest)
 
-	var bar sailor.ProcessBar
+	var bar process.Bar
 
 	bar.NewOption(0, 100)
 
