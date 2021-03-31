@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"path"
 
+	"airdb.io/airdb/sailor/fileutil"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/airdb/sailor"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -121,7 +121,7 @@ func SetAliyunConfig() error {
 		return err
 	}
 
-	err = sailor.WriteFile(aliyunConfigFile(), string(jsonByte))
+	err = fileutil.WriteFile(aliyunConfigFile(), string(jsonByte))
 	if err != nil {
 		return err
 	}
@@ -159,7 +159,7 @@ func SetSlackConfig() error {
 		return err
 	}
 
-	err = sailor.WriteFile(slackConfigFile(), string(jsonByte))
+	err = fileutil.WriteFile(slackConfigFile(), string(jsonByte))
 	if err != nil {
 		return err
 	}

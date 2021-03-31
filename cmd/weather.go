@@ -33,9 +33,8 @@ func weather(args []string) {
 	var out bytes.Buffer
 
 	cmd.Stdout = &out
-	err := cmd.Run()
 
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		fmt.Println("Thanks for using adb tool!")
 	} else {
 		fmt.Println(strings.Trim(out.String(), "\n"))

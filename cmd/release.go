@@ -74,8 +74,7 @@ func getRepoName() string {
 
 	cmd.Stdout = &out
 
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
 

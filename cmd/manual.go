@@ -164,6 +164,25 @@ var s3Command = &cobra.Command{
 	},
 }
 
+var awkCommand = &cobra.Command{
+	Use:   "awk",
+	Short: "awk tools",
+	Long:  "awk tools",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.AwkDoc)
+	},
+}
+
+var sedCommand = &cobra.Command{
+	Use:   "sed",
+	Short: "sed tools",
+	Long:  "sed tools",
+	Example: AirdbWiki,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.SedDoc)
+	},
+}
+
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
 
@@ -182,4 +201,6 @@ func initManCommand() {
 	manCommand.AddCommand(perfCommand)
 	manCommand.AddCommand(wrkCommand)
 	manCommand.AddCommand(s3Command)
+	manCommand.AddCommand(awkCommand)
+	manCommand.AddCommand(sedCommand)
 }
