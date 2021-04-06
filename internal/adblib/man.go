@@ -109,6 +109,11 @@ $ Github or Git Command:
 		resolved #x
 		add new quick sort algorithm, fixes #4, resolve #6, closed #12
 
+
+	git submodule update --init -f  vendor/github.com/mholt/caddy
+	git remote add ups https://github.com/airdb/b
+	git push -u ups local_branch:master -f
+
 	4. Github Command Line
 		brew install github/gh/gh
 		gh --repo bbhj/lbs issue status
@@ -155,5 +160,4 @@ $ tcpdump commands
 	wget https://dl.min.io/client/mc/release/linux-amd64/mc
 	mc config host add <bucketname> https://s3.airdb.io <accessKey> <secretKey>
 `)
-
 )

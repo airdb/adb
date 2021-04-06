@@ -7,10 +7,11 @@ LDFLAGS += "-X=airdb.io/airdb/adb/internal/adblib.Version=$(VERSION) \
             -X=airdb.io/airdb/adb/internal/adblib.Build=$(BUILD) \
             -X=airdb.io/airdb/adb/internal/adblib.BuildTime=$(shell date +%s)"
 
-myos = $(word 1, $@)
-ifndef $myos
-	myos = "$(shell uname | tr A-Z a-z)"
-endif
+SYSTEM:=
+#myos = $(word 1, $@)
+#ifndef $myos
+#	myos = "$(shell uname | tr A-Z a-z)"
+#endif
 
 .PHONY: test
 
@@ -20,7 +21,7 @@ test:
 	go test -v ./...
 
 build:
-	CGO_ENABLED=0 GOOS=$(myos) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
+	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
 
 PLATFORMS := windows linux darwin
 os = $(word 1, $@)
