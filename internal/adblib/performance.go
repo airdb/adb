@@ -44,7 +44,6 @@ $ Golang
 		(apt-get  install graphviz)
 `)
 
-
 var WrkDoc = heredoc.Doc(`
 $ wrk
 config.lua:

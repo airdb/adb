@@ -38,14 +38,26 @@ var serviceCmd = &cobra.Command{
 func serviceCmdInit() {
 	rootCmd.AddCommand(serviceCmd)
 	serviceCmd.AddCommand(servicesAddCmd)
+	serviceCmd.AddCommand(servicesUpdateCmd)
 	serviceCmd.AddCommand(servicesDeleteCmd)
 
 	serviceCmd.PersistentFlags().BoolVarP(&serviceFlags.List, "list", "l", false, "list all services")
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateSrvParams.RecordID,
+		"id", "i", "", "srv record_id")
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateSrvParams.Remark,
+		"remark", "m", "", "srv remark or comment")
 }
 
 type serviceStruct struct {
 	List bool
 }
+
+type SrvStruct struct {
+	RecordID string
+	Remark   string
+}
+
+var updateSrvParams SrvStruct
 
 var serviceFlags = serviceStruct{}
 
@@ -68,7 +80,8 @@ func service() {
 			continue
 		}
 
-		fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+		// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+		fmt.Printf("%-20s %-32s %-64s %s\n", rr.RecordId, rr.RR, rr.Value, rr.Remark)
 	}
 }
 
@@ -105,6 +118,16 @@ func addService(args []string) {
 	fmt.Println(output)
 }
 
+var servicesUpdateCmd = &cobra.Command{
+	Use:   "update [service]",
+	Short: "Update service",
+	Long:  "Update service",
+	Args:  cobra.MinimumNArgs(0),
+	Run: func(cmd *cobra.Command, args []string) {
+		updateService()
+	},
+}
+
 var servicesDeleteCmd = &cobra.Command{
 	Use:   "delete [service]",
 	Short: "Delete service",
@@ -113,6 +136,24 @@ var servicesDeleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		deleteService(args)
 	},
+}
+
+func updateService() {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateUpdateDomainRecordRemarkRequest()
+	request.RecordId = updateSrvParams.RecordID
+	request.Remark = updateSrvParams.Remark
+
+	output, err := client.UpdateDomainRecordRemark(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(output)
 }
 
 func deleteService(args []string) {

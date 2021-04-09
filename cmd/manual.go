@@ -174,9 +174,9 @@ var awkCommand = &cobra.Command{
 }
 
 var sedCommand = &cobra.Command{
-	Use:   "sed",
-	Short: "sed tools",
-	Long:  "sed tools",
+	Use:     "sed",
+	Short:   "sed tools",
+	Long:    "sed tools",
 	Example: AirdbWiki,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.SedDoc)
