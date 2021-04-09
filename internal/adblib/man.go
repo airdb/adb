@@ -161,3 +161,13 @@ $ tcpdump commands
 	mc config host add <bucketname> https://s3.airdb.io <accessKey> <secretKey>
 `)
 )
+
+var DockerDoc = heredoc.Doc(`
+      $docker exec -it -e COLUMNS=$(tput cols) -e LINES=$(tput lines) airdb/go bash
+
+      $ docker save myimage:latest | gzip > myimage_latest.tar.gz
+      $ docker save -o fedora-all.tar fedora
+
+      $ docker import /path/to/exampleimage.tgz
+      $	sudo tar -c . | docker import --change "ENV DEBUG=true" - exampleimagedir
+`)

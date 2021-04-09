@@ -1,7 +1,6 @@
 package adblib
 
 import (
-	"airdb.io/airdb/sailor"
 	"fmt"
 	"time"
 

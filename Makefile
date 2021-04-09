@@ -32,4 +32,5 @@ $(PLATFORMS):
 	CGO_ENABLED=0 GOOS=$(os) GOARCH=amd64 go build $(LDFLAGS) -o release/$(BINARY)-$(os)
 
 .PHONY: release
-release: windows linux darwin
+#release: windows linux darwin
+release: linux darwin
