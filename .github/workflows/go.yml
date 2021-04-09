@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           stable: 'true'
-          go-version: 1.14
+          go-version: 1.16
         id: go
 
       - name: Check out code into the Go module directory
@@ -19,12 +19,9 @@ jobs:
       - name: Lint
         run: |
           go version
-          go mod download
           # go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           # PATH=$PATH:$HOME/go/bin golangci-lint run
-          go build main.go
-          timeNow=$(date +%s)
-          go build -ldflags "-X github.com/airdb/adb/cmd.BuildTime=$timeNow" main.go
+          make release
 
       - name: Test
         run: echo go test -v .

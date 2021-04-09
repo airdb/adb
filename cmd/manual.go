@@ -25,13 +25,10 @@ var gitInitCommand = &cobra.Command{
 }
 
 var dockerInitCommand = &cobra.Command{
-	Use:   "docker",
-	Short: "docker operation",
-	Long:  "docker operation",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("docker exec -it -e COLUMNS=`tput cols` -e LINES=`tput lines`  -it airdb/go bash")
-		fmt.Println("docker exec -it -e COLUMNS=$(tput cols) -e LINES=$(tput lines) airdb/go bash")
-	},
+	Use:     "docker",
+	Short:   "docker operation",
+	Long:    "docker operation",
+	Example: adblib.DockerDoc,
 }
 
 var cloudInitCommand = &cobra.Command{
