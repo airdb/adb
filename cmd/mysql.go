@@ -5,7 +5,6 @@ import (
 	"net"
 	"strings"
 
-	"airdb.io/airdb/adb/internal/adblib"
 	"airdb.io/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/go-sql-driver/mysql"
@@ -19,7 +18,7 @@ var mysqlCmd = &cobra.Command{
 	Long:               "Airdb mysql client",
 	DisableFlagParsing: false,
 	Args:               cobra.MinimumNArgs(0),
-	Example:            adblib.SQLDoc,
+	Example:            SQLDoc,
 	Aliases:            []string{"sql"},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
@@ -33,33 +32,50 @@ var mysqlCmd = &cobra.Command{
 }
 
 var dsnAddCmd = &cobra.Command{
-	Use:     "add [name] [dsn tet record value]",
-	Short:   "Add new dsn",
-	Long:    "Add new dsn",
-	Example: adblib.DNSSrvDoc,
-	Args:    cobra.MinimumNArgs(servicesAddCmdMinArgs),
+	Use:   "add [name] [dsn tet record value]",
+	Short: "Add new dsn",
+	Long:  "Add new dsn",
+	Args:  cobra.MinimumNArgs(servicesAddCmdMinArgs),
 	Run: func(cmd *cobra.Command, args []string) {
 		addDsn(args)
 	},
 }
 
-type mysqlStruct struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	DB       string
+var dsnUpdateCmd = &cobra.Command{
+	Use:   "update [name] [dsn tet record value]",
+	Short: "Update new dsn",
+	Long:  "Update new dsn",
+	Args:  cobra.MinimumNArgs(0),
+	Run: func(cmd *cobra.Command, args []string) {
+		updateDsn()
+	},
 }
 
-var mysqlFlags mysqlStruct
+var dsnDeleteCmd = &cobra.Command{
+	Use:   "delete [name] [dsn tet record value]",
+	Short: "Delete new dsn",
+	Long:  "Delete new dsn",
+	Args:  cobra.MinimumNArgs(0),
+	Run: func(cmd *cobra.Command, args []string) {
+		deleteDsn()
+	},
+}
 
 func mysqlCmdInit() {
 	rootCmd.AddCommand(mysqlCmd)
 	mysqlCmd.AddCommand(dsnAddCmd)
+	mysqlCmd.AddCommand(dsnUpdateCmd)
+	mysqlCmd.AddCommand(dsnDeleteCmd)
 
-	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.User, "user", "u", "root", "database username")
-	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.Password, "password", "p", "airdb.me", "database password")
-	mysqlCmd.PersistentFlags().StringVarP(&mysqlFlags.DB, "db", "", "test", "database name")
+	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
+		"id", "i", "", "domain record_id")
+	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RR,
+		"rr", "r", "", "domain name prefix")
+	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.Value,
+		"value", "v", "", "domain name prefix")
+
+	dsnDeleteCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
+		"id", "i", "", "domain record_id")
 }
 
 func mysqlExec(args []string) {
@@ -126,12 +142,10 @@ func listDatabase() {
 	}
 
 	for _, rr := range output.DomainRecords.Record {
-		if rr.RR == sailor.DelimiterStar || rr.RR == sailor.DelimiterAt {
-			continue
+		if rr.Type == dns.TypeToString[dns.TypeTXT] {
+			// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+			fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
 		}
-
-		// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
-		fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
 	}
 }
 
@@ -148,6 +162,43 @@ func addDsn(args []string) {
 	request.Value = args[1]
 
 	output, err := client.AddDomainRecord(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(output)
+}
+
+func updateDsn() {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateUpdateDomainRecordRequest()
+	request.RecordId = updateDNSFlag.RecordID
+	request.Type = dns.TypeToString[dns.TypeTXT]
+	request.RR = updateDNSFlag.RR
+	request.Value = updateDNSFlag.Value
+
+	output, err := client.UpdateDomainRecord(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(output)
+}
+
+func deleteDsn() {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateDeleteDomainRecordRequest()
+	request.RecordId = updateDNSFlag.RecordID
+
+	output, err := client.DeleteDomainRecord(request)
 	if err != nil {
 		fmt.Println(err)
 	}

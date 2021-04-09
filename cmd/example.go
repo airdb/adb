@@ -1,9 +1,10 @@
-package adblib
+package cmd
 
 import (
 	"github.com/MakeNowJust/heredoc"
 )
 
 var SQLDoc = heredoc.Doc(`
-adb mysql mina-api -uroot -ppasswd --db test
+$ adb mysql sg
+$ adb mysql sh
 	`)

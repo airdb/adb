@@ -21,6 +21,7 @@ import (
 	"airdb.io/airdb/adb/internal/adblib"
 	"airdb.io/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
+	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
 )
 
@@ -42,9 +43,9 @@ func serviceCmdInit() {
 	serviceCmd.AddCommand(servicesDeleteCmd)
 
 	serviceCmd.PersistentFlags().BoolVarP(&serviceFlags.List, "list", "l", false, "list all services")
-	servicesUpdateCmd.PersistentFlags().StringVarP(&updateSrvParams.RecordID,
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
 		"id", "i", "", "srv record_id")
-	servicesUpdateCmd.PersistentFlags().StringVarP(&updateSrvParams.Remark,
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.Remark,
 		"remark", "m", "", "srv remark or comment")
 }
 
@@ -52,12 +53,14 @@ type serviceStruct struct {
 	List bool
 }
 
-type SrvStruct struct {
+type AliDNSStruct struct {
 	RecordID string
+	RR       string
+	Value    string
 	Remark   string
 }
 
-var updateSrvParams SrvStruct
+var updateDNSFlag AliDNSStruct
 
 var serviceFlags = serviceStruct{}
 
@@ -106,7 +109,7 @@ func addService(args []string) {
 
 	request := alidns.CreateAddDomainRecordRequest()
 	request.DomainName = ServiceDomain
-	request.Type = "SRV"
+	request.Type = dns.TypeToString[dns.TypeSRV]
 	request.RR = args[0]
 	request.Value = args[1]
 
@@ -145,8 +148,8 @@ func updateService() {
 	}
 
 	request := alidns.CreateUpdateDomainRecordRemarkRequest()
-	request.RecordId = updateSrvParams.RecordID
-	request.Remark = updateSrvParams.Remark
+	request.RecordId = updateDNSFlag.RecordID
+	request.Remark = updateDNSFlag.Remark
 
 	output, err := client.UpdateDomainRecordRemark(request)
 	if err != nil {
