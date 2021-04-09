@@ -21,6 +21,7 @@ import (
 	"airdb.io/airdb/adb/internal/adblib"
 	"airdb.io/airdb/sailor"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
+	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
 )
 
@@ -38,14 +39,28 @@ var serviceCmd = &cobra.Command{
 func serviceCmdInit() {
 	rootCmd.AddCommand(serviceCmd)
 	serviceCmd.AddCommand(servicesAddCmd)
+	serviceCmd.AddCommand(servicesUpdateCmd)
 	serviceCmd.AddCommand(servicesDeleteCmd)
 
 	serviceCmd.PersistentFlags().BoolVarP(&serviceFlags.List, "list", "l", false, "list all services")
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
+		"id", "i", "", "srv record_id")
+	servicesUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.Remark,
+		"remark", "m", "", "srv remark or comment")
 }
 
 type serviceStruct struct {
 	List bool
 }
+
+type AliDNSStruct struct {
+	RecordID string
+	RR       string
+	Value    string
+	Remark   string
+}
+
+var updateDNSFlag AliDNSStruct
 
 var serviceFlags = serviceStruct{}
 
@@ -68,7 +83,8 @@ func service() {
 			continue
 		}
 
-		fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+		// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+		fmt.Printf("%-20s %-32s %-64s %s\n", rr.RecordId, rr.RR, rr.Value, rr.Remark)
 	}
 }
 
@@ -93,7 +109,7 @@ func addService(args []string) {
 
 	request := alidns.CreateAddDomainRecordRequest()
 	request.DomainName = ServiceDomain
-	request.Type = "SRV"
+	request.Type = dns.TypeToString[dns.TypeSRV]
 	request.RR = args[0]
 	request.Value = args[1]
 
@@ -105,6 +121,16 @@ func addService(args []string) {
 	fmt.Println(output)
 }
 
+var servicesUpdateCmd = &cobra.Command{
+	Use:   "update [service]",
+	Short: "Update service",
+	Long:  "Update service",
+	Args:  cobra.MinimumNArgs(0),
+	Run: func(cmd *cobra.Command, args []string) {
+		updateService()
+	},
+}
+
 var servicesDeleteCmd = &cobra.Command{
 	Use:   "delete [service]",
 	Short: "Delete service",
@@ -113,6 +139,24 @@ var servicesDeleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		deleteService(args)
 	},
+}
+
+func updateService() {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateUpdateDomainRecordRemarkRequest()
+	request.RecordId = updateDNSFlag.RecordID
+	request.Remark = updateDNSFlag.Remark
+
+	output, err := client.UpdateDomainRecordRemark(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(output)
 }
 
 func deleteService(args []string) {

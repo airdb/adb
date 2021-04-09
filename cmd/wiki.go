@@ -76,8 +76,7 @@ func wiki(wikiName string) {
 
 	cmd.Stdout = &out
 
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		fmt.Println("Thanks for using adb tool!", err)
 	} else {
 		fmt.Println(strings.Trim(out.String(), "\n"))

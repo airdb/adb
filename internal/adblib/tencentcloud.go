@@ -1,12 +1,13 @@
 package adblib
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
+	terrors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 )
 
@@ -44,7 +45,9 @@ func (client *Client) ListCLB() {
 	}
 
 	response, err := client.DescribeLoadBalancers(request)
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
+
+	var sdkError *terrors.TencentCloudSDKError
+	if errors.As(err, &sdkError) {
 		fmt.Printf("An API error has returned: %s", err)
 
 		return
@@ -71,7 +74,9 @@ func (client *Client) ShowRS(lbID string) {
 	}
 
 	response, err := client.DescribeTargets(request)
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
+
+	var sdkError *terrors.TencentCloudSDKError
+	if errors.As(err, &sdkError) {
 		fmt.Printf("An API error has returned: %s", err)
 
 		return

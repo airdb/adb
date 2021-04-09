@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"airdb.io/airdb/sailor"
 	"airdb.io/airdb/sailor/process"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/imroc/req"
@@ -23,10 +24,10 @@ func LoginWithToken() {
 
 	bar.NewOption(0, 100)
 
-	var sleepInterval time.Duration = 100
+	sleepInterval := 100
 
 	for i := 0; i <= 100; i++ {
-		time.Sleep(sleepInterval * time.Millisecond)
+		time.Sleep(time.Duration(sleepInterval) * time.Millisecond)
 		bar.Play(int64(i))
 	}
 

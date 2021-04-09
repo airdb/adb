@@ -109,6 +109,11 @@ $ Github or Git Command:
 		resolved #x
 		add new quick sort algorithm, fixes #4, resolve #6, closed #12
 
+
+	git submodule update --init -f  vendor/github.com/mholt/caddy
+	git remote add ups https://github.com/airdb/b
+	git push -u ups local_branch:master -f
+
 	4. Github Command Line
 		brew install github/gh/gh
 		gh --repo bbhj/lbs issue status
@@ -144,58 +149,15 @@ $ openssl commands
 	TcpdumpDoc = heredoc.Doc(`
 $ tcpdump commands
 
-	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  http-gateway.spex.test.shopee.sg
+	udp:
+	sudo timeout 60 tcpdump -i any -n  port 53
+	sudo tcpdump -i any -nn udp and port 53
+	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  airdb.io
 `)
 	S3Doc = heredoc.Doc(`
 # Minio
 	wget https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2019-10-02T19-41-02Z
 	wget https://dl.min.io/client/mc/release/linux-amd64/mc
 	mc config host add <bucketname> https://s3.airdb.io <accessKey> <secretKey>
-`)
-
-	PerformanceDoc = heredoc.Doc(`
-$ Linux
-
-	1. dstat
-	2. iostat
-		iostat -x 5
-
-	3. iotop
-		iotop -p $pid
-
-	4. top, htop
-	5. iptraf
-	6. iftop
-
-	7. lsof
-
-	8. strace
-		strace -p $pid
-
-	Refer: https://www.brendangregg.com/linuxperf.html
-
-$ Golang
-
-	1. go tool pprof -alloc_space http://127.0.0.1:8080/debug/pprof/heap
-		top
-
-	2. go tool pprof -alloc_space -cum -svg http://127.0.0.1:8080/debug/pprof/heap > heap.svg
-		(apt-get  install graphviz)
-`)
-
-	WrkDoc = heredoc.Doc(`
-$ wrk
-config.lua:
-request = function()
-  wrk.method = "POST"
-  wrk.headers["Content-Type"] = "application/json"
-  wrk.headers["Authorization"] = "Bearer xx"
-  wrk.body = "{}"
-
-  return wrk.format("POST", headers)
-end
-
-wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://airdb.io
-
 `)
 )
