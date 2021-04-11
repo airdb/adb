@@ -6,3 +6,6 @@
 Feature:
 - Support Apple M1 arm64 platform
 - Upgrade sailor lib
+
+### 1.0.10
+- Fix mysql exec
