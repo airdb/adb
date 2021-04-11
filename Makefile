@@ -1,5 +1,5 @@
 BINARY := $(shell basename "$(PWD)")
-VERSION := $(shell git describe --tags)
+VERSION := $(shell git describe --dirty --always)
 BUILD := $(shell git rev-parse HEAD)
 
 LDFLAGS=-ldflags

@@ -115,7 +115,7 @@ func mysqlExec(args []string) {
 		return
 	}
 
-	flags := fmt.Sprintf("-A -h%s -P%s -u%s -p%s %s",
+	flags := fmt.Sprintf("-A --auto-rehash -h%s -P%s -u%s -p%s %s",
 		host,
 		port,
 		config.User,
