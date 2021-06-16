@@ -33,6 +33,10 @@ func aliyunConfigFile() string {
 	return path.Join(ConfigDir(), "aliyun.json")
 }
 
+func TencentYunConfigFile() string {
+	return path.Join(ConfigDir(), "tencentyun.json")
+}
+
 func slackConfigFile() string {
 	return path.Join(ConfigDir(), "slack.json")
 }
@@ -80,6 +84,12 @@ var qsSlack = []*survey.Question{
 
 // The  flag will be written to this struct.
 type AliyunFlag struct {
+	AccessKeyID     string `json:"access_key_id" survey:"access_key_id" mapstructure:"access_key_id"`
+	AccessKeySecret string `json:"access_key_secret" survey:"access_key_secret" mapstructure:"access_key_secret"`
+	RegionID        string `json:"region_id" survey:"region_id" mapstructure:"region_id"`
+}
+
+type TencentYunFlag struct {
 	AccessKeyID     string `json:"access_key_id" survey:"access_key_id" mapstructure:"access_key_id"`
 	AccessKeySecret string `json:"access_key_secret" survey:"access_key_secret" mapstructure:"access_key_secret"`
 	RegionID        string `json:"region_id" survey:"region_id" mapstructure:"region_id"`
@@ -165,4 +175,20 @@ func SetSlackConfig() error {
 	}
 
 	return nil
+}
+
+func GetTencentYunConfig() *TencentYunFlag {
+	viper.SetConfigFile(TencentYunConfigFile())
+
+	if err := viper.ReadInConfig(); err != nil {
+		panic(err)
+	}
+
+	var config TencentYunFlag
+
+	if err := viper.Unmarshal(&config); err != nil {
+		panic(err)
+	}
+
+	return &config
 }

@@ -32,6 +32,7 @@ func Execute() {
 	genCmdInit()
 	mysqlCmdInit()
 	serviceCmdInit()
+	serverlessCmdInit()
 	hostCmdInit()
 
 	initConfigCmd()
