@@ -56,6 +56,6 @@ request = function()
   return wrk.format("POST", headers)
 end
 
-wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://airdb.io
+wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://github.com
 
 `)

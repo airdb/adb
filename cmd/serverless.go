@@ -18,7 +18,7 @@ package cmd
 import (
 	"fmt"
 
-	"airdb.io/airdb/adb/internal/adblib"
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"

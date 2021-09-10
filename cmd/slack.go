@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"strings"
 
-	"airdb.io/airdb/adb/internal/adblib"
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/slack-go/slack"
 	"github.com/spf13/cobra"
 )

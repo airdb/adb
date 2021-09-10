@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"airdb.io/airdb/sailor"
+	"github.com/airdb/sailor"
+	"github.com/airdb/sailor/osutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/spf13/cobra"
 )
@@ -117,7 +118,7 @@ func hostSSH(args []string) {
 		parms = append(parms, "-o"+option)
 	}
 
-	sailor.Exec(CommandSSH, parms)
+	osutil.Exec(CommandSSH, parms)
 }
 
 var hostSFTPCmd = &cobra.Command{
@@ -153,5 +154,5 @@ func hostSFTP(args []string) {
 	// Sftp target(user@host:/tmp) must at the end of params.
 	parms = append(parms, sftpTarget)
 
-	sailor.Exec(CommandSFTP, parms)
+	osutil.Exec(CommandSFTP, parms)
 }

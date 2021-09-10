@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"airdb.io/airdb/sailor"
-	"airdb.io/airdb/sailor/process"
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/airdb/sailor/osutil"
+	"github.com/airdb/sailor/process"
 	"github.com/imroc/req"
 )
 
@@ -60,7 +60,7 @@ func Login() {
 
 	args := []string{IconFile()}
 
-	out, err := sailor.ExecCommand("cat", args)
+	out, err := osutil.ExecCommand("cat", args)
 	if err != nil {
 		downloadIcon()
 

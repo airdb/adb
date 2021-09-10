@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"path"
 
-	"airdb.io/airdb/sailor/fileutil"
+	"github.com/airdb/sailor/fileutil"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"

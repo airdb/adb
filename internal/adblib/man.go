@@ -152,13 +152,13 @@ $ tcpdump commands
 	udp:
 	sudo timeout 60 tcpdump -i any -n  port 53
 	sudo tcpdump -i any -nn udp and port 53
-	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  airdb.io
+	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  github.com
 `)
 	S3Doc = heredoc.Doc(`
 # Minio
 	wget https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2019-10-02T19-41-02Z
 	wget https://dl.min.io/client/mc/release/linux-amd64/mc
-	mc config host add <bucketname> https://s3.airdb.io <accessKey> <secretKey>
+	mc config host add <bucketname> https://s3.github.com <accessKey> <secretKey>
 `)
 )
 

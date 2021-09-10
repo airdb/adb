@@ -5,7 +5,7 @@ import (
 	"net"
 	"strings"
 
-	"airdb.io/airdb/sailor"
+	"github.com/airdb/sailor/osutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/go-sql-driver/mysql"
 	"github.com/miekg/dns"
@@ -124,7 +124,7 @@ func mysqlExec(args []string) {
 	)
 
 	args = strings.Split(flags, " ")
-	sailor.Exec("mysql", args)
+	osutil.Exec("mysql", args)
 }
 
 func listDatabase() {
