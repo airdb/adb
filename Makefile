@@ -20,6 +20,9 @@ all: build
 test:
 	go test -v ./...
 
+dev:
+	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go run $(LDFLAGS) main.go
+
 build:
 	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
 

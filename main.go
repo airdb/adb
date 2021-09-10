@@ -4,16 +4,15 @@ import (
 	"log"
 
 	"github.com/airdb/adb/cmd"
-	"github.com/joho/godotenv"
+	"github.com/airdb/adb/internal/adblib"
 )
 
 //go:generate go build -o adb main.go
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	adblib.InitDotEnv()
+
+	log.Println(adblib.AdbConfig)
 
 	cmd.Execute()
 }

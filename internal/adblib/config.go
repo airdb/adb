@@ -2,10 +2,14 @@ package adblib
 
 import (
 	"encoding/json"
+	"log"
+	"os"
 	"path"
+	"path/filepath"
 
-	"github.com/airdb/sailor/fileutil"
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/airdb/sailor/fileutil"
+	"github.com/joho/godotenv"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -191,4 +195,34 @@ func GetTencentYunConfig() *TencentYunFlag {
 	}
 
 	return &config
+}
+
+const EnvFile = ".config/adb/env"
+
+type CFG struct {
+	TencentyunAccessKeyID     string
+	TencentyunAccessKeySecret string
+	TencentyunRegionID        string
+
+	AliyunAccessKeyID     string
+	AliyunAccessKeySecret string
+	AliyunRegionID        string
+}
+
+var AdbConfig CFG
+
+func InitDotEnv() {
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	envfile := filepath.Join(homedir, EnvFile)
+
+	err = godotenv.Load(envfile)
+	if err != nil {
+		log.Fatal("Error loading .env file ", EnvFile, err)
+	}
+
+	AdbConfig.AliyunAccessKeyID = os.Getenv("AliyunAccessKeyID")
 }
