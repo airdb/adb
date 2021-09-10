@@ -16,36 +16,41 @@ var hostCmd = &cobra.Command{
 	Long:               "Perform actions on hosts",
 	DisableFlagParsing: true,
 	Aliases:            []string{"server", "servers", "hosts"},
+	Run: func(cmd *cobra.Command, args []string) {
+		host()
+	},
 }
 
 func hostCmdInit() {
 	rootCmd.AddCommand(hostCmd)
-	hostCmd.AddCommand(hostListCmd)
-	hostCmd.AddCommand(hostSSHCmd)
-	hostCmd.AddCommand(hostSFTPCmd)
+	/*
+		hostCmd.AddCommand(hostListCmd)
+		hostCmd.AddCommand(hostSSHCmd)
+		hostCmd.AddCommand(hostSFTPCmd)
 
-	sshOptions := []string{
-		"StrictHostKeyChecking=no",
-		"UserKnownHostsFile=/dev/null",
-		"ConnectTimeout=3",
-	}
+		sshOptions := []string{
+			"StrictHostKeyChecking=no",
+			"UserKnownHostsFile=/dev/null",
+			"ConnectTimeout=3",
+		}
 
-	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
-	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i",
-		"~/.config/ssh/id_rsa", "identity file")
+		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
+		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i",
+			"~/.config/ssh/id_rsa", "identity file")
 
-	sshFlags.Options = hostSSHCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
-	hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
-		"sftp server dest path")
+		sshFlags.Options = hostSSHCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
+		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
+			"sftp server dest path")
 
-	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
-	sshFlags.Options = hostSFTPCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
+		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
+		sshFlags.Options = hostSFTPCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
 
-	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.config/ssh/id_rsa",
-		"identity file")
+		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.config/ssh/id_rsa",
+			"identity file")
 
-	hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
-		"sftp server dest path")
+		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
+			"sftp server dest path")
+	*/
 }
 
 var hostListCmd = &cobra.Command{

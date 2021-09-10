@@ -20,12 +20,11 @@ import (
 
 	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
+	apigateway "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/apigateway/v20180808"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
-
-	apigateway "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/apigateway/v20180808"
 )
 
 // serverlessCmd represents the serverless command.
@@ -62,8 +61,10 @@ func serverless() {
 
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		fmt.Printf("An API error has returned: %s", err)
+
 		return
 	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -75,8 +76,10 @@ func serverless() {
 
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		fmt.Printf("An API error has returned: %s", err)
+
 		return
 	}
+
 	if err != nil {
 		panic(err)
 	}

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/airdb/adb/cmd"
 	"github.com/airdb/adb/internal/adblib"
 )
@@ -11,8 +9,6 @@ import (
 
 func main() {
 	adblib.InitDotEnv()
-
-	log.Println(adblib.AdbConfig)
 
 	cmd.Execute()
 }
