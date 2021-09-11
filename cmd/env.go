@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/airdb/adb/internal/adblib"
 	"github.com/joho/godotenv"
@@ -19,7 +20,13 @@ var envCommand = &cobra.Command{
 }
 
 func env() {
-	envs, err := godotenv.Read(adblib.GetEnvFile())
+	envfile := ".env"
+
+	if _, err := os.Stat(envfile); os.IsNotExist(err) {
+		envfile = adblib.GetEnvFile()
+	}
+
+	envs, err := godotenv.Read(envfile)
 	if err != nil {
 		fmt.Println("read envfile err ", err)
 	}
