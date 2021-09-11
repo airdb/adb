@@ -23,8 +23,8 @@ github.com/Netflix/go-expect v0.0.0-20180615182759-c93bf25de8e8/go.mod h1:oX5x61
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/PuerkitoBio/purell v1.1.0/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
-github.com/airdb/sailor v0.0.4 h1:fS+taui4+e2Bfs51oysajWh8eh15RWcUG+UjF9q/NYM=
-github.com/airdb/sailor v0.0.4/go.mod h1:Oi3MbY+CLgxw35AL6hqbKvbBy2pSFH2h26SuUv7YMIk=
+github.com/airdb/sailor v0.0.0-20210905152253-99ba97e2e89a h1:qBoVtMZyJH+nppKysWU7ccb+xV7To54UMIBZzkLswK8=
+github.com/airdb/sailor v0.0.0-20210905152253-99ba97e2e89a/go.mod h1:YgoCpQb0uVILdGCgniE695ig8kR+DiTRyeoSvHhsvCs=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=

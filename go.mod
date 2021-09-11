@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/AlecAivazis/survey/v2 v2.0.8
 	github.com/MakeNowJust/heredoc v1.0.0
-	github.com/airdb/sailor v0.0.4
+	github.com/airdb/sailor v0.0.0-20210905152253-99ba97e2e89a
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1022
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/imroc/req v0.2.4
