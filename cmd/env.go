@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/airdb/adb/internal/adblib"
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 )
 
@@ -12,8 +14,17 @@ var envCommand = &cobra.Command{
 	Long:               "Show Environment",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("adb_config=~/.adb/config.json")
-		fmt.Println("git_hook_path=./.github/hooks/")
-		fmt.Println("aliyun_config=~/.aliyun/config.json")
+		env()
 	},
+}
+
+func env() {
+	envs, err := godotenv.Read(adblib.GetEnvFile())
+	if err != nil {
+		fmt.Println("read envfile err ", err)
+	}
+
+	for k, v := range envs {
+		fmt.Printf("export %s=%s\n", k, v)
+	}
 }

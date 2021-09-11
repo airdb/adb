@@ -1,6 +1,12 @@
 # adb
 Airdb Development Builder
 
+## Quick Install
+
+```
+go install github.com/airdb/adb@latest
+```
+
 ## Download
 
 ```

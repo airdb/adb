@@ -211,7 +211,7 @@ type CFG struct {
 
 var AdbConfig CFG
 
-func InitDotEnv() {
+func GetEnvFile() string {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
@@ -219,7 +219,11 @@ func InitDotEnv() {
 
 	envfile := filepath.Join(homedir, EnvFile)
 
-	err = godotenv.Load(envfile)
+	return envfile
+}
+
+func InitDotEnv() {
+	err := godotenv.Load(GetEnvFile())
 	if err != nil {
 		log.Fatal("Error loading .env file ", EnvFile, err)
 	}
