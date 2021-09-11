@@ -17,7 +17,11 @@ require (
 	github.com/slack-go/slack v0.6.5
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.0
-	github.com/tencentcloud/tencentcloud-sdk-go v1.0.12
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/apigateway v1.0.248
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.248
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.248
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.248
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.248
 	golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f // indirect
 )
 

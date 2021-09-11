@@ -224,5 +224,13 @@ func InitDotEnv() {
 		log.Fatal("Error loading .env file ", EnvFile, err)
 	}
 
-	AdbConfig.AliyunAccessKeyID = os.Getenv("AliyunAccessKeyID")
+	AdbConfig = CFG{
+		TencentyunAccessKeyID:     os.Getenv("TencentyunAccessKeyID"),
+		TencentyunAccessKeySecret: os.Getenv("TencentyunAccessKeySecret"),
+		TencentyunRegionID:        os.Getenv("TencentyunRegionID"),
+		AliyunAccessKeyID:         os.Getenv("AliyunAccessKeyID"),
+		AliyunAccessKeySecret:     os.Getenv("AliyunAccessKeySecret"),
+		AliyunRegionID:            os.Getenv("AliyunRegionID"),
+	}
+	// AdbConfig.AliyunAccessKeyID = os.Getenv("AliyunAccessKeyID")
 }
