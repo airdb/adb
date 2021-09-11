@@ -7,7 +7,7 @@ import (
 
 var loginCommand = &cobra.Command{
 	Use:     "login",
-	Aliases: []string{"hello"},
+	Aliases: []string{"hello", "logo"},
 	Short:   "login airdb",
 	Long:    "login airdb",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -26,11 +26,5 @@ func initLogin() {
 }
 
 func login() {
-	if loginWithToken {
-		adblib.LoginWithToken()
-
-		return
-	}
-
-	adblib.Login()
+	adblib.Logo()
 }

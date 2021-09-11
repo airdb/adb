@@ -70,6 +70,19 @@ func Login() {
 	fmt.Println(out)
 }
 
+func Logo() {
+	args := []string{IconFile()}
+
+	out, err := osutil.ExecCommand("cat", args)
+	if err != nil {
+		downloadIcon()
+
+		return
+	}
+
+	fmt.Println(out)
+}
+
 func downloadIcon() {
 	mtod := "https://init.airdb.host/mtod/icon"
 	r, err := req.Get(mtod)
