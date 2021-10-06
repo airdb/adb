@@ -32,6 +32,7 @@ func env() {
 	}
 
 	for k, v := range envs {
-		fmt.Printf("export %s=%s\n", k, v)
+		// fmt.Printf("export %s=%s\n", k, v)
+		fmt.Printf("export %s=\"%s\"\n", k, v)
 	}
 }
