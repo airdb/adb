@@ -7,8 +7,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/airdb/adb/internal/adblib"
 	"github.com/MakeNowJust/heredoc"
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 )
@@ -137,11 +137,10 @@ func configGet(cmd *cobra.Command, args []string) error {
 
 	switch service {
 	case "aliyun":
-		aliyunFlag := adblib.GetAliyunConfig()
 		fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
-			aliyunFlag.AccessKeyID,
-			aliyunFlag.AccessKeySecret,
-			aliyunFlag.RegionID,
+			adblib.AdbConfig.AliyunAccessKeyID,
+			adblib.AdbConfig.AliyunAccessKeySecret,
+			adblib.AdbConfig.AliyunRegionID,
 		)
 	case "slack":
 		config = adblib.GetSlackConfig()

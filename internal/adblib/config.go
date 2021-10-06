@@ -105,22 +105,6 @@ type SlackFlag struct {
 	Channel string `json:"channel" survey:"channel" mapstructure:"channel"`
 }
 
-func GetAliyunConfig() *AliyunFlag {
-	viper.SetConfigFile(aliyunConfigFile())
-
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
-	var aliyunFlag AliyunFlag
-
-	if err := viper.Unmarshal(&aliyunFlag); err != nil {
-		panic(err)
-	}
-
-	return &aliyunFlag
-}
-
 func SetAliyunConfig() error {
 	var aliyunFlag AliyunFlag
 
@@ -236,5 +220,4 @@ func InitDotEnv() {
 		AliyunAccessKeySecret:     os.Getenv("AliyunAccessKeySecret"),
 		AliyunRegionID:            os.Getenv("AliyunRegionID"),
 	}
-	// AdbConfig.AliyunAccessKeyID = os.Getenv("AliyunAccessKeyID")
 }

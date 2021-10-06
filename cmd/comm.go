@@ -21,12 +21,10 @@ const CloudPlatformAliyun = "aliyun"
 // var aliyunConfig = map[string]string{}
 
 func aliyunConfigInit() (*alidns.Client, error) {
-	aliyunFlag := adblib.GetAliyunConfig()
-
 	client, err := alidns.NewClientWithAccessKey(
-		aliyunFlag.RegionID,
-		aliyunFlag.AccessKeyID,
-		aliyunFlag.AccessKeySecret,
+		adblib.AdbConfig.AliyunRegionID,
+		adblib.AdbConfig.AliyunAccessKeyID,
+		adblib.AdbConfig.AliyunAccessKeySecret,
 	)
 	if err != nil {
 		return nil, err
