@@ -44,10 +44,9 @@ func initSlack() {
 }
 
 func opSlack(args []string) {
-	config := adblib.GetSlackConfig()
-	api := slack.New(config.Token)
+	api := slack.New(adblib.AdbConfig.SlackToken)
 
-	channelName := config.Channel
+	channelName := adblib.AdbConfig.SlackChannel
 	msg := slack.MsgOptionText(strings.Join(args, " "), false)
 
 	channelID, timestamp, err := api.PostMessage(channelName, msg)

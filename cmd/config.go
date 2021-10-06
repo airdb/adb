@@ -133,8 +133,6 @@ func configSet(cmd *cobra.Command, args []string) error {
 func configGet(cmd *cobra.Command, args []string) error {
 	service := args[0]
 
-	var config interface{}
-
 	switch service {
 	case "aliyun":
 		fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
@@ -142,11 +140,9 @@ func configGet(cmd *cobra.Command, args []string) error {
 			adblib.AdbConfig.AliyunAccessKeySecret,
 			adblib.AdbConfig.AliyunRegionID,
 		)
-	case "slack":
-		config = adblib.GetSlackConfig()
+	default:
+		fmt.Println(adblib.AdbConfig)
 	}
-
-	fmt.Println(config)
 
 	return nil
 }

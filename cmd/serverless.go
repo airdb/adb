@@ -51,9 +51,11 @@ type serverlessStruct struct {
 var serverlessFlags = serverlessStruct{}
 
 func serverless() {
-	config := adblib.GetTencentYunConfig()
+	credential := common.NewCredential(
+		adblib.AdbConfig.TencentyunAccessKeyID,
+		adblib.AdbConfig.TencentyunAccessKeySecret,
+	)
 
-	credential := common.NewCredential(config.AccessKeyID, config.AccessKeySecret)
 	client, _ := apigateway.NewClient(credential, regions.Shanghai, profile.NewClientProfile())
 
 	request := apigateway.NewDescribeServicesStatusRequest()

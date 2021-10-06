@@ -165,22 +165,6 @@ func SetSlackConfig() error {
 	return nil
 }
 
-func GetTencentYunConfig() *TencentYunFlag {
-	viper.SetConfigFile(TencentYunConfigFile())
-
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
-	var config TencentYunFlag
-
-	if err := viper.Unmarshal(&config); err != nil {
-		panic(err)
-	}
-
-	return &config
-}
-
 const EnvFile = ".config/adb/env"
 
 type CFG struct {
@@ -191,6 +175,9 @@ type CFG struct {
 	AliyunAccessKeyID     string
 	AliyunAccessKeySecret string
 	AliyunRegionID        string
+
+	SlackToken   string
+	SlackChannel string
 }
 
 var AdbConfig CFG
@@ -219,5 +206,7 @@ func InitDotEnv() {
 		AliyunAccessKeyID:         os.Getenv("AliyunAccessKeyID"),
 		AliyunAccessKeySecret:     os.Getenv("AliyunAccessKeySecret"),
 		AliyunRegionID:            os.Getenv("AliyunRegionID"),
+		SlackToken:                os.Getenv("SlackToken"),
+		SlackChannel:              os.Getenv("SlackChannel"),
 	}
 }
