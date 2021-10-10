@@ -16,8 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 
@@ -31,6 +30,7 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Example: "./adb cert   -k /tmp/test/server.key  -c /tmp/test/ssl.chain.crt",
 	Run: func(cmd *cobra.Command, args []string) {
 		opCert(args)
 	},
@@ -46,12 +46,10 @@ var certFlag CertFlag
 func initCert() {
 	rootCmd.AddCommand(certCmd)
 
-	certCmd.PersistentFlags().StringVarP(&certFlag.PrivateKeyFile, "private key", "-k", "/tmp/",
-		"server.key")
-	certCmd.PersistentFlags().StringVarP(&certFlag.PublicKeyFile, "public key", "-c", "/tmp/",
-		"ssl.chain.crt")
+	certCmd.PersistentFlags().StringVarP(&certFlag.PrivateKeyFile, "key", "k", "", "server.key")
+	certCmd.PersistentFlags().StringVarP(&certFlag.PublicKeyFile, "chain", "c", "", "ssl.chain.crt")
 }
 
 func opCert(args []string) {
-	fmt.Println(args)
+	adblib.HandlerCert(certFlag.PrivateKeyFile, certFlag.PublicKeyFile)
 }
