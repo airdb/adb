@@ -36,6 +36,7 @@ func Execute() {
 	hostCmdInit()
 
 	initConfigCmd()
+	initCert()
 	initSlack()
 	initManCommand()
 
