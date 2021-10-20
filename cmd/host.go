@@ -24,12 +24,15 @@ var hostCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Aliases:            []string{"server", "servers", "hosts"},
 	Run: func(cmd *cobra.Command, args []string) {
-		host()
+		if len(args) == 0 {
+			host()
+		}
 	},
 }
 
 func hostCmdInit() {
 	rootCmd.AddCommand(hostCmd)
+	hostCmd.AddCommand(keyListCmd)
 	/*
 		hostCmd.AddCommand(hostListCmd)
 		hostCmd.AddCommand(hostSSHCmd)
@@ -61,13 +64,26 @@ func hostCmdInit() {
 }
 
 var hostListCmd = &cobra.Command{
-	Use:                "list",
-	Short:              "List servers",
-	Long:               "List servers",
-	DisableFlagParsing: true,
+	Use:     "list",
+	Short:   "List servers",
+	Long:    "List servers",
+	Aliases: []string{"ls"},
+	// DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		host()
 		hostDNS()
+	},
+}
+
+var keyListCmd = &cobra.Command{
+	Use:     "keys",
+	Short:   "List ssh public keys",
+	Long:    "List ssh public keys",
+	Aliases: []string{"key"},
+	// DisableFlagParsing: true,
+	Example: "adb host keys >> ~/.ssh/authorized_keys",
+	Run: func(cmd *cobra.Command, args []string) {
+		listPubKeys()
 	},
 }
 
@@ -225,4 +241,17 @@ func hostSFTP(args []string) {
 	parms = append(parms, sftpTarget)
 
 	osutil.Exec(CommandSFTP, parms)
+}
+
+var hostAdmins = []string{
+	"deancn",
+	"yino",
+	"hallelujah-shih",
+	"xqbumu",
+	"lovezsr",
+	"phuslu",
+}
+
+func listPubKeys() {
+	adblib.GetGithubKeys(hostAdmins)
 }

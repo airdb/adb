@@ -58,4 +58,9 @@ end
 
 wrk -t4 -c100 -d30s -T30s --script=config.lua --latency https://github.com
 
+wrk  https://bbhj.airdb.io --latency -t48 -d15 -c50
+
+for i in $(seq 1 10); do  wrk  https://bbhj.airdb.io  --latency -t48 -d15 -c50  >/tmp/run.log.$i ; done
+cat /tmp/run.log.* | grep "Req/Sec" | awk  '{print $2}' | sed 's/k//' | awk -F '|' '{sum += $1} END {print sum}'
+
 `)
