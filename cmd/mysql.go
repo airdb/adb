@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"log"
 	"net"
+	"os"
 	"strings"
 
 	"github.com/airdb/sailor/osutil"
@@ -28,6 +31,19 @@ var mysqlCmd = &cobra.Command{
 		}
 
 		mysqlExec(args)
+	},
+}
+
+var mysqlExprCmd = &cobra.Command{
+	Use:                "expr [dsn]",
+	Short:              "mysql expr client",
+	Long:               "mysql expr client",
+	DisableFlagParsing: false,
+	Args:               cobra.MinimumNArgs(0),
+	Example:            SQLDoc,
+	Aliases:            []string{"expr", "expression", "exp"},
+	Run: func(cmd *cobra.Command, args []string) {
+		GenMyqlExpr()
 	},
 }
 
@@ -66,6 +82,7 @@ func mysqlCmdInit() {
 	mysqlCmd.AddCommand(dsnAddCmd)
 	mysqlCmd.AddCommand(dsnUpdateCmd)
 	mysqlCmd.AddCommand(dsnDeleteCmd)
+	mysqlCmd.AddCommand(mysqlExprCmd)
 
 	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
 		"id", "i", "", "domain record_id")
@@ -204,4 +221,47 @@ func deleteDsn() {
 	}
 
 	fmt.Println(output)
+}
+
+func GenMyqlExpr() {
+	var dsn string
+
+	// check if there is somethinig to read on STDIN
+	stat, err := os.Stdin.Stat()
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		// var stdin []byte
+		reader := bufio.NewReader(os.Stdin)
+		dsn, err = reader.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+		//fmt.Printf("stdin = %s\n", stdin)
+	} else {
+		fmt.Println("Enter database dsn:")
+
+		fmt.Scanf("%s", &dsn)
+	}
+
+	dsn = strings.TrimSpace(dsn)
+	// fmt.Println("dsn = ", dsn)
+	config, _ := mysql.ParseDSN(dsn)
+
+	ip, port, _ := net.SplitHostPort(config.Addr)
+
+	fmt.Println("mysql expression:")
+	fmt.Printf("mysql -h%s -P%s -u%s -p%s %s\n",
+		ip,
+		port,
+		config.User,
+		config.Passwd,
+		config.DBName,
+	)
+
+	fmt.Printf("mysqldump -h%s -P%s -u%s -p%s %s [tablename] > dump.sql \n",
+		ip,
+		port,
+		config.User,
+		config.Passwd,
+		config.DBName,
+	)
 }
