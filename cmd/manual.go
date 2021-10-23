@@ -180,6 +180,17 @@ var sedCommand = &cobra.Command{
 	},
 }
 
+var webCommand = &cobra.Command{
+	Use:     "webserver",
+	Short:   "start a webserver",
+	Long:    "start a webserver",
+	Aliases: []string{"web"},
+	Example: AirdbWiki,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.WebserverDoc)
+	},
+}
+
 func initManCommand() {
 	rootCmd.AddCommand(manCommand)
 
@@ -200,4 +211,5 @@ func initManCommand() {
 	manCommand.AddCommand(s3Command)
 	manCommand.AddCommand(awkCommand)
 	manCommand.AddCommand(sedCommand)
+	manCommand.AddCommand(webCommand)
 }

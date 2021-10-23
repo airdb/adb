@@ -171,3 +171,11 @@ var DockerDoc = heredoc.Doc(`
       $ docker import /path/to/exampleimage.tgz
       $	sudo tar -c . | docker import --change "ENV DEBUG=true" - exampleimagedir
 `)
+
+var WebserverDoc = heredoc.Doc(`
+webserver:
+	$ python -m SimpleHTTPServer
+	$ python3 -m http.server
+
+	$ caddy run
+`)
