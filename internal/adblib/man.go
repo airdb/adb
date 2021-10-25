@@ -144,6 +144,10 @@ $ openssl commands
 
 	cert -f md www.airdb.com
 	Refer: https://github.com/genkiroid/cert
+
+Check Client Hello:
+	sudo ssldump -i  lo
+	curl -k https://127.0.0.1:8443 | hexdump -C
 `)
 
 	TcpdumpDoc = heredoc.Doc(`

@@ -109,6 +109,7 @@ var terraformCommand = &cobra.Command{
 
 var opensslCommand = &cobra.Command{
 	Use:   "openssl",
+	Aliases: []string{"ssl", "tls"},
 	Short: "openssl command",
 	Long:  "openssl command",
 	Run: func(cmd *cobra.Command, args []string) {
