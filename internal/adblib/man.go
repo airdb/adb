@@ -110,6 +110,7 @@ $ Github or Git Command:
 		add new quick sort algorithm, fixes #4, resolve #6, closed #12
 
 
+
 	git submodule update --init -f  vendor/github.com/mholt/caddy
 	git remote add ups https://github.com/airdb/b
 	git push -u ups local_branch:master -f
@@ -126,6 +127,8 @@ $ Github or Git Command:
 		git tag -d v1.0
 		git push --delete origin v1.0
 
+	6. submodule
+	git submodule update --init --recursive --remote
 `)
 
 	OpenSSLDoc = heredoc.Doc(`
