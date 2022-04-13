@@ -16,7 +16,7 @@ func GetGithubKeysByID(id string) {
 
 	scanner := bufio.NewScanner(resp.Body)
 	for i := 0; scanner.Scan() && i < 3; i++ {
-		fmt.Printf("%s  %s@github.com\n", scanner.Text(), id)
+		fmt.Printf("%s https://github.com/%s\n", scanner.Text(), id)
 	}
 }
 
