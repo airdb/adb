@@ -26,6 +26,13 @@ dev:
 build:
 	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
 
+lint:
+	go fmt ./...
+	golangci-lint run
+
+install: build
+	cp adb $(shell which adb)
+
 PLATFORMS := windows linux darwin
 os = $(word 1, $@)
 

@@ -10,7 +10,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           stable: 'true'
-          go-version: 1.16
+          go-version: 1.18
         id: go
 
       - name: Check out code into the Go module directory
@@ -19,6 +19,9 @@ jobs:
       - name: Lint
         run: |
           go version
+          go env -w GOSUMDB=off
+          rm go.sum
+          go mod tidy
           # go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           # PATH=$PATH:$HOME/go/bin golangci-lint run
           make release

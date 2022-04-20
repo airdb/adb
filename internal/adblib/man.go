@@ -62,73 +62,11 @@ $ terraform commands
 `)
 
 	BrewDoc = heredoc.Docf(`
-$ Brew Common Command:
-
-	brew outdated
-
-	brew cask outdated
-	brew outdated adb --verbose --debug
-	brew install github/gh/gh
-	brew install aliyun-cli
-	
-	brew tap aidb/taps
-	brew install airdb/taps/adb
-	brew install adb
-
+	https://airdb.wiki/os/mac/mac/
 `)
 
 	GithubDoc = heredoc.Docf(`
-$ Github or Git Command:
-
-	1. Maintain a repo without permission
-		git remote add upstream https://github.com/bfenetworks/bfe.git
-		git fetch upstream
-		git checkout develop
-
-		git merge upstream/develop
-
-		git rebase upstream/develop
-
-		Refer: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
-
-
-	2. git config setting
-		git config --global core.hooksPath .github/hooks
-		git config --global core.excludefile .gitignore_global
-		git config --global url.'ssh://git@github.com'.insteadOf https://github.com
-
-	3. Github Commit. For Close Github Issue, commit message should as follow:
-		close #x
-		closes #x
-		closed #x
-		fix #x
-		fixes #x
-		fixed #x
-		resolve #x
-		resolves #x
-		resolved #x
-		add new quick sort algorithm, fixes #4, resolve #6, closed #12
-
-
-
-	git submodule update --init -f  vendor/github.com/mholt/caddy
-	git remote add ups https://github.com/airdb/b
-	git push -u ups local_branch:master -f
-
-	4. Github Command Line
-		brew install github/gh/gh
-		gh --repo bbhj/lbs issue status
-		gh --repo bbhj/lbs issue view 1
-
-	5. Delete branch or tag
-		git branch -D dev
-		git push origin --delete dev
-
-		git tag -d v1.0
-		git push --delete origin v1.0
-
-	6. submodule
-	git submodule update --init --recursive --remote
+	https://airdb.wiki/os/linux/shell/git.html
 `)
 
 	OpenSSLDoc = heredoc.Doc(`
@@ -154,18 +92,17 @@ Check Client Hello:
 `)
 
 	TcpdumpDoc = heredoc.Doc(`
-$ tcpdump commands
-
-	udp:
-	sudo timeout 60 tcpdump -i any -n  port 53
-	sudo tcpdump -i any -nn udp and port 53
-	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  github.com
+	https://airdb.wiki/os/linux/shell/tcpdump.html
 `)
 	S3Doc = heredoc.Doc(`
 # Minio
 	wget https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2019-10-02T19-41-02Z
 	wget https://dl.min.io/client/mc/release/linux-amd64/mc
 	mc config host add <bucketname> https://s3.github.com <accessKey> <secretKey>
+
+# Tecent cos
+	https://cloud.tencent.com/developer/article/1982033
+	./mc-for-cos alias set s3 http://cos.ap-shanghai.myqcloud.com <TENCENTCLOUD_SECRET_ID> <TENCENTCLOUD_SECRET_KEY>
 `)
 )
 
@@ -177,6 +114,20 @@ var DockerDoc = heredoc.Doc(`
 
       $ docker import /path/to/exampleimage.tgz
       $	sudo tar -c . | docker import --change "ENV DEBUG=true" - exampleimagedir
+
+      podman
+
+      brew install simnalamburt/x/podman-apple-silicon
+      podman machine init --cpus=2 --disk-size=20 --memory 1000
+
+      Refer: https://edofic.com/posts/2021-09-12-podman-m1-amd64/
+
+
+      Error: short-name resolution enforced but cannot prompt without a TTYr
+      podman machine ssh
+
+      sed -i 's/short-name-mode="enforcing"/short-name-mode="permissive"/g' /etc/containers/registries.conf
+      unqualified-search-registries = ["docker.io", "registry.fedoraproject.org", "registry.access.redhat.com", "quay.io"]
 `)
 
 var WebserverDoc = heredoc.Doc(`

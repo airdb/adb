@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/airdb/sailor/osutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
@@ -132,15 +133,20 @@ func mysqlExec(args []string) {
 		return
 	}
 
-	flags := fmt.Sprintf("-A --auto-rehash -h%s -P%s -u%s -p%s %s",
+	flags := fmt.Sprintf("-A --auto-rehash -h%s -P%s -u%s -p%s",
 		host,
 		port,
 		config.User,
 		config.Passwd,
-		config.DBName,
 	)
 
 	args = strings.Split(flags, " ")
+	args = append(args,
+		"--prompt",
+		fmt.Sprintf("mysql [%s]> ", config.DBName),
+		config.DBName,
+	)
+
 	osutil.Exec("mysql", args)
 }
 
@@ -226,8 +232,10 @@ func deleteDsn() {
 func GenMyqlExpr() {
 	var dsn string
 
-	// check if there is somethinig to read on STDIN
-	stat, err := os.Stdin.Stat()
+	var err error
+
+	// check if there is something to read on STDIN
+	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		// var stdin []byte
 		reader := bufio.NewReader(os.Stdin)
@@ -235,7 +243,6 @@ func GenMyqlExpr() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		//fmt.Printf("stdin = %s\n", stdin)
 	} else {
 		fmt.Println("Enter database dsn:")
 
@@ -249,19 +256,22 @@ func GenMyqlExpr() {
 	ip, port, _ := net.SplitHostPort(config.Addr)
 
 	fmt.Println("mysql expression:")
-	fmt.Printf("mysql -h%s -P%s -u%s -p%s %s\n",
+	fmt.Printf("mysql -h%s -P%s -u%s -p%s --prompt \"mysql [%s]> \" %s\n",
 		ip,
 		port,
 		config.User,
 		config.Passwd,
+		config.DBName,
 		config.DBName,
 	)
 
-	fmt.Printf("mysqldump -h%s -P%s -u%s -p%s %s [tablename] > dump.sql \n",
+	fmt.Printf("mysqldump --single-transaction -h%s -P%s -u%s -p%s %s > %s_%s.dump.sql \n",
 		ip,
 		port,
 		config.User,
 		config.Passwd,
 		config.DBName,
+		config.DBName,
+		time.Now().Format("2006_0102"),
 	)
 }

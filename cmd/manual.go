@@ -29,6 +29,10 @@ var dockerInitCommand = &cobra.Command{
 	Short:   "docker operation",
 	Long:    "docker operation",
 	Example: adblib.DockerDoc,
+	Aliases: []string{"podman"},
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.DockerDoc)
+	},
 }
 
 var cloudInitCommand = &cobra.Command{
@@ -108,19 +112,20 @@ var terraformCommand = &cobra.Command{
 }
 
 var opensslCommand = &cobra.Command{
-	Use:   "openssl",
+	Use:     "openssl",
 	Aliases: []string{"ssl", "tls"},
-	Short: "openssl command",
-	Long:  "openssl command",
+	Short:   "openssl command",
+	Long:    "openssl command",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.OpenSSLDoc)
 	},
 }
 
 var tcpdumpCommand = &cobra.Command{
-	Use:   "tcpdump",
-	Short: "tcpdump command",
-	Long:  "tcpdump command",
+	Use:     "tcpdump",
+	Short:   "tcpdump command",
+	Long:    "tcpdump command",
+	Aliases: []string{"wireshake"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.TcpdumpDoc)
 	},
@@ -154,30 +159,12 @@ var wrkCommand = &cobra.Command{
 }
 
 var s3Command = &cobra.Command{
-	Use:   "s3",
-	Short: "s3 tools",
-	Long:  "s3 tools",
+	Use:     "s3",
+	Short:   "s3 tools",
+	Long:    "s3 tools",
+	Aliases: []string{"cos", "store"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.S3Doc)
-	},
-}
-
-var awkCommand = &cobra.Command{
-	Use:   "awk",
-	Short: "awk tools",
-	Long:  "awk tools",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(adblib.AwkDoc)
-	},
-}
-
-var sedCommand = &cobra.Command{
-	Use:     "sed",
-	Short:   "sed tools",
-	Long:    "sed tools",
-	Example: AirdbWiki,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(adblib.SedDoc)
 	},
 }
 
@@ -210,7 +197,5 @@ func initManCommand() {
 	manCommand.AddCommand(perfCommand)
 	manCommand.AddCommand(wrkCommand)
 	manCommand.AddCommand(s3Command)
-	manCommand.AddCommand(awkCommand)
-	manCommand.AddCommand(sedCommand)
 	manCommand.AddCommand(webCommand)
 }
