@@ -254,6 +254,7 @@ var hostAdmins = []string{
 	"hsluoyz",
 	"carrot1234567",
 	"servens",
+	"cateleon",
 }
 
 func listPubKeys() {
