@@ -75,6 +75,9 @@ $ Brew Common Command:
 	brew install airdb/taps/adb
 	brew install adb
 
+
+	brew unlink go
+	brew link go@17
 `)
 
 	GithubDoc = heredoc.Docf(`
