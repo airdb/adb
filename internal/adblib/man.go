@@ -85,14 +85,20 @@ $ Github or Git Command:
 
 	1. Maintain a repo without permission
 		git remote add upstream https://github.com/bfenetworks/bfe.git
+		a)
 		git fetch upstream
 		git checkout develop
 
 		git merge upstream/develop
-
+		or 
 		git rebase upstream/develop
 
 		Refer: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
+
+		b)
+		git pull ups master
+		git rebase ups/master
+		https://levelup.gitconnected.com/how-to-update-fork-repo-from-original-repo-b853387dd471
 
 
 	2. git config setting
