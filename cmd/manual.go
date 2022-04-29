@@ -157,6 +157,7 @@ var s3Command = &cobra.Command{
 	Use:   "s3",
 	Short: "s3 tools",
 	Long:  "s3 tools",
+	Aliases: []string{"cos", "store"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.S3Doc)
 	},
