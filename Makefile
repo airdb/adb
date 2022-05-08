@@ -26,7 +26,7 @@ dev:
 build:
 	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
 
-install:
+install: build
 	cp adb $(shell which adb)
 
 PLATFORMS := windows linux darwin
