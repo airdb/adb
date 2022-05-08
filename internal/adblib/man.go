@@ -138,6 +138,12 @@ $ Github or Git Command:
 
 	6. submodule
 	git submodule update --init --recursive --remote
+
+	Push Branch to Another Branch
+	$ git push <remote> <local_branch>:<remote_name>
+
+	Push Branch to Another Repository
+	$ git push <remote> <branch>
 `)
 
 	OpenSSLDoc = heredoc.Doc(`
@@ -190,6 +196,13 @@ var DockerDoc = heredoc.Doc(`
 
       $ docker import /path/to/exampleimage.tgz
       $	sudo tar -c . | docker import --change "ENV DEBUG=true" - exampleimagedir
+
+      podman
+
+      brew install simnalamburt/x/podman-apple-silicon
+      podman machine init --cpus=2 --disk-size=20 --memory 1000
+
+      Refer: https://edofic.com/posts/2021-09-12-podman-m1-amd64/
 `)
 
 var WebserverDoc = heredoc.Doc(`
