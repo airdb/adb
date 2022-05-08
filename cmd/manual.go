@@ -29,6 +29,10 @@ var dockerInitCommand = &cobra.Command{
 	Short:   "docker operation",
 	Long:    "docker operation",
 	Example: adblib.DockerDoc,
+	Aliases: []string{"podman"},
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(adblib.DockerDoc)
+	},
 }
 
 var cloudInitCommand = &cobra.Command{
