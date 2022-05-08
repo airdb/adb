@@ -203,6 +203,13 @@ var DockerDoc = heredoc.Doc(`
       podman machine init --cpus=2 --disk-size=20 --memory 1000
 
       Refer: https://edofic.com/posts/2021-09-12-podman-m1-amd64/
+
+
+      Error: short-name resolution enforced but cannot prompt without a TTYr
+      podman machine ssh
+
+      sed -i 's/short-name-mode="enforcing"/short-name-mode="permissive"/g' /etc/containers/registries.conf
+      unqualified-search-registries = ["docker.io", "registry.fedoraproject.org", "registry.access.redhat.com", "quay.io"]
 `)
 
 var WebserverDoc = heredoc.Doc(`
