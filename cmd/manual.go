@@ -112,19 +112,20 @@ var terraformCommand = &cobra.Command{
 }
 
 var opensslCommand = &cobra.Command{
-	Use:   "openssl",
+	Use:     "openssl",
 	Aliases: []string{"ssl", "tls"},
-	Short: "openssl command",
-	Long:  "openssl command",
+	Short:   "openssl command",
+	Long:    "openssl command",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.OpenSSLDoc)
 	},
 }
 
 var tcpdumpCommand = &cobra.Command{
-	Use:   "tcpdump",
-	Short: "tcpdump command",
-	Long:  "tcpdump command",
+	Use:     "tcpdump",
+	Short:   "tcpdump command",
+	Long:    "tcpdump command",
+	Aliases: []string{"wireshake"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.TcpdumpDoc)
 	},
@@ -158,9 +159,9 @@ var wrkCommand = &cobra.Command{
 }
 
 var s3Command = &cobra.Command{
-	Use:   "s3",
-	Short: "s3 tools",
-	Long:  "s3 tools",
+	Use:     "s3",
+	Short:   "s3 tools",
+	Long:    "s3 tools",
 	Aliases: []string{"cos", "store"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(adblib.S3Doc)

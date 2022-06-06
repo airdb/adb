@@ -175,6 +175,14 @@ $ tcpdump commands
 	sudo timeout 60 tcpdump -i any -n  port 53
 	sudo tcpdump -i any -nn udp and port 53
 	sudo tcpdump -i bond0.1000  -nnAAAA  | grep -A 20 -B 3  github.com
+
+	wireshake filters:
+
+	a. Client Hello
+	tls.handshake.extensions_server_name == "ja3.airdb.dev"
+	ssl.handshake.type == 1 && ip.dst == 127.0.0.1
+
+
 `)
 	S3Doc = heredoc.Doc(`
 # Minio
