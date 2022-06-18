@@ -48,7 +48,6 @@ func HandlerCert(keyfile, chainFile string) {
 
 	ret, _ := fileutil.TemplateGenerateString(CaddyTmpl, x)
 	fmt.Println("xxx", ret)
-
 }
 
 func ParseCertChain(chain []byte) (*CertX509, error) {

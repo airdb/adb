@@ -226,8 +226,10 @@ func deleteDsn() {
 func GenMyqlExpr() {
 	var dsn string
 
-	// check if there is somethinig to read on STDIN
-	stat, err := os.Stdin.Stat()
+	var err error
+
+	// check if there is something to read on STDIN
+	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
 		// var stdin []byte
 		reader := bufio.NewReader(os.Stdin)
@@ -235,7 +237,6 @@ func GenMyqlExpr() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		//fmt.Printf("stdin = %s\n", stdin)
 	} else {
 		fmt.Println("Enter database dsn:")
 

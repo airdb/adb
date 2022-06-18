@@ -33,7 +33,7 @@ func Usage() {
 
 type Repo struct {
 	ID     uint   `json:"id"`
-	NodeID string `json:"node_id"`
+	NodeID string `json:"nodeId"`
 	Name   string `json:"name"`
 }
 

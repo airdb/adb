@@ -9,13 +9,7 @@ linters-settings:
 
 linters:
   disable:
-    - gochecknoglobals
-    - exhaustive
-    - forbidigo
-    - exhaustivestruct
-    - paralleltest
-    - wrapcheck
-  enable-all: true
+    - structcheck
 
 skip-dirs:
   - gin-template
