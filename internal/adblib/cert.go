@@ -3,12 +3,12 @@ package adblib
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/airdb/sailor/fileutil"
-	"github.com/pkg/errors"
 )
 
 type CertX509 struct {
@@ -54,7 +54,7 @@ func HandlerCert(keyfile, chainFile string) {
 func ParseCertChain(chain []byte) (*CertX509, error) {
 	pemBlock, _ := pem.Decode(chain)
 	if pemBlock == nil {
-		err := errors.Errorf("cert pem decode err")
+		err := errors.New("cert perm decode err")
 		log.Println("cert pem decode fail, err:", err)
 
 		return nil, err
