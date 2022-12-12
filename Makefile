@@ -1,3 +1,4 @@
+APP = noah
 BINARY := $(shell basename "$(PWD)")
 VERSION := $(shell git describe --dirty --always)
 BUILD := $(shell git rev-parse HEAD)
@@ -24,7 +25,7 @@ dev:
 	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go run $(LDFLAGS) main.go
 
 build:
-	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go build $(LDFLAGS) -o $(BINARY)
+	@bash ./build/util.sh until::build
 
 lint:
 	go fmt ./...
@@ -32,6 +33,17 @@ lint:
 
 install: build
 	cp adb $(shell which adb)
+
+
+deploy:
+	flyctl deploy -a ${APP}
+
+conf secret:
+	flyctl secrets import -a ${APP} < .env
+
+bash:
+	flyctl ssh console -a  ${APP} -C /bin/bash
+
 
 PLATFORMS := windows linux darwin
 os = $(word 1, $@)
@@ -41,6 +53,7 @@ $(PLATFORMS):
 	mkdir -p release
 	CGO_ENABLED=0 GOOS=$(os) GOARCH=amd64 go build $(LDFLAGS) -o release/$(BINARY)-$(os)
 
-.PHONY: release
 #release: windows linux darwin
 release: linux darwin
+
+.PHONY: release build
