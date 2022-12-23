@@ -194,7 +194,14 @@ func GetEnvFile() string {
 }
 
 func InitDotEnv() {
-	err := godotenv.Load(GetEnvFile())
+	envFile := GetEnvFile()
+
+	_, err := os.Stat(envFile)
+	if os.IsNotExist(err) {
+		return
+	}
+
+	err = godotenv.Load(envFile)
 	if err != nil {
 		log.Fatal("Error loading .env file ", EnvFile, err)
 	}

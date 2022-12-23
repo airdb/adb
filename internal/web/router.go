@@ -2,6 +2,7 @@ package web
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -25,7 +26,16 @@ func HandleRoot(w http.ResponseWriter, r *http.Request) {
 	opt, _ := redis.ParseURL(redisURL)
 	client := redis.NewClient(opt)
 
-	client.Set(ctx, "name", "adb", 0)
-	val := client.Get(ctx, "name").Val()
-	w.Write([]byte("welcome " + val))
+	_, err := client.Get(ctx, "counter").Int64()
+	if err != nil {
+		client.Set(ctx, "counter", 1, 0)
+		// client.Incr(ctx, "counter")
+	}
+
+	client.Incr(ctx, "counter")
+
+	// client.Set(ctx, "name", "adb", 0)
+	val, _ := client.Get(ctx, "counter").Int64()
+	msg := fmt.Sprintf("welcome counter: %d", val)
+	w.Write([]byte(msg))
 }
