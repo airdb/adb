@@ -34,6 +34,8 @@ lint:
 install: build
 	cp adb $(shell which adb)
 
+preinstall:
+	go install -ldflags -X=github.com/airdb/adb/internal/adblib.BuildTime=$(date +%s) github.com/airdb/adb@dev
 
 deploy:
 	flyctl deploy -a ${APP}

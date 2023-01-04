@@ -4,7 +4,7 @@ Airdb Development Builder
 ## Quick Install
 
 ```
-go install github.com/airdb/adb@latest
+go install -ldflags -X=github.com/airdb/adb/internal/adblib.BuildTime=$(date +%s) github.com/airdb/adb@latest
 ```
 
 ## Download
