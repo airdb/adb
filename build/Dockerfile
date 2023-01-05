@@ -7,6 +7,7 @@ ADD ./.env.* /srv/output
 ADD ./.env.* /srv/
 ADD ./.env /srv/output
 ADD ./.env /srv/
+RUN apk add lego
 
 ENTRYPOINT ["./output/adb"]
 CMD ["serve"]
