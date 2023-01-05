@@ -89,6 +89,12 @@ $ openssl commands
 Check Client Hello:
 	sudo ssldump -i  lo
 	curl -k https://127.0.0.1:8443 | hexdump -C
+
+Lego:
+	https://github.com/go-acme/lego
+
+	lego --email xxx@gmail.com --dns tencentcloud --domains=*.domain1.com --domains=*.domain2.com \
+		renew --days=30 --renew-hook="nginx -s reload"
 `)
 
 	TcpdumpDoc = heredoc.Doc(`

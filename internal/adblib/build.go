@@ -37,6 +37,6 @@ func GetVersion() string {
 	ret := string(out)
 	ret += "\n" + "https://github.com/airdb/adb/releases/latest"
 	ret += "\n"
-	ret += "\n" + "go install github.com/airdb/adb@dev"
+	ret += "\n" + "go install -ldflags -X=github.com/airdb/adb/internal/adblib.BuildTime= github.com/airdb/adb@dev"
 	return ret
 }

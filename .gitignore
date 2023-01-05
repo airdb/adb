@@ -2,5 +2,7 @@ adb
 main
 docs
 .idea/
+.env
+.env.*
 conf
 .vscode/
