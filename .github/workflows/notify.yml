@@ -6,18 +6,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: send custom message with args
-      uses: appleboy/discord-action@master
-      with:
-        webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-        webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-        args: The ${{ github.event_name }} event triggered first step.
-
-
     - name: Discord notification
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: Ilshidur/action-discord@master
       with:
-        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been pushed by {{ EVENT_PAYLOAD.sender.login }}.'
