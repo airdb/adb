@@ -131,6 +131,7 @@ func getLightHouse(region string) {
 var hostAdmins = []string{
 	"deancn",
 	"yino",
+	"bumu",
 	"hallelujah-shih",
 	"xqbumu",
 	"lovezsr",
@@ -141,6 +142,7 @@ var hostAdmins = []string{
 	"servens",
 	"cateleon",
 	"cellan",
+	"yuduxing",
 }
 
 func listPubKeys() {
