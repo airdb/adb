@@ -1,6 +1,6 @@
 APP = noah
 BINARY := $(shell basename "$(PWD)")
-VERSION := $(shell git describe --dirty --always)
+VERSION := $(shell git describe --tags --dirty --always)
 BUILD := $(shell git rev-parse HEAD)
 
 LDFLAGS=-ldflags
