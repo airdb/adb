@@ -24,20 +24,23 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.540
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.540
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.540
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.40
 )
 
 require (
+	github.com/bytedance/sonic v1.8.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.7.7 // indirect
+	github.com/gin-gonic/gin v1.9.0 // indirect
 	github.com/go-chi/render v1.0.1 // indirect
-	github.com/go-playground/locales v0.13.0 // indirect
-	github.com/go-playground/universal-translator v0.17.0 // indirect
-	github.com/go-playground/validator/v10 v10.4.1 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.11.2 // indirect
+	github.com/goccy/go-json v0.10.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -45,10 +48,11 @@ require (
 	github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -56,7 +60,7 @@ require (
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.1-0.20220228012449-10b1cf09e00b // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/serverless-plus/tencent-serverless-go v1.0.1 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
@@ -64,14 +68,15 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.40 // indirect
-	github.com/ugorji/go/codec v1.1.7 // indirect
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
+	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ugorji/go/codec v1.2.9 // indirect
+	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
+	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
-	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/term v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
