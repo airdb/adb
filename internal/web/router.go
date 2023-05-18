@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/airdb/sailor/faas"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-redis/redis/v8"
 )
@@ -15,7 +14,7 @@ func Run() {
 	r := chi.NewRouter()
 	r.Get("/", HandleRoot)
 
-	faas.RunChi(r)
+	http.ListenAndServe(":8080", r)
 }
 
 var ctx = context.Background()

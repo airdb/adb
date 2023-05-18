@@ -29,7 +29,6 @@ func Execute() {
 	wikiCommand.AddCommand(interviewWikiCommand)
 	wikiCommand.AddCommand(listWikiCommand)
 
-	genCmdInit()
 	mysqlCmdInit()
 	serviceCmdInit()
 	serverlessCmdInit()
