@@ -18,7 +18,6 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	adblib.Init()
-	fmt.Println(adblib.ConfigNew)
 
 	rootCmd.Version = adblib.GetVersion()
 
@@ -37,7 +36,6 @@ func Execute() {
 
 	initConfigCmd()
 	initCert()
-	initSlack()
 	initManCommand()
 
 	initLogin()

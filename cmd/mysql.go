@@ -14,6 +14,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
+	"github.com/xo/dburl"
 )
 
 var mysqlCmd = &cobra.Command{
@@ -121,11 +122,28 @@ func mysqlExec(args []string) {
 		}
 	}
 
-	config, err := mysql.ParseDSN(dsn)
-	if err != nil {
-		fmt.Println(err)
+	config := &mysql.Config{}
 
-		return
+	if strings.HasPrefix(dsn, "mysql://") {
+		_dsn, err := dburl.Parse(dsn)
+		if err != nil {
+			log.Println("dburl parse errl")
+			return
+		}
+
+		log.Println(_dsn.Path)
+		config.Addr = _dsn.Host
+		config.DBName = strings.Trim(_dsn.Path, "/")
+
+		config.User = _dsn.User.Username()
+		config.Passwd, _ = _dsn.User.Password()
+	} else {
+		config, err = mysql.ParseDSN(dsn)
+		if err != nil {
+			fmt.Println(err)
+
+			return
+		}
 	}
 
 	host, port, err := net.SplitHostPort(config.Addr)
