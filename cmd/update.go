@@ -23,6 +23,9 @@ var updateCmd = &cobra.Command{
 }
 
 func doUpdate() {
+	fmt.Println("go install github.com/airdb/adb@dev")
+	return
+
 	dl := "https://github.com/airdb/adb/releases/latest/download/adb"
 	if runtime.GOOS == "darwin" {
 		dl = dl + "-" + runtime.GOOS
