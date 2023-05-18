@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/airdb/adb/internal/adblib"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/cobra"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
@@ -128,23 +130,7 @@ func getLightHouse(region string) {
 	}
 }
 
-var hostAdmins = []string{
-	"deancn",
-	"yino",
-	"bumu",
-	"hallelujah-shih",
-	"xqbumu",
-	"lovezsr",
-	"phuslu",
-	"wekeey",
-	"hsluoyz",
-	"carrot1234567",
-	"servens",
-	"cateleon",
-	"cellan",
-	"yuduxing",
-}
-
 func listPubKeys() {
+	hostAdmins := strings.Split(adblib.ConfigNew.HostUsers, ",")
 	adblib.GetGithubKeys(hostAdmins)
 }

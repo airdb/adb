@@ -2,6 +2,7 @@ package adblib
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -84,6 +85,13 @@ var qsSlack = []*survey.Question{
 		},
 		Validate: survey.Required,
 	},
+}
+
+type Config struct {
+	AliyunAccessKeyID     string `json:"aliyun_access_key_id" mapstructure:"aliyun_access_key_id"`
+	AliyunAccessKeySecret string `json:"aliyun_access_key_secret" mapstructure:"aliyun_access_key_secret"`
+
+	HostUsers string `json:"host_users" mapstructure:"HostUsers"`
 }
 
 // The  flag will be written to this struct.
@@ -216,4 +224,26 @@ func InitDotEnv() {
 		SlackToken:                os.Getenv("SlackToken"),
 		SlackChannel:              os.Getenv("SlackChannel"),
 	}
+}
+
+var ConfigNew *Config
+
+func Init() {
+	viper.GetViper().AddConfigPath("$HOME/.config/adb/")
+	viper.SetConfigName("config")
+
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
+
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; ignore error if desired
+		} else {
+			// Config file was found but another error was produced
+		}
+	}
+
+	viper.Unmarshal(&ConfigNew)
 }
