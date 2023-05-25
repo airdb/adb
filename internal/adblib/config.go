@@ -88,8 +88,9 @@ var qsSlack = []*survey.Question{
 }
 
 type Config struct {
-	AliyunAccessKeyID     string `json:"aliyun_access_key_id" mapstructure:"aliyun_access_key_id"`
-	AliyunAccessKeySecret string `json:"aliyun_access_key_secret" mapstructure:"aliyun_access_key_secret"`
+	AliyunRegionID        string `json:"aliyun_region_id" mapstructure:"AliyunRegionID"`
+	AliyunAccessKeyID     string `json:"aliyun_access_key_id" mapstructure:"AliyunAccessKeyID"`
+	AliyunAccessKeySecret string `json:"aliyun_access_key_secret" mapstructure:"AliyunAccessKeySecret"`
 
 	HostUsers string `json:"host_users" mapstructure:"HostUsers"`
 }
