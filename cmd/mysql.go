@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/airdb/adb/internal/adblib"
 	"github.com/airdb/sailor/osutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/go-sql-driver/mysql"
@@ -98,13 +99,13 @@ func mysqlCmdInit() {
 }
 
 func mysqlExec(args []string) {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
 
 	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = ServiceDomain
+	request.DomainName = adblib.ServiceDomain
 	request.RRKeyWord = args[0]
 
 	output, err := client.DescribeDomainRecords(request)
@@ -169,13 +170,13 @@ func mysqlExec(args []string) {
 }
 
 func listDatabase() {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
 
 	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = ServiceDomain
+	request.DomainName = adblib.ServiceDomain
 
 	output, err := client.DescribeDomainRecords(request)
 	if err != nil {
@@ -191,13 +192,13 @@ func listDatabase() {
 }
 
 func addDsn(args []string) {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
 
 	request := alidns.CreateAddDomainRecordRequest()
-	request.DomainName = ServiceDomain
+	request.DomainName = adblib.ServiceDomain
 	request.Type = dns.TypeToString[dns.TypeTXT]
 	request.RR = args[0]
 	request.Value = args[1]
@@ -211,7 +212,7 @@ func addDsn(args []string) {
 }
 
 func updateDsn() {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
@@ -231,7 +232,7 @@ func updateDsn() {
 }
 
 func deleteDsn() {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}

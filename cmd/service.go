@@ -65,13 +65,13 @@ var updateDNSFlag AliDNSStruct
 var serviceFlags = serviceStruct{}
 
 func service() {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
 
 	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = ServiceDomain
+	request.DomainName = adblib.ServiceDomain
 
 	output, err := client.DescribeDomainRecords(request)
 	if err != nil {
@@ -106,13 +106,13 @@ var servicesAddCmd = &cobra.Command{
 }
 
 func addService(args []string) {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
 
 	request := alidns.CreateAddDomainRecordRequest()
-	request.DomainName = ServiceDomain
+	request.DomainName = adblib.ServiceDomain
 	request.Type = dns.TypeToString[dns.TypeSRV]
 	request.RR = args[0]
 	request.Value = args[1]
@@ -146,7 +146,7 @@ var servicesDeleteCmd = &cobra.Command{
 }
 
 func updateService() {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
@@ -164,7 +164,7 @@ func updateService() {
 }
 
 func deleteService(args []string) {
-	client, err := aliyunConfigInit()
+	client, err := adblib.NewAliyunClient()
 	if err != nil {
 		panic(err)
 	}
