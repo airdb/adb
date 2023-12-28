@@ -138,7 +138,6 @@ var DockerDoc = heredoc.Doc(`
 
 var WebserverDoc = heredoc.Doc(`
 webserver:
-	$ python -m SimpleHTTPServer
 	$ python3 -m http.server
 
 	$ caddy run
