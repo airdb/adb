@@ -29,13 +29,12 @@ func Execute() {
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
 	wikiCommand.AddCommand(interviewWikiCommand)
-	wikiCommand.AddCommand(listWikiCommand)
 
 	mysqlCmdInit()
 	serviceCmdInit()
 	hostCmdInit()
 
-	initConfigCmd()
+	// initConfigCmd()
 	initCert()
 	initSlack()
 	initManCommand()

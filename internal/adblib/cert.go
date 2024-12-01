@@ -1,14 +1,7 @@
 package adblib
 
 import (
-	"crypto/x509"
-	"encoding/pem"
-	"errors"
-	"fmt"
-	"log"
 	"time"
-
-	"github.com/airdb/sailor/fileutil"
 )
 
 type CertX509 struct {
@@ -38,15 +31,16 @@ var CaddyTmpl = `
 }
 `
 
+/*
 func HandlerCert(keyfile, chainFile string) {
-	chainStr, _ := fileutil.ReadFile(chainFile)
+	chainStr, _ := osutil.ReadFile(chainFile)
 
 	x, _ := ParseCertChain(chainStr)
 
 	x.KeyFile = keyfile
 	x.ChainFile = chainFile
 
-	ret, _ := fileutil.TemplateGenerateString(CaddyTmpl, x)
+	ret, _ := osutil.TemplateGenerateString(CaddyTmpl, x)
 	fmt.Println("xxx", ret)
 }
 
@@ -76,3 +70,4 @@ func ParseCertChain(chain []byte) (*CertX509, error) {
 
 	return &certInfo, nil
 }
+*/

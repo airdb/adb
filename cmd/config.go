@@ -1,13 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path"
 
-	"github.com/MakeNowJust/heredoc"
-	"github.com/airdb/adb/internal/adblib"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 )
@@ -69,79 +66,4 @@ Current respected settings:
 - git_protocol: "https" or "ssh". Default is "https".
 - editor: if unset, defaults to environment variables.
 `,
-}
-
-var configGetCmd = &cobra.Command{
-	Use:   "get <key>",
-	Short: "Print the value of a given configuration key",
-	Example: heredoc.Doc(`
-	$ adb config get aliyun 
-    access_key_id: xxxxxxxxxxxx_id
-    access_key_secret: xxxxxxxxxxxx_secret
-    region_id: cn-hangzhou
-	`),
-	Args: cobra.ExactArgs(1),
-	RunE: configGet,
-}
-
-var configSetCmd = &cobra.Command{
-	Use:   "set <key> <value>",
-	Short: "Update configuration with a value for the given key",
-	Example: heredoc.Doc(`
-	$ adb config set aliyun
-    [aliyun]
-    ? access_key_id: xxxxxxxxxxxx_id
-    ? access_key_secret: xxxxxxxxxxxx_secret
-    ? region_id: (cn-hangzhou)
-	`),
-	Args: cobra.ExactArgs(1),
-	RunE: configSet,
-}
-
-func initConfigCmd() {
-	rootCmd.AddCommand(configCmd)
-	configCmd.AddCommand(configGetCmd)
-	configCmd.AddCommand(configSetCmd)
-}
-
-func configSet(cmd *cobra.Command, args []string) error {
-	service := args[0]
-
-	switch service {
-	case adblib.ServiceAliyun:
-		err := adblib.SetAliyunConfig()
-		if err != nil {
-			fmt.Println("configure failed, error: ", err)
-
-			return err
-		}
-	case adblib.ServiceSlack:
-		err := adblib.SetSlackConfig()
-		if err != nil {
-			fmt.Println("configure failed, error: ", err)
-
-			return err
-		}
-	}
-
-	fmt.Println("configure successfully.")
-
-	return nil
-}
-
-func configGet(cmd *cobra.Command, args []string) error {
-	service := args[0]
-
-	switch service {
-	case "aliyun":
-		fmt.Printf("access_key_id: %s\naccess_key_secret: %s\nregion_id: %s\n",
-			adblib.AdbConfig.AliyunAccessKeyID,
-			adblib.AdbConfig.AliyunAccessKeySecret,
-			adblib.AdbConfig.AliyunRegionID,
-		)
-	default:
-		fmt.Println(adblib.AdbConfig)
-	}
-
-	return nil
 }

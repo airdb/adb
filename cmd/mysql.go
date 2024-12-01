@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/airdb/sailor/osutil"
+	"github.com/airdb/toolbox/osutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/go-sql-driver/mysql"
 	"github.com/miekg/dns"

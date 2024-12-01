@@ -1,7 +1,6 @@
 package adblib
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -9,7 +8,6 @@ import (
 	"path/filepath"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/airdb/sailor/fileutil"
 	"github.com/joho/godotenv"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -116,28 +114,6 @@ type SlackFlag struct {
 	Channel string `json:"channel" survey:"channel" mapstructure:"channel"`
 }
 
-func SetAliyunConfig() error {
-	var aliyunFlag AliyunFlag
-
-	// pPerform the questions.
-	err := survey.Ask(qsAliyun, &aliyunFlag)
-	if err != nil {
-		return err
-	}
-
-	jsonByte, err := json.MarshalIndent(aliyunFlag, "", "\t")
-	if err != nil {
-		return err
-	}
-
-	err = fileutil.WriteFile(aliyunConfigFile(), string(jsonByte))
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func GetSlackConfig() *SlackFlag {
 	viper.SetConfigFile(slackConfigFile())
 
@@ -152,28 +128,6 @@ func GetSlackConfig() *SlackFlag {
 	}
 
 	return &config
-}
-
-func SetSlackConfig() error {
-	var config SlackFlag
-
-	// pPerform the questions.
-	err := survey.Ask(qsSlack, &config)
-	if err != nil {
-		return err
-	}
-
-	jsonByte, err := json.MarshalIndent(config, "", "\t")
-	if err != nil {
-		return err
-	}
-
-	err = fileutil.WriteFile(slackConfigFile(), string(jsonByte))
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 const EnvFile = ".config/adb/env"

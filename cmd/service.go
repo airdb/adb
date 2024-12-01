@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/airdb/adb/internal/adblib"
-	"github.com/airdb/sailor"
+	"github.com/airdb/toolbox/typeutil"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
@@ -79,7 +79,7 @@ func service() {
 	}
 
 	for _, rr := range output.DomainRecords.Record {
-		if rr.RR == sailor.DelimiterStar || rr.RR == sailor.DelimiterAt {
+		if rr.RR == typeutil.DelimiterStar || rr.RR == typeutil.DelimiterAt {
 			continue
 		}
 

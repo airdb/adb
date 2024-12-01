@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/airdb/adb/internal/adblib"
 	"github.com/spf13/cobra"
 )
 
@@ -51,5 +50,5 @@ func initCert() {
 }
 
 func opCert(args []string) {
-	adblib.HandlerCert(certFlag.PrivateKeyFile, certFlag.PublicKeyFile)
+	// adblib.HandlerCert(certFlag.PrivateKeyFile, certFlag.PublicKeyFile)
 }
