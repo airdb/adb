@@ -18,13 +18,10 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	adblib.Init()
-	fmt.Println(adblib.ConfigNew)
 
 	rootCmd.Version = adblib.GetVersion()
 
 	// rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
-	rootCmd.AddCommand(envCommand)
-	rootCmd.AddCommand(releaseCommand)
 
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
