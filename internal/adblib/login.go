@@ -1,13 +1,22 @@
 package adblib
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/airdb/sailor/osutil"
 	"github.com/airdb/sailor/process"
 	"github.com/imroc/req"
+
+	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	httphelper "github.com/zitadel/oidc/v3/pkg/http"
 )
 
 // The  flag will be written to this struct.
@@ -47,27 +56,50 @@ var userLogin = []*survey.Question{
 	},
 }
 
+var (
+	key = []byte("test1234test1234")
+)
+
 func Login() {
-	var user User
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT)
+	defer stop()
 
-	// pPerform the questions.
-	err := survey.Ask(userLogin, &user)
-	if err != nil {
-		fmt.Println(err.Error())
+	fmt.Println(ConfigNew.CLIENT_ID, ConfigNew.AuthIssuer)
+	clientID := ConfigNew.CLIENT_ID
+	clientSecret := os.Getenv("CLIENT_SECRET")
+	keyPath := os.Getenv("KEY_PATH")
+	issuer := ConfigNew.AuthIssuer
+	scopes := strings.Split(os.Getenv("SCOPES"), " ")
 
-		return
+	cookieHandler := httphelper.NewCookieHandler(key, key, httphelper.WithUnsecure())
+
+	var options []rp.Option
+	if clientSecret == "" {
+		options = append(options, rp.WithPKCE(cookieHandler))
+	}
+	if keyPath != "" {
+		options = append(options, rp.WithJWTProfile(rp.SignerFromKeyPath(keyPath)))
 	}
 
-	args := []string{IconFile()}
-
-	out, err := osutil.ExecCommand("cat", args)
+	provider, err := rp.NewRelyingPartyOIDC(ctx, issuer, clientID, clientSecret, "", scopes, options...)
 	if err != nil {
-		downloadIcon()
-
-		return
+		log.Fatalf("error creating provider %s", err.Error())
 	}
 
-	fmt.Println(out)
+	log.Println("starting device authorization flow")
+	resp, err := rp.DeviceAuthorization(ctx, scopes, provider, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("resp", resp)
+	fmt.Printf("\nPlease browse to %s and enter code %s\n", resp.VerificationURI, resp.UserCode)
+
+	log.Println("start polling")
+	token, err := rp.DeviceAccessToken(ctx, resp.DeviceCode, time.Duration(resp.Interval)*time.Second, provider)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("successfully obtained token: %#v", token)
 }
 
 func Logo() {

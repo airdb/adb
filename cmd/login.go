@@ -26,5 +26,5 @@ func initLogin() {
 }
 
 func login() {
-	adblib.Logo()
+	adblib.Login()
 }

@@ -88,6 +88,9 @@ var qsSlack = []*survey.Question{
 }
 
 type Config struct {
+	AuthIssuer string `json:"auth_issuer" mapstructure:"auth_issuer"`
+	CLIENT_ID  string `json:"client_id" mapstructure:"client_id"`
+
 	AliyunAccessKeyID     string `json:"aliyun_access_key_id" mapstructure:"aliyun_access_key_id"`
 	AliyunAccessKeySecret string `json:"aliyun_access_key_secret" mapstructure:"aliyun_access_key_secret"`
 
@@ -176,6 +179,9 @@ func SetSlackConfig() error {
 const EnvFile = ".config/adb/env"
 
 type CFG struct {
+	AuthIssuer string
+	CLIENT_ID  string
+
 	TencentyunAccessKeyID     string
 	TencentyunAccessKeySecret string
 	TencentyunRegionID        string
@@ -215,6 +221,9 @@ func InitDotEnv() {
 	}
 
 	AdbConfig = CFG{
+		AuthIssuer: os.Getenv("AuthIssuer"),
+		CLIENT_ID:  os.Getenv("CLIENT_ID"),
+
 		TencentyunAccessKeyID:     os.Getenv("TencentyunAccessKeyID"),
 		TencentyunAccessKeySecret: os.Getenv("TencentyunAccessKeySecret"),
 		TencentyunRegionID:        os.Getenv("TencentyunRegionID"),

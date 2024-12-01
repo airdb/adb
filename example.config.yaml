@@ -1,0 +1,21 @@
+# Copy this file to ~/.config/adb/config.yaml
+# then setup the config.
+
+#Auth
+Auth_Issuer: ""
+CLIENT_ID: ""
+
+# Tencentyun Access Key
+TencentyunAccessKeyID: ""
+TencentyunAccessKeySecret: ""
+TencentyunRegionID: "cn-shanghai"
+
+
+# Aliyun Access Key
+AliyunAccessKeyID: ""
+AliyunAccessKeySecret: ""
+AliyunRegionID: "cn-hangzhou"
+
+REDIS_URL=
+TENCENTCLOUD_SECRET_ID=AKxxxx
+TENCENTCLOUD_SECRET_KEY=xxxx
