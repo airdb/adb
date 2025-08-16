@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func GetGithubKeysByID(id string) {
@@ -16,7 +17,11 @@ func GetGithubKeysByID(id string) {
 
 	scanner := bufio.NewScanner(resp.Body)
 	for i := 0; scanner.Scan() && i < 3; i++ {
-		fmt.Printf("%s https://github.com/%s\n", scanner.Text(), id)
+		if !strings.HasPrefix(scanner.Text(), "ssh-ed25519") {
+			continue
+		}
+
+		fmt.Printf("%s https://github.com/%s.keys\n", scanner.Text(), id)
 	}
 }
 
