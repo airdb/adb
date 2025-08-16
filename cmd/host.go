@@ -1,18 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/airdb/adb/internal/adblib"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/spf13/cobra"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
-	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
-	lh "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse/v20200324"
 )
 
 var hostCmd = &cobra.Command{
@@ -74,60 +67,6 @@ var keyListCmd = &cobra.Command{
 }
 
 func host() {
-	getLightHouse(regions.Singapore)
-	getHostByRegion(regions.Shanghai)
-	getHostByRegion(regions.Singapore)
-	getHostByRegion(regions.Nanjing)
-}
-
-func getHostByRegion(region string) {
-	credential := common.NewCredential(adblib.AdbConfig.TencentyunAccessKeyID, adblib.AdbConfig.TencentyunAccessKeySecret)
-	client, _ := cvm.NewClient(credential, region, profile.NewClientProfile())
-
-	request := cvm.NewDescribeInstancesRequest()
-	output, err := client.DescribeInstances(request)
-
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
-		fmt.Printf("An API error has returned: %s", err)
-
-		return
-	}
-
-	for _, instance := range output.Response.InstanceSet {
-		fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\n",
-			*instance.InstanceId,
-			*instance.ExpiredTime,
-			region,
-			*instance.InstanceName,
-			*instance.PublicIpAddresses[0],
-			*instance.PrivateIpAddresses[0],
-		)
-	}
-}
-
-func getLightHouse(region string) {
-	credential := common.NewCredential(adblib.AdbConfig.TencentyunAccessKeyID, adblib.AdbConfig.TencentyunAccessKeySecret)
-	client, _ := lh.NewClient(credential, region, profile.NewClientProfile())
-
-	request := lh.NewDescribeInstancesRequest()
-	output, err := client.DescribeInstances(request)
-
-	if _, ok := err.(*errors.TencentCloudSDKError); ok {
-		fmt.Printf("An API error has returned: %s", err)
-
-		return
-	}
-
-	for _, instance := range output.Response.InstanceSet {
-		fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\n",
-			*instance.InstanceId,
-			*instance.ExpiredTime,
-			region,
-			*instance.InstanceName,
-			*instance.PublicAddresses[0],
-			*instance.PrivateAddresses[0],
-		)
-	}
 }
 
 func listPubKeys() {
