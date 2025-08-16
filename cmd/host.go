@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/airdb/adb/internal/adblib"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
 )
 
@@ -66,10 +69,30 @@ var keyListCmd = &cobra.Command{
 	},
 }
 
-func host() {
-}
-
 func listPubKeys() {
 	hostAdmins := strings.Split(adblib.ConfigNew.HostUsers, ",")
 	adblib.GetGithubKeys(hostAdmins)
+}
+
+func host() {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateDescribeDomainRecordsRequest()
+	request.DomainName = HostDomain
+
+	output, err := client.DescribeDomainRecords(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, rr := range output.DomainRecords.Record {
+		// fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
+		if rr.Type == dns.TypeToString[dns.TypeA] {
+			// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
+			fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
+		}
+	}
 }
