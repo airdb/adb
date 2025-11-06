@@ -22,7 +22,8 @@ test:
 	go test -v ./...
 
 dev:
-	CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go run $(LDFLAGS) main.go
+	#CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go run $(LDFLAGS) main.go
+	CGO_ENABLED=0 $(SYSTEM) go build $(LDFLAGS) main.go
 
 build:
 	@bash ./build/util.sh until::build

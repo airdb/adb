@@ -79,6 +79,10 @@ func service() {
 	}
 
 	for _, rr := range output.DomainRecords.Record {
+		if rr.Type != "SRV" {
+			continue
+		}
+
 		if rr.RR == typeutil.DelimiterStar || rr.RR == typeutil.DelimiterAt {
 			continue
 		}
