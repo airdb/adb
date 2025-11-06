@@ -29,6 +29,7 @@ func Execute() {
 
 	mysqlCmdInit()
 	serviceCmdInit()
+	dnsTxtCmdInit()
 	hostCmdInit()
 
 	// initConfigCmd()
