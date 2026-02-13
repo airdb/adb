@@ -88,7 +88,7 @@ func service() {
 		}
 
 		// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
-		fmt.Printf("%-20s %32s %-64s %s\n", rr.RecordId, rr.RR, rr.Value, rr.Remark)
+		fmt.Printf("%-20s %-32s %-64s %s\n", rr.RecordId, rr.RR, rr.Value, rr.Remark)
 	}
 }
 
