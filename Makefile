@@ -1,3 +1,15 @@
+SERVICE := noah
+
+all: help
+
+help: ## Show help messages
+	@echo "Container - ${SERVICE} "
+	@echo
+	@echo "Usage:\tmake COMMAND"
+	@echo
+	@echo "Commands:"
+	@sed -n '/##/s/\(.*\):.*##/  \1#/p' ${MAKEFILE_LIST} | grep -v "MAKEFILE_LIST" | column -t -c 2 -s '#'
+
 APP = noah
 BINARY := $(shell basename "$(PWD)")
 VERSION := $(shell git describe --tags --dirty --always)
@@ -16,7 +28,7 @@ SYSTEM:=
 
 .PHONY: test
 
-all: build
+#all: build
 
 test:
 	go test -v ./...
@@ -25,15 +37,15 @@ dev:
 	#CGO_ENABLED=0 $(SYSTEM) GOARCH=amd64 go run $(LDFLAGS) main.go
 	CGO_ENABLED=0 $(SYSTEM) go build $(LDFLAGS) main.go
 
-build:
-	@bash ./build/util.sh until::build
+build: ## Build binary
+	bash ./build/util.sh until::build
 
 lint:
 	go fmt ./...
 	golangci-lint run
 
-install: build
-	cp adb $(shell which adb)
+install: ## Install adb
+	cp output/adb $(shell which adb)
 
 preinstall:
 	go install -ldflags -X=github.com/airdb/adb/internal/adblib.BuildTime=$(date +%s) github.com/airdb/adb@dev
