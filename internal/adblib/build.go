@@ -8,6 +8,8 @@ import (
 // Build version info.
 type BuildInfo struct {
 	GoVersion string
+	GOOS      string
+	GoArch    string
 	Version   string
 	Build     string
 	BuildTime string
@@ -22,6 +24,8 @@ var (
 func GetVersion() string {
 	info := BuildInfo{
 		GoVersion: runtime.Version(),
+		GOOS:      runtime.GOOS,
+		GOARCH:    runtime.GOARCH,
 		Version:   Version,
 		Build:     Build,
 		BuildTime: BuildTime,
