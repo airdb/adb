@@ -12,11 +12,11 @@ import (
 )
 
 var hostCmd = &cobra.Command{
-	Use:                "host",
-	Short:              "Perform actions on hosts",
-	Long:               "Perform actions on hosts",
-	DisableFlagParsing: true,
-	Aliases:            []string{"server", "servers", "hosts"},
+	Use:   "host",
+	Short: "Perform actions on hosts",
+	Long:  "Perform actions on hosts",
+	//DisableFlagParsing: true,
+	Aliases: []string{"server", "servers", "hosts"},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			host()
@@ -26,7 +26,10 @@ var hostCmd = &cobra.Command{
 
 func hostCmdInit() {
 	rootCmd.AddCommand(hostCmd)
+	hostCmd.AddCommand(hostDeleteCmd)
+
 	hostCmd.AddCommand(keyListCmd)
+
 	/*
 		hostCmd.AddCommand(hostListCmd)
 		hostCmd.AddCommand(hostSSHCmd)
@@ -65,7 +68,18 @@ var keyListCmd = &cobra.Command{
 	// DisableFlagParsing: true,
 	Example: "adb host keys >> ~/.ssh/authorized_keys",
 	Run: func(cmd *cobra.Command, args []string) {
+
 		listPubKeys()
+	},
+}
+
+var hostDeleteCmd = &cobra.Command{
+	Use:   "delete [hostid]",
+	Short: "Delete hostid",
+	Long:  "Delete hostid",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		deleteHost(args)
 	},
 }
 
@@ -95,4 +109,21 @@ func host() {
 			fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
 		}
 	}
+}
+
+func deleteHost(args []string) {
+	client, err := aliyunConfigInit()
+	if err != nil {
+		panic(err)
+	}
+
+	request := alidns.CreateDeleteDomainRecordRequest()
+	request.RecordId = args[0]
+
+	output, err := client.DeleteDomainRecord(request)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(output)
 }

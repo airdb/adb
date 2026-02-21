@@ -9,7 +9,7 @@ import (
 type BuildInfo struct {
 	GoVersion string
 	GOOS      string
-	GoArch    string
+	GOARCH    string
 	Version   string
 	Build     string
 	BuildTime string
