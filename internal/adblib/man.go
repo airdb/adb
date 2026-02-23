@@ -24,6 +24,11 @@ $ tools
 	docker run --rm -v $PWD:/data asciinema/asciicast2gif -s 2 -t solarized-dark demo.json demo.gif
 
 	docker run --rm -v $PWD:/data asciinema/asciicast2gif -s 2 -t solarized-dark demo.json demo.gif
+
+	## ssh tunel
+	ssh -N -L 18789:127.0.0.1:18789  oracle
+	http://127.0.0.1:18789
+
 `)
 
 	HelmDoc = heredoc.Doc(`
