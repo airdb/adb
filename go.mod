@@ -12,7 +12,7 @@ require (
 	github.com/miekg/dns v1.1.72
 	github.com/minio/selfupdate v0.6.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/slack-go/slack v0.17.3
+	github.com/slack-go/slack v0.23.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/zitadel/oidc/v3 v3.45.4
