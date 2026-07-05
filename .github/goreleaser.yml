@@ -9,17 +9,12 @@ builds:
       - -s -w -X main.version={{.Version}}
     goos:
       - darwin
-      - freebsd
       - linux
-      - openbsd
       - windows
     goarch:
-      - '386'
       - amd64
-      - arm
       - arm64
     goarm:
-      - '6'
       - '7'
 nfpms:
   - maintainer: "https://github.com/{{ .Env.GITHUB_USER }}"
@@ -28,7 +23,8 @@ nfpms:
       - rpm
       - apk
 archives:
-  - format: gz
+  - formats:
+      - zip
     files:
       - none*
 changelog:
