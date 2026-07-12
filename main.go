@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/airdb/adb/cmd"
 	"github.com/airdb/adb/internal/adblib"
 )
@@ -8,7 +11,10 @@ import (
 //go:generate go build -o adb main.go
 
 func main() {
-	adblib.InitDotEnv()
+	if err := adblib.InitDotEnv(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	cmd.Execute()
 }

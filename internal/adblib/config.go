@@ -1,93 +1,18 @@
 package adblib
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os"
-	"path"
 	"path/filepath"
 
-	"github.com/AlecAivazis/survey/v2"
 	"github.com/joho/godotenv"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
-const (
-	ServiceAliyun = "aliyun"
-	ServiceSlack  = "slack"
-)
-
-func ConfigDir() string {
-	dir, _ := homedir.Expand("~/.config/adb")
-
-	return dir
-}
-
-func ConfigFile() string {
-	return path.Join(ConfigDir(), "config.json")
-}
-
-func IconFile() string {
-	return path.Join(ConfigDir(), "icon")
-}
-
-func aliyunConfigFile() string {
-	return path.Join(ConfigDir(), "aliyun.json")
-}
-
-func TencentYunConfigFile() string {
-	return path.Join(ConfigDir(), "tencentyun.json")
-}
-
-func slackConfigFile() string {
-	return path.Join(ConfigDir(), "slack.json")
-}
-
-// The questions to ask.
-var qsAliyun = []*survey.Question{
-	{
-		Name: "access_key_id",
-		// Name:     "access",
-		Prompt:    &survey.Input{Message: "access_key_id"},
-		Validate:  survey.Required,
-		Transform: survey.Title,
-	},
-	{
-		Name:      "access_key_secret",
-		Prompt:    &survey.Input{Message: "access_key_secret"},
-		Validate:  survey.Required,
-		Transform: survey.Title,
-	},
-	{
-		Name: "region_id",
-		Prompt: &survey.Input{
-			Message: "region_id",
-			Default: "cn-hangzhou",
-		},
-	},
-}
-
-// The questions to ask.
-var qsSlack = []*survey.Question{
-	{
-		Name:     "token",
-		Prompt:   &survey.Input{Message: "token"},
-		Validate: survey.Required,
-	},
-	{
-		Name: "channel",
-		Prompt: &survey.Input{
-			Message: "channel",
-			Default: "#wiki",
-		},
-		Validate: survey.Required,
-	},
-}
-
 type Config struct {
 	AuthIssuer string `json:"auth_issuer" mapstructure:"auth_issuer"`
-	CLIENT_ID  string `json:"client_id" mapstructure:"client_id"`
+	ClientID   string `json:"client_id" mapstructure:"client_id"`
 
 	AliyunAccessKeyID     string `json:"aliyun_access_key_id" mapstructure:"aliyun_access_key_id"`
 	AliyunAccessKeySecret string `json:"aliyun_access_key_secret" mapstructure:"aliyun_access_key_secret"`
@@ -95,46 +20,11 @@ type Config struct {
 	HostUsers string `json:"host_users" mapstructure:"HostUsers"`
 }
 
-// The  flag will be written to this struct.
-type AliyunFlag struct {
-	AccessKeyID     string `json:"access_key_id" survey:"access_key_id" mapstructure:"access_key_id"`
-	AccessKeySecret string `json:"access_key_secret" survey:"access_key_secret" mapstructure:"access_key_secret"`
-	RegionID        string `json:"region_id" survey:"region_id" mapstructure:"region_id"`
-}
-
-type TencentYunFlag struct {
-	AccessKeyID     string `json:"access_key_id" survey:"access_key_id" mapstructure:"access_key_id"`
-	AccessKeySecret string `json:"access_key_secret" survey:"access_key_secret" mapstructure:"access_key_secret"`
-	RegionID        string `json:"region_id" survey:"region_id" mapstructure:"region_id"`
-}
-
-// The  flag will be written to this struct.
-type SlackFlag struct {
-	Token   string `json:"token" survey:"token" mapstructure:"token"`
-	Channel string `json:"channel" survey:"channel" mapstructure:"channel"`
-}
-
-func GetSlackConfig() *SlackFlag {
-	viper.SetConfigFile(slackConfigFile())
-
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
-	var config SlackFlag
-
-	if err := viper.Unmarshal(&config); err != nil {
-		panic(err)
-	}
-
-	return &config
-}
-
 const EnvFile = ".config/adb/env"
 
 type CFG struct {
 	AuthIssuer string
-	CLIENT_ID  string
+	ClientID   string
 
 	TencentyunAccessKeyID     string
 	TencentyunAccessKeySecret string
@@ -150,33 +40,32 @@ type CFG struct {
 
 var AdbConfig CFG
 
-func GetEnvFile() string {
+func GetEnvFile() (string, error) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	envfile := filepath.Join(homedir, EnvFile)
-
-	return envfile
+	return filepath.Join(homedir, EnvFile), nil
 }
 
-func InitDotEnv() {
-	envFile := GetEnvFile()
-
-	_, err := os.Stat(envFile)
-	if os.IsNotExist(err) {
-		return
+func InitDotEnv() error {
+	envFile, err := GetEnvFile()
+	if err != nil {
+		return err
 	}
 
-	err = godotenv.Load(envFile)
-	if err != nil {
-		log.Fatal("Error loading .env file ", EnvFile, err)
+	if _, err := os.Stat(envFile); os.IsNotExist(err) {
+		return nil
+	}
+
+	if err := godotenv.Load(envFile); err != nil {
+		return fmt.Errorf("load env file %s: %w", envFile, err)
 	}
 
 	AdbConfig = CFG{
 		AuthIssuer: os.Getenv("AuthIssuer"),
-		CLIENT_ID:  os.Getenv("CLIENT_ID"),
+		ClientID:   os.Getenv("CLIENT_ID"),
 
 		TencentyunAccessKeyID:     os.Getenv("TencentyunAccessKeyID"),
 		TencentyunAccessKeySecret: os.Getenv("TencentyunAccessKeySecret"),
@@ -187,26 +76,30 @@ func InitDotEnv() {
 		SlackToken:                os.Getenv("SlackToken"),
 		SlackChannel:              os.Getenv("SlackChannel"),
 	}
+
+	return nil
 }
 
-var ConfigNew *Config
+var ConfigNew = &Config{}
 
-func Init() {
-	viper.GetViper().AddConfigPath("$HOME/.config/adb/")
+// Init loads ~/.config/adb/config.json into ConfigNew. A missing config file
+// is not an error so that commands which need no config keep working.
+func Init() error {
+	viper.AddConfigPath("$HOME/.config/adb/")
 	viper.SetConfigName("config")
 
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("fatal error config file: %w", err))
-	}
-
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// Config file not found; ignore error if desired
-		} else {
-			// Config file was found but another error was produced
+		var notFound viper.ConfigFileNotFoundError
+		if !errors.As(err, &notFound) {
+			return fmt.Errorf("read config file: %w", err)
 		}
+
+		return nil
 	}
 
-	viper.Unmarshal(&ConfigNew)
+	if err := viper.Unmarshal(ConfigNew); err != nil {
+		return fmt.Errorf("parse config file: %w", err)
+	}
+
+	return nil
 }

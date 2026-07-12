@@ -44,8 +44,10 @@ lint:
 	go fmt ./...
 	golangci-lint run
 
+PREFIX ?= /usr/local
+
 install: ## Install adb
-	cp output/adb $(shell which adb)
+	install -m 0755 output/adb $(PREFIX)/bin/adb
 
 preinstall:
 	go install -ldflags -X=github.com/airdb/adb/internal/adblib.BuildTime=$(date +%s) github.com/airdb/adb@dev
@@ -67,6 +69,7 @@ os = $(word 1, $@)
 $(PLATFORMS):
 	mkdir -p release
 	CGO_ENABLED=0 GOOS=$(os) GOARCH=amd64 go build $(LDFLAGS) -o release/$(BINARY)-$(os)
+	CGO_ENABLED=0 GOOS=$(os) GOARCH=arm64 go build $(LDFLAGS) -o release/$(BINARY)-$(os)-arm64
 
 #release: windows linux darwin
 release: linux darwin

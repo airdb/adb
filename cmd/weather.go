@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"bytes"
+	"context"
 	"fmt"
-	"os/exec"
-	"strings"
+	"io"
+	"net/http"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -14,29 +15,43 @@ var weatherCommand = &cobra.Command{
 	Aliases: []string{"hello"},
 	Short:   "show weather",
 	Long:    "The right way to check the weather",
-	Run: func(cmd *cobra.Command, args []string) {
-		weather(args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return weather(args)
 	},
 }
 
 const weatherAPI = "https://wttr.in/"
 
-func weather(args []string) {
+func weather(args []string) error {
 	apiurl := weatherAPI
 	if len(args) != 0 {
-		apiurl = weatherAPI + args[0]
+		apiurl += args[0]
 	}
 
 	fmt.Println(apiurl)
-	cmd := exec.Command("/usr/bin/curl", apiurl)
 
-	var out bytes.Buffer
+	client := &http.Client{Timeout: 30 * time.Second}
 
-	cmd.Stdout = &out
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Thanks for using adb tool!")
-	} else {
-		fmt.Println(strings.Trim(out.String(), "\n"))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, apiurl, nil)
+	if err != nil {
+		return err
 	}
+
+	// wttr.in returns plain text for curl-like user agents.
+	req.Header.Set("User-Agent", "curl/8.0")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(body))
+
+	return nil
 }

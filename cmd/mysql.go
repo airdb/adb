@@ -2,79 +2,79 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/airdb/toolbox/osutil"
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/go-sql-driver/mysql"
 	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
 )
 
 var mysqlCmd = &cobra.Command{
-	Use:                "mysql [service]",
-	Short:              "mysql client",
-	Long:               "Airdb mysql client",
-	DisableFlagParsing: false,
-	Args:               cobra.MinimumNArgs(0),
-	Example:            SQLDoc,
-	Aliases:            []string{"sql"},
-	Run: func(cmd *cobra.Command, args []string) {
+	Use:     "mysql [service]",
+	Short:   "mysql client",
+	Long:    "Airdb mysql client",
+	Example: SQLDoc,
+	Aliases: []string{"sql"},
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			listDatabase()
-
-			return
+			return listDatabase()
 		}
 
-		mysqlExec(args)
+		return mysqlExec(args)
 	},
 }
 
 var mysqlExprCmd = &cobra.Command{
-	Use:                "expr [dsn]",
-	Short:              "mysql expr client",
-	Long:               "mysql expr client",
-	DisableFlagParsing: false,
-	Args:               cobra.MinimumNArgs(0),
-	Example:            SQLDoc,
-	Aliases:            []string{"expr", "expression", "exp"},
-	Run: func(cmd *cobra.Command, args []string) {
-		GenMyqlExpr()
+	Use:     "expr [dsn]",
+	Short:   "mysql expr client",
+	Long:    "mysql expr client",
+	Example: SQLDoc,
+	Aliases: []string{"expression", "exp"},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return GenMysqlExpr()
 	},
 }
 
 var dsnAddCmd = &cobra.Command{
-	Use:   "add [name] [dsn tet record value]",
+	Use:   "add [name] [dsn txt record value]",
 	Short: "Add new dsn",
 	Long:  "Add new dsn",
 	Args:  cobra.MinimumNArgs(servicesAddCmdMinArgs),
-	Run: func(cmd *cobra.Command, args []string) {
-		addDsn(args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return addRecord(ServiceDomain, dns.TypeToString[dns.TypeTXT], args[0], args[1])
 	},
 }
 
 var dsnUpdateCmd = &cobra.Command{
-	Use:   "update [name] [dsn tet record value]",
-	Short: "Update new dsn",
-	Long:  "Update new dsn",
-	Args:  cobra.MinimumNArgs(0),
-	Run: func(cmd *cobra.Command, args []string) {
-		updateDsn()
+	Use:   "update",
+	Short: "Update dsn",
+	Long:  "Update dsn",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if updateDNSFlag.RecordID == "" || updateDNSFlag.RR == "" || updateDNSFlag.Value == "" {
+			return errors.New("flags --id, --rr and --value are required")
+		}
+
+		return updateRecord(updateDNSFlag.RecordID,
+			dns.TypeToString[dns.TypeTXT], updateDNSFlag.RR, updateDNSFlag.Value)
 	},
 }
 
 var dsnDeleteCmd = &cobra.Command{
-	Use:   "delete [name] [dsn tet record value]",
-	Short: "Delete new dsn",
-	Long:  "Delete new dsn",
-	Args:  cobra.MinimumNArgs(0),
-	Run: func(cmd *cobra.Command, args []string) {
-		deleteDsn()
+	Use:   "delete",
+	Short: "Delete dsn",
+	Long:  "Delete dsn",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if updateDNSFlag.RecordID == "" {
+			return errors.New("flag --id is required")
+		}
+
+		return deleteRecord(updateDNSFlag.RecordID)
 	},
 }
 
@@ -90,170 +90,105 @@ func mysqlCmdInit() {
 	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.RR,
 		"rr", "r", "", "domain name prefix")
 	dsnUpdateCmd.PersistentFlags().StringVarP(&updateDNSFlag.Value,
-		"value", "v", "", "domain name prefix")
+		"value", "v", "", "domain record value")
 
 	dsnDeleteCmd.PersistentFlags().StringVarP(&updateDNSFlag.RecordID,
 		"id", "i", "", "domain record_id")
 }
 
-func mysqlExec(args []string) {
-	client, err := aliyunConfigInit()
+func lookupDsn(service string) (string, error) {
+	records, err := describeRecords(ServiceDomain)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = ServiceDomain
-	request.RRKeyWord = args[0]
-
-	output, err := client.DescribeDomainRecords(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// rrs := output.DomainRecords.Record
-	dsn := ""
-
-	for _, rr := range output.DomainRecords.Record {
-		if rr.Type == dns.TypeToString[dns.TypeTXT] && rr.RR == request.RRKeyWord {
-			// fmt.Printf("%-32s\t%s\n", rr.RR, rr.Value)
-			dsn = rr.Value
+	for _, rr := range records {
+		if rr.Type == dns.TypeToString[dns.TypeTXT] && rr.RR == service {
+			return rr.Value, nil
 		}
+	}
+
+	return "", fmt.Errorf("no dsn record found for service %q under %s", service, ServiceDomain)
+}
+
+func mysqlExec(args []string) error {
+	dsn, err := lookupDsn(args[0])
+	if err != nil {
+		return err
 	}
 
 	config, err := mysql.ParseDSN(dsn)
 	if err != nil {
-		fmt.Println(err)
-
-		return
+		return fmt.Errorf("parse dsn: %w", err)
 	}
 
 	host, port, err := net.SplitHostPort(config.Addr)
 	if err != nil {
-		return
+		return fmt.Errorf("parse dsn address %q: %w", config.Addr, err)
 	}
 
-	flags := fmt.Sprintf("-A --auto-rehash -h%s -P%s -u%s -p%s",
-		host,
-		port,
-		config.User,
-		config.Passwd,
-	)
+	// Pass the password via MYSQL_PWD so it does not show up in `ps`.
+	if err := os.Setenv("MYSQL_PWD", config.Passwd); err != nil {
+		return err
+	}
 
-	args = strings.Split(flags, " ")
-	args = append(args,
-		"--prompt",
-		fmt.Sprintf("mysql [%s]> ", config.DBName),
+	mysqlArgs := []string{
+		"-A", "--auto-rehash",
+		"-h" + host,
+		"-P" + port,
+		"-u" + config.User,
+		"--prompt", fmt.Sprintf("mysql [%s]> ", config.DBName),
 		config.DBName,
-	)
+	}
 
-	osutil.Exec("mysql", args)
+	osutil.Exec("mysql", mysqlArgs)
+
+	return nil
 }
 
-func listDatabase() {
-	client, err := aliyunConfigInit()
+func listDatabase() error {
+	records, err := describeRecords(ServiceDomain)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = ServiceDomain
-
-	output, err := client.DescribeDomainRecords(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, rr := range output.DomainRecords.Record {
+	for _, rr := range records {
 		if rr.Type == dns.TypeToString[dns.TypeTXT] {
-			// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
 			fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
 		}
 	}
+
+	return nil
 }
 
-func addDsn(args []string) {
-	client, err := aliyunConfigInit()
-	if err != nil {
-		panic(err)
-	}
-
-	request := alidns.CreateAddDomainRecordRequest()
-	request.DomainName = ServiceDomain
-	request.Type = dns.TypeToString[dns.TypeTXT]
-	request.RR = args[0]
-	request.Value = args[1]
-
-	output, err := client.AddDomainRecord(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(output)
-}
-
-func updateDsn() {
-	client, err := aliyunConfigInit()
-	if err != nil {
-		panic(err)
-	}
-
-	request := alidns.CreateUpdateDomainRecordRequest()
-	request.RecordId = updateDNSFlag.RecordID
-	request.Type = dns.TypeToString[dns.TypeTXT]
-	request.RR = updateDNSFlag.RR
-	request.Value = updateDNSFlag.Value
-
-	output, err := client.UpdateDomainRecord(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(output)
-}
-
-func deleteDsn() {
-	client, err := aliyunConfigInit()
-	if err != nil {
-		panic(err)
-	}
-
-	request := alidns.CreateDeleteDomainRecordRequest()
-	request.RecordId = updateDNSFlag.RecordID
-
-	output, err := client.DeleteDomainRecord(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(output)
-}
-
-func GenMyqlExpr() {
+func GenMysqlExpr() error {
 	var dsn string
-
-	var err error
 
 	// check if there is something to read on STDIN
 	stat, _ := os.Stdin.Stat()
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
-		// var stdin []byte
-		reader := bufio.NewReader(os.Stdin)
-		dsn, err = reader.ReadString('\n')
-		if err != nil {
-			log.Fatal(err)
+		line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil && line == "" {
+			return err
 		}
+
+		dsn = line
 	} else {
 		fmt.Println("Enter database dsn:")
-
 		fmt.Scanf("%s", &dsn)
 	}
 
 	dsn = strings.TrimSpace(dsn)
-	// fmt.Println("dsn = ", dsn)
-	config, _ := mysql.ParseDSN(dsn)
 
-	ip, port, _ := net.SplitHostPort(config.Addr)
+	config, err := mysql.ParseDSN(dsn)
+	if err != nil {
+		return fmt.Errorf("parse dsn: %w", err)
+	}
+
+	ip, port, err := net.SplitHostPort(config.Addr)
+	if err != nil {
+		return fmt.Errorf("parse dsn address %q: %w", config.Addr, err)
+	}
 
 	fmt.Println("mysql expression:")
 	fmt.Printf("mysql -h%s -P%s -u%s -p%s --prompt \"mysql [%s]> \" %s\n",
@@ -274,4 +209,6 @@ func GenMyqlExpr() {
 		config.DBName,
 		time.Now().Format("2006_0102"),
 	)
+
+	return nil
 }

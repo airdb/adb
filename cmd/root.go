@@ -9,19 +9,19 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "adb",
-	Short: "Airdb Development Builder",
-	Long:  "Airdb Development Builder Command Line Interface",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-	},
+	Use:          "adb",
+	Short:        "Airdb Development Builder",
+	Long:         "Airdb Development Builder Command Line Interface",
+	SilenceUsage: true,
 }
 
 func Execute() {
-	adblib.Init()
+	if err := adblib.Init(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	rootCmd.Version = adblib.GetVersion()
-
-	// rootCmd.PersistentFlags().StringVarP(&GlobalFlags.Type, "type", "t", "com", "Top level domain")
 
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
@@ -32,17 +32,12 @@ func Execute() {
 	dnsTxtCmdInit()
 	hostCmdInit()
 
-	// initConfigCmd()
-	initCert()
 	initSlack()
 	initManCommand()
-
 	initLogin()
-
 	updateCmdInit()
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }

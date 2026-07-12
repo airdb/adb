@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
-	"strings"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -12,61 +11,48 @@ import (
 const AirdbWiki = "https://airdb-wiki.github.io/"
 
 var wikiCommand = &cobra.Command{
-	Use:     "wiki",
+	Use:     "wiki [project_name]",
 	Short:   "airdb wiki",
 	Long:    "airdb wiki, https://airdb-wiki.github.io",
 	Example: "adb wiki [project_name]",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		name := ""
+		if len(args) > 0 {
+			name = args[0]
+		}
+
+		return wiki(name)
+	},
 }
 
-func Usage() {
-	fmt.Println("Usage:")
-	fmt.Println("  adb wiki [project_name]")
-	fmt.Println()
-	fmt.Println()
-	fmt.Printf("Airdb Wiki: %s.\n", AirdbWiki)
-}
+func wiki(wikiName string) error {
+	url := AirdbWiki + wikiName
 
-type Repo struct {
-	ID     uint   `json:"id"`
-	NodeID string `json:"nodeId"`
-	Name   string `json:"name"`
-}
-
-func wiki(wikiName string) {
-	wikiArgs := getWikiArgs(wikiName)
-	cmd := exec.Command("open", wikiArgs...)
-
-	var out bytes.Buffer
-
-	cmd.Stdout = &out
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Thanks for using adb tool!", err)
-	} else {
-		fmt.Println(strings.Trim(out.String(), "\n"))
-	}
-}
-
-func getWikiArgs(name string) []string {
-	args := []string{
-		"-a",
-		"Google Chrome",
-	}
-	if name == "" {
-		args = append(args, AirdbWiki)
-	} else {
-		args = append(args, AirdbWiki+name)
+	if err := openBrowser(url); err != nil {
+		return fmt.Errorf("open %s: %w", url, err)
 	}
 
-	return args
+	fmt.Println("Opened", url)
+
+	return nil
+}
+
+func openBrowser(url string) error {
+	switch runtime.GOOS {
+	case "darwin":
+		return exec.Command("open", url).Run()
+	case "windows":
+		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Run()
+	default:
+		return exec.Command("xdg-open", url).Run()
+	}
 }
 
 var interviewWikiCommand = &cobra.Command{
 	Use:   "interview",
 	Short: "interview wiki",
 	Long:  "interview wiki",
-	Run: func(cmd *cobra.Command, args []string) {
-		name := "interview"
-		wiki(name)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return wiki("interview")
 	},
 }

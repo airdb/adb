@@ -2,31 +2,60 @@ package adblib
 
 import (
 	"bufio"
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 )
 
-func GetGithubKeysByID(id string) {
+const maxKeysPerUser = 3
+
+var githubClient = &http.Client{Timeout: 10 * time.Second}
+
+func GetGithubKeysByID(id string) error {
 	keysURL := fmt.Sprintf("https://github.com/%s.keys", id)
-	resp, err := http.Get(keysURL)
+
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, keysURL, nil)
 	if err != nil {
-		panic(err)
+		return err
+	}
+
+	resp, err := githubClient.Do(req)
+	if err != nil {
+		return err
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("fetch %s: unexpected status %s", keysURL, resp.Status)
+	}
+
+	count := 0
 	scanner := bufio.NewScanner(resp.Body)
-	for i := 0; scanner.Scan() && i < 3; i++ {
-		if !strings.HasPrefix(scanner.Text(), "ssh-ed25519") {
+
+	for scanner.Scan() && count < maxKeysPerUser {
+		line := scanner.Text()
+		if !strings.HasPrefix(line, "ssh-ed25519") {
 			continue
 		}
 
-		fmt.Printf("%s https://github.com/%s.keys\n", scanner.Text(), id)
+		fmt.Printf("%s %s\n", line, keysURL)
+		count++
 	}
+
+	return scanner.Err()
 }
 
-func GetGithubKeys(userID []string) {
+func GetGithubKeys(userID []string) error {
+	var errs []error
+
 	for _, id := range userID {
-		GetGithubKeysByID(id)
+		if err := GetGithubKeysByID(strings.TrimSpace(id)); err != nil {
+			errs = append(errs, err)
+		}
 	}
+
+	return errors.Join(errs...)
 }

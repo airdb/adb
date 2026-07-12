@@ -3,10 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/minio/selfupdate"
 	"github.com/spf13/cobra"
@@ -17,43 +17,58 @@ var updateCmd = &cobra.Command{
 	Short:              "Self update adb",
 	Long:               "Self update adb",
 	DisableFlagParsing: true,
-	Run: func(cmd *cobra.Command, args []string) {
-		doUpdate()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return doUpdate()
 	},
 }
 
-func doUpdate() {
+const updateTimeout = 5 * time.Minute
+
+func downloadURL() string {
 	dl := "https://github.com/airdb/adb/releases/latest/download/adb"
-	if runtime.GOOS == "darwin" {
-		dl = dl + "-" + runtime.GOOS
+
+	// Keep the legacy artifact names for amd64: "adb" (linux) and
+	// "adb-darwin". Other combinations use "adb-<goos>-<goarch>".
+	switch {
+	case runtime.GOOS == "linux" && runtime.GOARCH == "amd64":
+	case runtime.GOOS == "darwin" && runtime.GOARCH == "amd64":
+		dl += "-darwin"
+	default:
+		dl += "-" + runtime.GOOS + "-" + runtime.GOARCH
 	}
+
+	return dl
+}
+
+func doUpdate() error {
+	dl := downloadURL()
 
 	fmt.Printf("It will take about 1 minute for downloading.\nDownload url: %s\n", dl)
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: updateTimeout}
 
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, dl, nil)
 	if err != nil {
-		log.Println(err)
-
-		return
+		return err
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
-
-		return
+		return err
 	}
-
 	defer resp.Body.Close()
 
-	err = selfupdate.Apply(resp.Body, selfupdate.Options{})
-	if err != nil {
-		log.Println("update failed!")
-	} else {
-		log.Println("update successfully!")
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("download %s: unexpected status %s", dl, resp.Status)
 	}
+
+	if err := selfupdate.Apply(resp.Body, selfupdate.Options{}); err != nil {
+		return fmt.Errorf("update failed: %w", err)
+	}
+
+	fmt.Println("update successfully!")
+
+	return nil
 }
 
 func updateCmdInit() {
@@ -67,14 +82,14 @@ var writeCompletionFile bool
 
 var completionBashCmdLongDesc = `To load completion run
 
-. <(bitbucket completion)
+. <(adb completion)
 
 To configure your bash shell to load completions for each session add to your bashrc
 
 # MacOS:
 # adb completion >/usr/local/etc/bash_completion.d/adb
 # ~/.bashrc or ~/.profile
-. <(bitbucket completion)
+. <(adb completion)
 `
 
 // CompletionCmd represents the completion command.
@@ -82,23 +97,19 @@ var completionBashCmd = &cobra.Command{
 	Use:   "completion",
 	Short: "Generates bash completion scripts",
 	Long:  completionBashCmdLongDesc,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if writeCompletionFile {
 			completionFile := "/usr/local/etc/bash_completion.d/adb"
 
-			err := rootCmd.GenFishCompletionFile(completionFile, true)
-			if err != nil {
-				panic(err)
+			if err := rootCmd.GenBashCompletionFile(completionFile); err != nil {
+				return err
 			}
 
 			fmt.Println("Generates bash completion scripts successfully, file:", completionFile)
 
-			return
+			return nil
 		}
 
-		err := rootCmd.GenBashCompletion(os.Stdout)
-		if err != nil {
-			fmt.Println("Generates bash completion scripts failed!")
-		}
+		return rootCmd.GenBashCompletion(os.Stdout)
 	},
 }

@@ -1,63 +1,29 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/airdb/adb/internal/adblib"
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
-	_ "github.com/joho/godotenv/autoload"
 	"github.com/miekg/dns"
 	"github.com/spf13/cobra"
 )
 
 var hostCmd = &cobra.Command{
-	Use:   "host",
-	Short: "Perform actions on hosts",
-	Long:  "Perform actions on hosts",
-	//DisableFlagParsing: true,
+	Use:     "host",
+	Short:   "Perform actions on hosts",
+	Long:    "Perform actions on hosts",
 	Aliases: []string{"server", "servers", "hosts"},
-	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			host()
-		}
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return host()
 	},
 }
 
 func hostCmdInit() {
 	rootCmd.AddCommand(hostCmd)
 	hostCmd.AddCommand(hostDeleteCmd)
-
 	hostCmd.AddCommand(keyListCmd)
-
-	/*
-		hostCmd.AddCommand(hostListCmd)
-		hostCmd.AddCommand(hostSSHCmd)
-		hostCmd.AddCommand(hostSFTPCmd)
-
-		sshOptions := []string{
-			"StrictHostKeyChecking=no",
-			"UserKnownHostsFile=/dev/null",
-			"ConnectTimeout=3",
-		}
-
-		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
-		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i",
-			"~/.config/ssh/id_rsa", "identity file")
-
-		sshFlags.Options = hostSSHCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
-		hostSSHCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
-			"sftp server dest path")
-
-		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.LoginName, "login_name", "l", DefaultSSHUser, "login name")
-		sshFlags.Options = hostSFTPCmd.PersistentFlags().StringSliceP("option", "o", sshOptions, "ssh option")
-
-		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.IdentityFile, "identity_file", "i", "~/.config/ssh/id_rsa",
-			"identity file")
-
-		hostSFTPCmd.PersistentFlags().StringVarP(&sshFlags.SFTPDestPath, "sftp_server_path", "d", "/tmp",
-			"sftp server dest path")
-	*/
 }
 
 var keyListCmd = &cobra.Command{
@@ -65,11 +31,9 @@ var keyListCmd = &cobra.Command{
 	Short:   "List ssh public keys",
 	Long:    "List ssh public keys",
 	Aliases: []string{"key"},
-	// DisableFlagParsing: true,
 	Example: "adb host keys >> ~/.ssh/authorized_keys",
-	Run: func(cmd *cobra.Command, args []string) {
-
-		listPubKeys()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return listPubKeys()
 	},
 }
 
@@ -78,52 +42,32 @@ var hostDeleteCmd = &cobra.Command{
 	Short: "Delete hostid",
 	Long:  "Delete hostid",
 	Args:  cobra.MinimumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		deleteHost(args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return deleteRecord(args[0])
 	},
 }
 
-func listPubKeys() {
+func listPubKeys() error {
+	if adblib.ConfigNew.HostUsers == "" {
+		return errors.New("host_users is not configured, set it in ~/.config/adb/config.json")
+	}
+
 	hostAdmins := strings.Split(adblib.ConfigNew.HostUsers, ",")
-	adblib.GetGithubKeys(hostAdmins)
+
+	return adblib.GetGithubKeys(hostAdmins)
 }
 
-func host() {
-	client, err := aliyunConfigInit()
+func host() error {
+	records, err := describeRecords(HostDomain)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	request := alidns.CreateDescribeDomainRecordsRequest()
-	request.DomainName = HostDomain
-
-	output, err := client.DescribeDomainRecords(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, rr := range output.DomainRecords.Record {
-		// fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
+	for _, rr := range records {
 		if rr.Type == dns.TypeToString[dns.TypeA] {
-			// fmt.Printf("%-20s\t%-32s\t%s\n", rr.RecordId, rr.RR, rr.Value)
 			fmt.Printf("%-20s %-5s %-32s %-64s %s\n", rr.RecordId, rr.Type, rr.RR, rr.Value, rr.Remark)
 		}
 	}
-}
 
-func deleteHost(args []string) {
-	client, err := aliyunConfigInit()
-	if err != nil {
-		panic(err)
-	}
-
-	request := alidns.CreateDeleteDomainRecordRequest()
-	request.RecordId = args[0]
-
-	output, err := client.DeleteDomainRecord(request)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(output)
+	return nil
 }
