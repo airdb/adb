@@ -18,6 +18,12 @@ https://github.com/airdb/adb/releases/latest/download/adb-linux-amd64.zip
 https://github.com/airdb/adb/releases/download/v1.0.0/adb
 ```
 
+## Cowsay
+
+`adb cowsay` supports the built-in figures and also recursively loads custom
+ASCII figures from `~/.config/bar/`. Relative file paths under that directory
+become figure names for `adb cowsay --list` and `adb cowsay -f <figure>`.
+
 
 # For Template Maintaining
 
