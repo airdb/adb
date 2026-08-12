@@ -24,6 +24,7 @@ func Execute() {
 	rootCmd.Version = adblib.GetVersion()
 
 	rootCmd.AddCommand(cowsayCommand)
+	rootCmd.AddCommand(passwdCommand)
 	rootCmd.AddCommand(weatherCommand)
 	rootCmd.AddCommand(wikiCommand)
 	wikiCommand.AddCommand(interviewWikiCommand)

@@ -24,6 +24,12 @@ https://github.com/airdb/adb/releases/download/v1.0.0/adb
 ASCII figures from `~/.config/bar/`. Relative file paths under that directory
 become figure names for `adb cowsay --list` and `adb cowsay -f <figure>`.
 
+## Password
+
+`adb passwd` generates a random 16-character alphanumeric password by default.
+Use `adb passwd --complex` to require lower, upper, digit, and symbol
+characters, and `adb passwd -n 24` to control the length.
+
 
 # For Template Maintaining
 
