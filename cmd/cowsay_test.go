@@ -95,6 +95,82 @@ func TestLoadCowsayFiguresCustomOverridesBuiltin(t *testing.T) {
 	}
 }
 
+func TestLoadCustomCowsayFiguresSkipsFortuneFile(t *testing.T) {
+	tempHome := t.TempDir()
+	previousHomeDir := cowsayUserHomeDir
+	cowsayUserHomeDir = func() (string, error) {
+		return tempHome, nil
+	}
+	t.Cleanup(func() {
+		cowsayUserHomeDir = previousHomeDir
+	})
+
+	customDir := filepath.Join(tempHome, cowsayCustomFigureDir)
+	if err := os.MkdirAll(customDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll failed: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(customDir, cowsayFortuneFileName), []byte("fortune one\nfortune two\n"), 0o644); err != nil {
+		t.Fatalf("WriteFile failed: %v", err)
+	}
+
+	figures, err := loadCustomCowsayFigures()
+	if err != nil {
+		t.Fatalf("loadCustomCowsayFigures returned error: %v", err)
+	}
+	if len(figures) != 0 {
+		t.Fatalf("expected fortune.txt to be excluded from figures, got %v", cowsayFigureNames(figures))
+	}
+}
+
+func TestLoadCowsayFortunesFallbackToBuiltin(t *testing.T) {
+	tempHome := t.TempDir()
+	previousHomeDir := cowsayUserHomeDir
+	cowsayUserHomeDir = func() (string, error) {
+		return tempHome, nil
+	}
+	t.Cleanup(func() {
+		cowsayUserHomeDir = previousHomeDir
+	})
+
+	fortunes, err := loadCowsayFortunes()
+	if err != nil {
+		t.Fatalf("loadCowsayFortunes returned error: %v", err)
+	}
+	if !reflect.DeepEqual(fortunes, cowsayFortunes) {
+		t.Fatalf("expected builtin fortunes fallback")
+	}
+}
+
+func TestLoadCowsayFortunesFromCustomFile(t *testing.T) {
+	tempHome := t.TempDir()
+	previousHomeDir := cowsayUserHomeDir
+	cowsayUserHomeDir = func() (string, error) {
+		return tempHome, nil
+	}
+	t.Cleanup(func() {
+		cowsayUserHomeDir = previousHomeDir
+	})
+
+	customDir := filepath.Join(tempHome, cowsayCustomFigureDir)
+	if err := os.MkdirAll(customDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll failed: %v", err)
+	}
+	content := " first fortune \n\nsecond fortune\r\n  \nthird fortune\n"
+	if err := os.WriteFile(filepath.Join(customDir, cowsayFortuneFileName), []byte(content), 0o644); err != nil {
+		t.Fatalf("WriteFile failed: %v", err)
+	}
+
+	fortunes, err := loadCowsayFortunes()
+	if err != nil {
+		t.Fatalf("loadCowsayFortunes returned error: %v", err)
+	}
+
+	want := []string{"first fortune", "second fortune", "third fortune"}
+	if !reflect.DeepEqual(fortunes, want) {
+		t.Fatalf("unexpected fortunes: got %#v want %#v", fortunes, want)
+	}
+}
+
 func TestCowsayFortunesIncludeChineseLines(t *testing.T) {
 	want := []string{
 		"行而不辍，未来可期。",

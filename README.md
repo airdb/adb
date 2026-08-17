@@ -23,6 +23,9 @@ https://github.com/airdb/adb/releases/download/v1.0.0/adb
 `adb cowsay` supports the built-in figures and also recursively loads custom
 ASCII figures from `~/.config/bar/`. Relative file paths under that directory
 become figure names for `adb cowsay --list` and `adb cowsay -f <figure>`.
+When no message is provided, `adb cowsay` also looks for fortunes in
+`~/.config/bar/fortune.txt`, using one non-empty trimmed line per fortune
+before falling back to the built-in defaults.
 
 ## Password
 
