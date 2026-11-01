@@ -13,7 +13,7 @@ var jwtCommand = &cobra.Command{
 	Use:   "jwt <jwt-token>",
 	Short: "Decode a JWT payload without verifying its signature",
 	Long:  "Decode a JWT payload and print it as formatted JSON without verifying its signature. Accepts an optional Bearer prefix.",
-	Example: "  adb jwt \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiRGVhbiIsImFkbWluIjp0cnVlfQ.signature\"\n" +
+	Example: "  adb jwt \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiYWlyZGIiLCJhZG1pbiI6dHJ1ZX0.signature\"\n" +
 		"  adb jwt 'Bearer header.payload.signature'",
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
