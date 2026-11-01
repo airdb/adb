@@ -12,8 +12,6 @@ jobs:
           go-version-file: 'go.mod'
         id: go
 
-      - name: Check out code into the Go module directory
-
       - name: Lint
         run: |
           go version
