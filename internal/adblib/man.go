@@ -96,13 +96,20 @@ Check Client Hello:
 	curl -k https://127.0.0.1:8443 | hexdump -C
 
 Check the Full Chain:
+	DOMAIN="expired.badssl.com"
 	openssl s_client -connect $DOMAIN:443 -servername $DOMAIN -showcerts < /dev/null 2>/dev/null | grep -c "BEGIN CERTIFICATE"
 	返回 1：服务器只发了叶子证书，中级缺失
 	返回 2 或 3：链完整（叶子 + 中级，或再加一张根/交叉签名）
 
+	DOMAIN="expired.badssl.com"
 	openssl s_client -connect $DOMAIN:443 -servername $DOMAIN < /dev/null 2>/dev/null | grep "Verify return code"
 	Verify return code: 0 (ok)：链完整
 	Verify return code: 21 (unable to verify the first certificate)：缺中级，这是最典型的表现
+
+	## 过期证书测试
+	DOMAIN="expired.badssl.com"
+	openssl s_client -connect $DOMAIN:443 -servername $DOMAIN < /dev/null 2>/dev/null | grep "Verify return code"
+    Verify return code: 10 (certificate has expired)
 
 Lego:
 	https://github.com/go-acme/lego
