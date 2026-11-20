@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"encoding/base64"
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"fmt"
 	"strings"
 
@@ -26,7 +27,7 @@ var jwtCommand = &cobra.Command{
 			return err
 		}
 
-		prettyJSON, err := json.MarshalIndent(claims, "", "  ")
+		prettyJSON, err := json.Marshal(claims, json.Deterministic(true), jsontext.WithIndent("  "), jsontext.EscapeForHTML(true))
 		if err != nil {
 			return err
 		}

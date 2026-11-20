@@ -67,10 +67,22 @@ func TestJWTCommandWithoutArgsShowsUsage(t *testing.T) {
 	for _, want := range []string{
 		"Usage:",
 		"adb jwt <jwt-token>",
-		`adb jwt "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiRGVhbiIsImFkbWluIjp0cnVlfQ.signature"`,
+		`adb jwt "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiYWlyZGIiLCJhZG1pbiI6dHJ1ZX0.signature"`,
 	} {
 		if !strings.Contains(output.String(), want) {
 			t.Errorf("help missing %q", want)
+		}
+	}
+}
+
+func TestDecodeJWTRejectsAmbiguousJSON(t *testing.T) {
+	for _, payload := range []string{
+		`{"sub":"first","sub":"second"}`,
+		"{\"sub\":\"\xff\"}",
+	} {
+		token := "header." + base64.RawURLEncoding.EncodeToString([]byte(payload)) + ".signature"
+		if _, err := DecodeJWT(token); err == nil || !strings.Contains(err.Error(), "parse JSON:") {
+			t.Errorf("payload %q: expected JSON parsing error, got %v", payload, err)
 		}
 	}
 }

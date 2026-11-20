@@ -1,7 +1,8 @@
 package adblib
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"runtime"
 )
 
@@ -31,7 +32,7 @@ func GetVersion() string {
 		BuildTime: BuildTime,
 	}
 
-	out, err := json.Marshal(info)
+	out, err := json.Marshal(info, jsontext.EscapeForHTML(true))
 	if err != nil {
 		panic(err)
 	}
