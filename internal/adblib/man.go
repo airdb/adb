@@ -109,7 +109,7 @@ Check the Full Chain:
 	## 过期证书测试
 	DOMAIN="expired.badssl.com"
 	openssl s_client -connect $DOMAIN:443 -servername $DOMAIN < /dev/null 2>/dev/null | grep "Verify return code"
-    Verify return code: 10 (certificate has expired)
+	Verify return code: 10 (certificate has expired)
 
 Lego:
 	https://github.com/go-acme/lego
