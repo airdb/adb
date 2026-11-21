@@ -205,3 +205,94 @@ func TestAPIDryRunKeepsEmptyJSONBody(t *testing.T) {
 		t.Fatalf("empty JSON body missing: %s", output)
 	}
 }
+
+func TestAPIListFilter(t *testing.T) {
+	for _, tc := range []struct {
+		args  []string
+		count int
+	}{
+		{[]string{"createItem"}, 1},
+		{[]string{"--operation", "createItem"}, 1},
+		{[]string{"getItem"}, 2},
+		{[]string{"GET /items/{id}"}, 1},
+	} {
+		args := append([]string{"list", "--spec", apiTestSpec, "--json"}, tc.args...)
+		output, _, err := executeAPITest(t, "", args...)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var operations []map[string]any
+		if err := json.Unmarshal([]byte(output), &operations); err != nil {
+			t.Fatal(err)
+		}
+		if len(operations) != tc.count {
+			t.Fatalf("args=%v output=%s", tc.args, output)
+		}
+	}
+	output, _, err := executeAPITest(t, "", "list", "--spec", apiTestSpec, "createItem")
+	if err != nil || !strings.Contains(output, "createItem") || strings.Contains(output, "getItem") {
+		t.Fatalf("out=%s err=%v", output, err)
+	}
+	for _, extra := range [][]string{{"missing"}, {"createItem", "extra"}, {"createItem", "--operation", "getItem"}} {
+		if _, _, err := executeAPITest(t, "", append([]string{"list", "--spec", apiTestSpec}, extra...)...); err == nil {
+			t.Fatalf("expected error for %v", extra)
+		}
+	}
+}
+
+func TestAPIListOperationHelp(t *testing.T) {
+	output, _, err := executeAPITest(t, "", "list", "--spec", apiTestSpec, "createItem")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"Summary: Create a test item", "Description: Sends a test JSON document.", "Deprecated: false", " api example ", "'POST /items/{id}'", "--path id=example", "--query limit=example", "--header 'X-Test: example'", "--generate --dry-run", "--data @request.json"} {
+		if !strings.Contains(output, want) {
+			t.Errorf("help missing %q: %s", want, output)
+		}
+	}
+	output, _, err = executeAPITest(t, "", "list", "--spec", apiTestSpec, "GET /items/{id}")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(output, "Deprecated: true") || !strings.Contains(output, "No JSON request body") || strings.Contains(output, "--generate") || strings.Contains(output, "--data @") {
+		t.Fatalf("unexpected GET help: %s", output)
+	}
+	output, _, err = executeAPITest(t, "", "list", "--spec", apiTestSpec, "getItem", "--json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var operations []struct {
+		Deprecated bool `json:"deprecated"`
+	}
+	if err = json.Unmarshal([]byte(output), &operations); err != nil {
+		t.Fatalf("JSON mixed with help: %s", output)
+	}
+	if len(operations) != 2 || !operations[0].Deprecated || !operations[1].Deprecated {
+		t.Fatal(output)
+	}
+	output, _, err = executeAPITest(t, "", "list", "--help")
+	if err != nil || !strings.Contains(output, "--operation") || !strings.Contains(output, "createCompany") {
+		t.Fatalf("out=%s err=%v", output, err)
+	}
+}
+
+func TestAPIHelpShellQuotes(t *testing.T) {
+	for _, tc := range []struct{ value, want string }{
+		{"adb", "adb"},
+		{"./output/adb", "./output/adb"},
+		{"/tmp/apis.swagger.yaml", "/tmp/apis.swagger.yaml"},
+		{"http://localhost:8080", "http://localhost:8080"},
+		{"name=example", "name=example"},
+		{"", "''"},
+		{"POST /v1/user/{name}", "'POST /v1/user/{name}'"},
+		{"a b.yaml", "'a b.yaml'"},
+		{"a'b.yaml", `'a'"'"'b.yaml'`},
+		{"https://example.com/?a=1&b=2", "'https://example.com/?a=1&b=2'"},
+		{"$(whoami)", "'$(whoami)'"},
+		{"`whoami`", "'`whoami`'"},
+	} {
+		if got := apiShellQuote(tc.value); got != tc.want {
+			t.Errorf("quote(%q) = %q, want %q", tc.value, got, tc.want)
+		}
+	}
+}

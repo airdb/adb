@@ -180,3 +180,22 @@ func TestLoadJSONAndInvalidSpecs(t *testing.T) {
 		}
 	}
 }
+
+func TestOperationHelpMetadata(t *testing.T) {
+	for _, tc := range []struct{ file, id, description string }{
+		{"testdata/swagger.yaml", "GET /items/{id}", ""},
+		{"testdata/openapi.yaml", "alternate", "Alternate server endpoint."},
+	} {
+		spec, err := Load(tc.file)
+		if err != nil {
+			t.Fatal(err)
+		}
+		operation, err := spec.Find(tc.id)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !operation.Deprecated || operation.Description != tc.description {
+			t.Fatalf("operation=%+v", operation)
+		}
+	}
+}

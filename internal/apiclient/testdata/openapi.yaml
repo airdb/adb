@@ -48,6 +48,8 @@ paths:
       - url: https://path.example.invalid/prefix
     get:
       operationId: alternate
+      description: Alternate server endpoint.
+      deprecated: true
       servers:
         - url: https://operation.example.invalid/prefix
       responses:

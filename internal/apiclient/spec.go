@@ -30,6 +30,8 @@ type Operation struct {
 	Method          string      `json:"method"`
 	Path            string      `json:"path"`
 	Summary         string      `json:"summary,omitempty"`
+	Description     string      `json:"description,omitempty"`
+	Deprecated      bool        `json:"deprecated"`
 	BaseURL         string      `json:"baseUrl,omitempty"`
 	Parameters      []Parameter `json:"parameters,omitempty"`
 	BodyRequired    bool        `json:"bodyRequired"`
@@ -71,7 +73,7 @@ func Load(filename string) (*Spec, error) {
 		}
 		for path, item := range m.Paths.PathItems.FromOldest() {
 			for method, op := range item.GetOperations().FromOldest() {
-				o := Operation{ID: op.OperationId, Method: strings.ToUpper(method), Path: path, Summary: op.Summary, BaseURL: baseURL}
+				o := Operation{ID: op.OperationId, Method: strings.ToUpper(method), Path: path, Summary: op.Summary, Description: op.Description, Deprecated: op.Deprecated, BaseURL: baseURL}
 				consumes := op.Consumes
 				if len(consumes) == 0 {
 					consumes = m.Consumes
@@ -113,7 +115,7 @@ func Load(filename string) (*Spec, error) {
 				if len(servers) == 0 {
 					servers = m.Servers
 				}
-				o := Operation{ID: op.OperationId, Method: strings.ToUpper(method), Path: path, Summary: op.Summary, BaseURL: serverURL(servers)}
+				o := Operation{ID: op.OperationId, Method: strings.ToUpper(method), Path: path, Summary: op.Summary, Description: op.Description, Deprecated: op.Deprecated != nil && *op.Deprecated, BaseURL: serverURL(servers)}
 				for _, p := range append(append([]*v3.Parameter{}, item.Parameters...), op.Parameters...) {
 					style := p.Style
 					if style == "" {
@@ -252,3 +254,9 @@ func serverURL(servers []*v3.Server) string {
 	}
 	return url
 }
+
+// HasJSONBody reports whether this operation supports JSON body examples.
+func (o Operation) HasJSONBody() bool { return o.body != nil && !o.unsupportedBody }
+
+// HasRequestBody includes unsupported form bodies as well as JSON bodies.
+func (o Operation) HasRequestBody() bool { return o.body != nil || o.unsupportedBody }

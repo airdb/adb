@@ -33,31 +33,71 @@ func newAPICommand() *cobra.Command {
 	_ = api.MarkPersistentFlagRequired("spec")
 	load := func() (*apiclient.Spec, error) { return apiclient.Load(specFile) }
 	var listJSON bool
-	list := &cobra.Command{Use: "list", Short: "List operations and parameters without sending requests", Args: cobra.NoArgs, RunE: func(cmd *cobra.Command, args []string) error {
-		spec, err := load()
-		if err != nil {
-			return err
-		}
-		if listJSON {
-			return printAPIJSON(cmd.OutOrStdout(), spec.Operations)
-		}
-		out := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 4, 2, ' ', 0)
-		fmt.Fprintln(out, "METHOD\tPATH\tOPERATION ID\tREQUIRED PARAMETERS")
-		for _, o := range spec.Operations {
-			var required []string
-			for _, p := range o.Parameters {
-				if p.Required {
-					required = append(required, p.In+":"+p.Name)
+	var listOperation string
+	list := &cobra.Command{Use: "list [operationId]", Short: "List operations and show per-operation request help",
+		Long: "List operations without sending requests. Select an operationId or 'METHOD /path' to show its description, deprecation status, and example/call commands. Use --json for machine-readable metadata.",
+		Example: `  adb api list --spec swagger.yaml
+  adb api list --spec swagger.yaml createCompany
+  adb api list --spec swagger.yaml "GET /info"
+  adb api list --spec swagger.yaml --operation createCompany --json`,
+		Args: cobra.MaximumNArgs(1), RunE: func(cmd *cobra.Command, args []string) error {
+			selector := listOperation
+			if len(args) == 1 {
+				if cmd.Flags().Changed("operation") {
+					return fmt.Errorf("use either an operation argument or --operation")
+				}
+				selector = args[0]
+			}
+			spec, err := load()
+			if err != nil {
+				return err
+			}
+			operations := spec.Operations
+			if selector != "" {
+				operations = nil
+				for _, operation := range spec.Operations {
+					if operation.ID == selector || operation.Method+" "+operation.Path == selector {
+						operations = append(operations, operation)
+					}
+				}
+				if len(operations) == 0 {
+					return fmt.Errorf("operation %q not found; use 'adb api list'", selector)
 				}
 			}
-			if o.BodyRequired {
-				required = append(required, "body")
+			if listJSON {
+				return printAPIJSON(cmd.OutOrStdout(), operations)
 			}
-			fmt.Fprintf(out, "%s\t%s\t%s\t%s\n", o.Method, o.Path, o.ID, strings.Join(required, ", "))
-		}
-		return out.Flush()
-	}}
+			out := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 4, 2, ' ', 0)
+			fmt.Fprintln(out, "METHOD\tPATH\tOPERATION ID\tREQUIRED PARAMETERS")
+			for _, o := range operations {
+				var required []string
+				for _, p := range o.Parameters {
+					if p.Required {
+						required = append(required, p.In+":"+p.Name)
+					}
+				}
+				if o.BodyRequired {
+					required = append(required, "body")
+				}
+				fmt.Fprintf(out, "%s\t%s\t%s\t%s\n", o.Method, o.Path, o.ID, strings.Join(required, ", "))
+			}
+			if err := out.Flush(); err != nil {
+				return err
+			}
+			if selector != "" {
+				for _, operation := range operations {
+					if err := printAPIOperationHelp(cmd.OutOrStdout(), specFile, operation); err != nil {
+						return err
+					}
+				}
+			} else {
+				_, err = fmt.Fprintln(cmd.OutOrStdout(), "\nInspect an operation: adb api list --spec <file> <operationId>\nMore help: adb api list --help")
+				return err
+			}
+			return nil
+		}}
 	list.Flags().BoolVar(&listJSON, "json", false, "Print operation metadata as JSON")
+	list.Flags().StringVar(&listOperation, "operation", "", "Filter by operationId or 'METHOD /path'")
 	var exampleOperation string
 	var seed int64
 	example := &cobra.Command{Use: "example", Short: "Generate a JSON request body from examples or schema", Args: cobra.NoArgs, RunE: func(cmd *cobra.Command, args []string) error {

@@ -42,12 +42,16 @@ Read a local Swagger 2.0 or OpenAPI 3.x YAML/JSON file without generating client
 ```bash
 adb api list --spec /tmp/apis.swagger.yaml
 adb api list --spec /tmp/apis.swagger.yaml --json
+adb api list --spec /tmp/apis.swagger.yaml UserAuthService_Welcome
 
 adb api example --spec /tmp/apis.swagger.yaml \
   --operation CompanyProfile_CompanyProfile > request.json
 ```
 
-`list` shows operation IDs, paths, methods, and required parameters. `example`
+`list` shows operation IDs, paths, methods, and required parameters. An optional
+operationId argument (or `--operation`) filters the list and displays the
+description, deprecation status, and copyable example/preview/call commands;
+duplicate IDs show all matching routes. `--json` outputs only metadata. A selector such as `"GET /info"` selects one route. `example`
 prints only the JSON request body, using an explicit example when provided and
 otherwise generating data from the schema. `--seed` defaults to `1` for
 reproducibility. Schemas with no concrete properties may generate `{}`; generated

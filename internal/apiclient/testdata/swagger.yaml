@@ -19,6 +19,8 @@ paths:
         type: integer
     post:
       operationId: createItem
+      summary: Create a test item
+      description: Sends a test JSON document.
       parameters:
         - name: X-Test
           in: header
@@ -38,11 +40,13 @@ paths:
         "200": {description: OK}
     get:
       operationId: getItem
+      deprecated: true
       responses:
         "200": {description: OK}
   /duplicate:
     get:
       operationId: getItem
+      deprecated: true
       responses:
         "200": {description: OK}
 definitions:
