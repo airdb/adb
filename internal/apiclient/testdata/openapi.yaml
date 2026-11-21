@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: API CLI test
+  version: "1"
+servers:
+  - url: https://{env}.example.invalid/root
+    variables:
+      env: {default: test}
+paths:
+  /items/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: string}
+      - name: q
+        in: query
+        required: true
+        schema: {type: string}
+    post:
+      operationId: createItem
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema: {type: string}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+            example: {name: explicit}
+      responses:
+        "201": {description: Created}
+    get:
+      operationId: listItem
+      parameters:
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items: {type: string}
+      responses:
+        "200": {description: OK}
+  /alternate:
+    servers:
+      - url: https://path.example.invalid/prefix
+    get:
+      operationId: alternate
+      servers:
+        - url: https://operation.example.invalid/prefix
+      responses:
+        "200": {description: OK}
+  /form:
+    post:
+      operationId: uploadForm
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: {type: object}
+      responses:
+        "200": {description: OK}
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        name: {type: string}
