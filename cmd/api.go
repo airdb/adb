@@ -68,7 +68,7 @@ func newAPICommand() *cobra.Command {
 				return printAPIJSON(cmd.OutOrStdout(), operations)
 			}
 			out := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 4, 2, ' ', 0)
-			fmt.Fprintln(out, "METHOD\tPATH\tOPERATION ID\tREQUIRED PARAMETERS")
+			fmt.Fprintln(out, "OPERATION_ID\tMETHOD\tPATH\tREQUIRED_PARAMETERS")
 			for _, o := range operations {
 				var required []string
 				for _, p := range o.Parameters {
@@ -79,7 +79,7 @@ func newAPICommand() *cobra.Command {
 				if o.BodyRequired {
 					required = append(required, "body")
 				}
-				fmt.Fprintf(out, "%s\t%s\t%s\t%s\n", o.Method, o.Path, o.ID, strings.Join(required, ", "))
+				fmt.Fprintf(out, "%s\t%s\t%s\t%s\n", o.ID, o.Method, o.Path, strings.Join(required, ", "))
 			}
 			if err := out.Flush(); err != nil {
 				return err
